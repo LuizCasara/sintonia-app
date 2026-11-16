@@ -14,5 +14,10 @@ export interface HoursMetrics {
 
 export function computeHours(conv: Conversation): HoursMetrics {
   void conv;
-  return { heatmap: [], earliest: { A: null, B: null }, latest: { A: null, B: null }, lateNightPerYear: [] };
+  return {
+    heatmap: [],
+    earliest: { A: null, B: null },
+    latest: { A: null, B: null },
+    lateNightPerYear: [],
+  };
 }

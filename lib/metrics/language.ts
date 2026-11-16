@@ -16,7 +16,13 @@ export interface LanguageMetrics {
   perPerson: PerPerson<PersonLanguage>;
 }
 
-const empty: PersonLanguage = { topEmojis: [], laughs: 0, questions: 0, apologies: 0, affection: 0 };
+const empty: PersonLanguage = {
+  topEmojis: [],
+  laughs: 0,
+  questions: 0,
+  apologies: 0,
+  affection: 0,
+};
 
 export function computeLanguage(conv: Conversation): LanguageMetrics {
   void conv;

@@ -10,7 +10,8 @@ export interface TelegramMessage {
   from?: string;
   text: TelegramText;
   photo?: string;
-  media_type?: 'voice_message' | 'video_message' | 'video_file' | 'sticker' | 'animation' | 'audio_file';
+  media_type?:
+    'voice_message' | 'video_message' | 'video_file' | 'sticker' | 'animation' | 'audio_file';
   duration_seconds?: number;
 }
 

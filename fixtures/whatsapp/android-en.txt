@@ -1,0 +1,333 @@
+1/5/26, 12:00 AM - Messages and calls are end-to-end encrypted.
+1/5/26, 11:43 PM - Bruno Reis: <Media omitted>
+1/5/26, 11:44 PM - Ana Lima: <Media omitted>
+1/5/26, 11:46 PM - Ana Lima: did you see the game last night?
+1/5/26, 11:49 PM - Bruno Reis: did you see the game last night?
+1/5/26, 11:49 PM - Bruno Reis: hi, how are you?
+1/5/26, 11:49 PM - Ana Lima: ok, deal
+1/6/26, 9:52 AM - Bruno Reis: hi, how are you?
+1/6/26, 9:55 AM - Ana Lima: call me when you can
+1/6/26, 9:56 AM - Bruno Reis: look at this: https://example.com/post/123
+1/6/26, 9:57 AM - Ana Lima: I will be there in 10 minutes
+1/6/26, 10:01 AM - Bruno Reis: I miss you
+1/6/26, 10:01 AM - Bruno Reis: <Media omitted>
+1/6/26, 10:02 AM - Bruno Reis: hi, how are you?
+1/6/26, 10:05 AM - Ana Lima: look at this: https://example.com/post/123
+1/7/26, 1:20 AM - Ana Lima: first line
+second line of the same message
+1/7/26, 1:24 AM - Bruno Reis: I need to buy bread
+1/7/26, 1:27 AM - Ana Lima: I miss you
+1/7/26, 1:30 PM - Bruno Reis: I need to buy bread
+1/7/26, 1:31 PM - Ana Lima: dinner out tonight?
+1/7/26, 1:35 PM - Ana Lima: did you see the game last night?
+1/7/26, 1:36 PM - Ana Lima: <Media omitted>
+1/7/26, 1:39 PM - Bruno Reis: good night, see you tomorrow
+1/7/26, 1:40 PM - Ana Lima: dinner out tonight?
+1/7/26, 1:43 PM - Bruno Reis: <Media omitted>
+1/8/26, 12:59 PM - Ana Lima: I will be there in 10 minutes
+1/8/26, 1:02 PM - Bruno Reis: call me when you can
+1/8/26, 1:03 PM - Ana Lima: <Media omitted>
+1/8/26, 1:06 PM - Bruno Reis: I need to buy bread
+1/8/26, 1:07 PM - Ana Lima: I will be there in 10 minutes
+1/8/26, 1:11 PM - Bruno Reis: good night, see you tomorrow
+1/8/26, 1:12 PM - Ana Lima: dinner out tonight?
+1/8/26, 1:15 PM - Bruno Reis: did you see the game last night?
+1/8/26, 1:19 PM - Ana Lima: <Media omitted>
+1/8/26, 6:10 PM - Ana Lima: look at this: https://example.com/post/123
+1/8/26, 6:11 PM - Ana Lima: did you see the game last night?
+1/8/26, 6:12 PM - Bruno Reis: I miss you
+1/8/26, 6:13 PM - Ana Lima: hi, how are you?
+1/9/26, 12:31 AM - Ana Lima: ok, deal
+1/9/26, 12:33 AM - Bruno Reis: first line
+second line of the same message
+1/9/26, 12:38 AM - Ana Lima: <Media omitted>
+1/9/26, 12:38 AM - Ana Lima: good night, see you tomorrow
+1/9/26, 12:41 AM - Bruno Reis: first line
+second line of the same message
+1/9/26, 12:45 AM - Bruno Reis: <Media omitted>
+1/9/26, 12:48 AM - Bruno Reis: haha that was good
+1/9/26, 12:51 AM - Bruno Reis: first line
+second line of the same message
+1/9/26, 12:53 AM - Ana Lima: <Media omitted>
+1/10/26, 7:09 AM - Bruno Reis: I miss you
+1/10/26, 7:10 AM - Ana Lima: hi, how are you?
+1/10/26, 7:13 AM - Bruno Reis: I miss you
+1/10/26, 7:17 AM - Bruno Reis: call me when you can
+1/10/26, 7:19 AM - Ana Lima: haha that was good
+1/10/26, 7:21 AM - Bruno Reis: good morning!
+1/10/26, 7:22 AM - Ana Lima: I need to buy bread
+1/11/26, 9:04 AM - Bruno Reis: did you see the game last night?
+1/11/26, 9:08 AM - Ana Lima: dinner out tonight?
+1/11/26, 9:12 AM - Bruno Reis: good morning!
+1/11/26, 9:15 AM - Bruno Reis: ok, deal
+1/11/26, 9:19 AM - Ana Lima: good night, see you tomorrow
+1/11/26, 9:20 AM - Bruno Reis: I will be there in 10 minutes
+1/11/26, 9:23 AM - Ana Lima: first line
+second line of the same message
+1/11/26, 9:25 AM - Bruno Reis: I will be there in 10 minutes
+1/11/26, 9:28 AM - Bruno Reis: first line
+second line of the same message
+1/13/26, 9:56 PM - Ana Lima: I will be there in 10 minutes
+1/13/26, 10:00 PM - Bruno Reis: I miss you
+1/13/26, 10:04 PM - Ana Lima: <Media omitted>
+1/13/26, 11:57 PM - Bruno Reis: I miss you
+1/14/26, 12:01 AM - Ana Lima: I need to buy bread
+1/14/26, 12:06 AM - Ana Lima: dinner out tonight?
+1/14/26, 12:09 AM - Bruno Reis: <Media omitted>
+1/14/26, 12:13 AM - Ana Lima: look at this: https://example.com/post/123
+1/14/26, 12:15 AM - Bruno Reis: ok, deal
+1/14/26, 8:56 PM - Ana Lima: did you see the game last night?
+1/14/26, 8:57 PM - Bruno Reis: good morning!
+1/14/26, 9:01 PM - Ana Lima: <Media omitted>
+1/14/26, 9:01 PM - Bruno Reis: I will be there in 10 minutes
+1/14/26, 9:03 PM - Bruno Reis: <Media omitted>
+1/15/26, 12:22 AM - Bruno Reis: I will be there in 10 minutes
+1/15/26, 12:25 AM - Bruno Reis: I need to buy bread
+1/15/26, 12:29 AM - Ana Lima: look at this: https://example.com/post/123
+1/15/26, 12:29 AM - Bruno Reis: dinner out tonight?
+1/15/26, 12:30 AM - Ana Lima: <Media omitted>
+1/15/26, 12:34 AM - Bruno Reis: call me when you can
+1/15/26, 12:38 AM - Ana Lima: dinner out tonight?
+1/15/26, 12:50 PM - Ana Lima: look at this: https://example.com/post/123
+1/15/26, 12:53 PM - Ana Lima: <Media omitted>
+1/15/26, 12:54 PM - Bruno Reis: call me when you can
+1/16/26, 1:14 AM - Bruno Reis: good night, see you tomorrow
+1/16/26, 1:18 AM - Bruno Reis: good night, see you tomorrow
+1/16/26, 1:22 AM - Ana Lima: did you see the game last night?
+1/16/26, 1:25 AM - Bruno Reis: look at this: https://example.com/post/123
+1/16/26, 1:27 AM - Ana Lima: did you see the game last night?
+1/16/26, 1:30 AM - Bruno Reis: look at this: https://example.com/post/123
+1/16/26, 12:09 PM - Ana Lima: <Media omitted>
+1/16/26, 12:09 PM - Ana Lima: <Media omitted>
+1/16/26, 12:10 PM - Bruno Reis: dinner out tonight?
+1/16/26, 12:14 PM - Bruno Reis: look at this: https://example.com/post/123
+1/16/26, 12:15 PM - Ana Lima: did you see the game last night?
+1/16/26, 12:19 PM - Bruno Reis: good morning!
+1/17/26, 10:35 PM - Ana Lima: <Media omitted>
+1/17/26, 10:37 PM - Bruno Reis: I need to buy bread
+1/17/26, 10:41 PM - Ana Lima: first line
+second line of the same message
+1/17/26, 10:46 PM - Ana Lima: first line
+second line of the same message
+1/17/26, 10:47 PM - Ana Lima: first line
+second line of the same message
+1/17/26, 10:50 PM - Bruno Reis: <Media omitted>
+1/17/26, 10:54 PM - Ana Lima: ok, deal
+1/17/26, 10:58 PM - Bruno Reis: I will be there in 10 minutes
+1/17/26, 11:05 PM - Ana Lima: haha that was good
+1/17/26, 11:05 PM - Bruno Reis: hi, how are you?
+1/17/26, 11:06 PM - Ana Lima: I miss you
+1/17/26, 11:08 PM - Ana Lima: look at this: https://example.com/post/123
+1/17/26, 11:08 PM - Bruno Reis: did you see the game last night?
+1/17/26, 11:10 PM - Ana Lima: good morning!
+1/18/26, 10:04 PM - Bruno Reis: first line
+second line of the same message
+1/18/26, 10:08 PM - Ana Lima: hi, how are you?
+1/18/26, 10:13 PM - Bruno Reis: I need to buy bread
+1/20/26, 11:41 PM - Bruno Reis: I need to buy bread
+1/20/26, 11:45 PM - Ana Lima: haha that was good
+1/20/26, 11:49 PM - Bruno Reis: I need to buy bread
+1/20/26, 11:54 PM - Ana Lima: call me when you can
+1/20/26, 11:57 PM - Ana Lima: call me when you can
+1/22/26, 7:07 AM - Ana Lima: I miss you
+1/22/26, 7:07 AM - Bruno Reis: ok, deal
+1/23/26, 10:43 PM - Bruno Reis: haha that was good
+1/23/26, 10:45 PM - Ana Lima: good night, see you tomorrow
+1/23/26, 10:48 PM - Bruno Reis: I will be there in 10 minutes
+1/23/26, 10:53 PM - Bruno Reis: I need to buy bread
+1/23/26, 10:57 PM - Ana Lima: <Media omitted>
+1/23/26, 11:00 PM - Ana Lima: look at this: https://example.com/post/123
+1/23/26, 11:05 PM - Bruno Reis: good morning!
+1/24/26, 7:35 PM - Ana Lima: I miss you
+1/24/26, 7:37 PM - Bruno Reis: good morning!
+1/24/26, 7:39 PM - Ana Lima: haha that was good
+1/24/26, 7:39 PM - Bruno Reis: good night, see you tomorrow
+1/24/26, 7:42 PM - Ana Lima: dinner out tonight?
+1/24/26, 7:45 PM - Bruno Reis: good morning!
+1/24/26, 7:47 PM - Ana Lima: <Media omitted>
+1/24/26, 9:02 PM - Bruno Reis: first line
+second line of the same message
+1/24/26, 9:07 PM - Ana Lima: did you see the game last night?
+1/24/26, 9:08 PM - Bruno Reis: first line
+second line of the same message
+1/24/26, 9:10 PM - Ana Lima: dinner out tonight?
+1/24/26, 9:11 PM - Bruno Reis: look at this: https://example.com/post/123
+1/24/26, 9:14 PM - Ana Lima: <Media omitted>
+1/24/26, 9:18 PM - Bruno Reis: call me when you can
+1/27/26, 9:37 PM - Ana Lima: look at this: https://example.com/post/123
+1/27/26, 9:38 PM - Bruno Reis: look at this: https://example.com/post/123
+1/27/26, 9:41 PM - Ana Lima: I need to buy bread
+1/27/26, 9:44 PM - Ana Lima: did you see the game last night?
+1/27/26, 9:48 PM - Ana Lima: good night, see you tomorrow
+1/27/26, 9:50 PM - Ana Lima: did you see the game last night?
+1/27/26, 9:52 PM - Bruno Reis: dinner out tonight?
+1/27/26, 9:56 PM - Ana Lima: <Media omitted>
+1/27/26, 9:59 PM - Bruno Reis: did you see the game last night?
+1/28/26, 6:09 PM - Bruno Reis: call me when you can
+1/28/26, 6:10 PM - Bruno Reis: <Media omitted>
+1/28/26, 7:59 PM - Bruno Reis: good morning!
+1/28/26, 8:03 PM - Ana Lima: haha that was good
+1/28/26, 8:08 PM - Bruno Reis: haha that was good
+1/28/26, 8:12 PM - Ana Lima: I need to buy bread
+1/28/26, 8:13 PM - Bruno Reis: <Media omitted>
+1/29/26, 12:01 PM - Bruno Reis: hi, how are you?
+1/29/26, 12:04 PM - Bruno Reis: good morning!
+1/29/26, 12:08 PM - Ana Lima: hi, how are you?
+1/29/26, 12:09 PM - Ana Lima: dinner out tonight?
+1/29/26, 12:10 PM - Bruno Reis: <Media omitted>
+1/29/26, 12:11 PM - Ana Lima: ok, deal
+1/29/26, 12:16 PM - Bruno Reis: first line
+second line of the same message
+1/29/26, 12:20 PM - Bruno Reis: dinner out tonight?
+1/29/26, 12:20 PM - Ana Lima: I need to buy bread
+1/29/26, 7:26 PM - Bruno Reis: haha that was good
+1/29/26, 7:31 PM - Ana Lima: good night, see you tomorrow
+1/29/26, 7:32 PM - Bruno Reis: ok, deal
+1/29/26, 7:37 PM - Bruno Reis: <Media omitted>
+1/29/26, 7:40 PM - Ana Lima: ok, deal
+1/30/26, 9:05 PM - Ana Lima: good night, see you tomorrow
+1/30/26, 9:05 PM - Bruno Reis: <Media omitted>
+1/30/26, 9:08 PM - Ana Lima: I need to buy bread
+1/30/26, 9:10 PM - Bruno Reis: haha that was good
+1/30/26, 9:11 PM - Bruno Reis: call me when you can
+1/30/26, 9:15 PM - Ana Lima: <Media omitted>
+1/30/26, 9:19 PM - Bruno Reis: haha that was good
+1/30/26, 9:26 PM - Ana Lima: <Media omitted>
+1/30/26, 9:28 PM - Bruno Reis: <Media omitted>
+1/30/26, 9:31 PM - Ana Lima: dinner out tonight?
+1/30/26, 9:33 PM - Ana Lima: <Media omitted>
+1/30/26, 9:37 PM - Bruno Reis: haha that was good
+1/30/26, 9:39 PM - Ana Lima: I will be there in 10 minutes
+1/30/26, 9:39 PM - Bruno Reis: good night, see you tomorrow
+1/30/26, 9:39 PM - Ana Lima: good morning!
+1/30/26, 9:42 PM - Ana Lima: dinner out tonight?
+1/31/26, 9:16 AM - Ana Lima: look at this: https://example.com/post/123
+1/31/26, 9:17 AM - Ana Lima: <Media omitted>
+1/31/26, 9:19 AM - Bruno Reis: I miss you
+1/31/26, 9:23 AM - Bruno Reis: I will be there in 10 minutes
+1/31/26, 9:26 AM - Ana Lima: look at this: https://example.com/post/123
+1/31/26, 1:48 PM - Ana Lima: I need to buy bread
+1/31/26, 1:50 PM - Ana Lima: haha that was good
+1/31/26, 1:53 PM - Bruno Reis: good night, see you tomorrow
+1/31/26, 1:57 PM - Ana Lima: first line
+second line of the same message
+1/31/26, 2:01 PM - Ana Lima: did you see the game last night?
+1/31/26, 2:06 PM - Bruno Reis: hi, how are you?
+1/31/26, 2:06 PM - Ana Lima: I miss you
+2/1/26, 9:32 PM - Ana Lima: first line
+second line of the same message
+2/1/26, 9:33 PM - Bruno Reis: good night, see you tomorrow
+2/1/26, 9:34 PM - Bruno Reis: look at this: https://example.com/post/123
+2/1/26, 9:38 PM - Bruno Reis: good morning!
+2/1/26, 9:40 PM - Bruno Reis: look at this: https://example.com/post/123
+2/1/26, 9:42 PM - Ana Lima: hi, how are you?
+2/1/26, 9:47 PM - Bruno Reis: <Media omitted>
+2/2/26, 1:12 AM - Ana Lima: I will be there in 10 minutes
+2/2/26, 1:16 AM - Bruno Reis: good morning!
+2/2/26, 1:19 AM - Ana Lima: I miss you
+2/2/26, 1:22 AM - Ana Lima: <Media omitted>
+2/2/26, 1:25 AM - Ana Lima: <Media omitted>
+2/2/26, 1:26 AM - Bruno Reis: did you see the game last night?
+2/2/26, 1:28 AM - Ana Lima: <Media omitted>
+2/2/26, 1:32 AM - Ana Lima: <Media omitted>
+2/2/26, 1:40 AM - Bruno Reis: I need to buy bread
+2/2/26, 1:43 AM - Ana Lima: did you see the game last night?
+2/2/26, 1:44 AM - Bruno Reis: ok, deal
+2/2/26, 1:45 AM - Ana Lima: good night, see you tomorrow
+2/2/26, 1:45 AM - Ana Lima: I miss you
+2/2/26, 1:46 AM - Bruno Reis: hi, how are you?
+2/2/26, 1:48 AM - Bruno Reis: call me when you can
+2/2/26, 1:51 AM - Ana Lima: <Media omitted>
+2/3/26, 12:46 AM - Bruno Reis: <Media omitted>
+2/3/26, 12:50 AM - Bruno Reis: <Media omitted>
+2/3/26, 12:54 AM - Ana Lima: I will be there in 10 minutes
+2/3/26, 12:55 AM - Bruno Reis: <Media omitted>
+2/3/26, 8:21 AM - Bruno Reis: ok, deal
+2/3/26, 8:25 AM - Bruno Reis: <Media omitted>
+2/3/26, 8:30 AM - Ana Lima: I need to buy bread
+2/3/26, 8:32 AM - Bruno Reis: I miss you
+2/3/26, 8:35 AM - Ana Lima: ok, deal
+2/3/26, 8:35 AM - Bruno Reis: good night, see you tomorrow
+2/3/26, 8:40 AM - Bruno Reis: dinner out tonight?
+2/4/26, 12:32 AM - Ana Lima: <Media omitted>
+2/4/26, 12:34 AM - Bruno Reis: did you see the game last night?
+2/4/26, 11:20 PM - Bruno Reis: did you see the game last night?
+2/4/26, 11:23 PM - Bruno Reis: <Media omitted>
+2/4/26, 11:23 PM - Ana Lima: haha that was good
+2/4/26, 11:26 PM - Bruno Reis: <Media omitted>
+2/4/26, 11:26 PM - Ana Lima: good night, see you tomorrow
+2/4/26, 11:31 PM - Bruno Reis: <Media omitted>
+2/4/26, 11:34 PM - Ana Lima: did you see the game last night?
+2/4/26, 11:35 PM - Bruno Reis: did you see the game last night?
+2/4/26, 11:40 PM - Ana Lima: hi, how are you?
+2/5/26, 8:26 PM - Ana Lima: I will be there in 10 minutes
+2/5/26, 8:28 PM - Bruno Reis: <Media omitted>
+2/5/26, 8:31 PM - Ana Lima: good night, see you tomorrow
+2/5/26, 8:32 PM - Ana Lima: ok, deal
+2/5/26, 8:35 PM - Bruno Reis: call me when you can
+2/6/26, 8:15 PM - Bruno Reis: I will be there in 10 minutes
+2/6/26, 8:17 PM - Ana Lima: ok, deal
+2/6/26, 8:19 PM - Bruno Reis: <Media omitted>
+2/6/26, 8:21 PM - Ana Lima: I need to buy bread
+2/6/26, 8:22 PM - Bruno Reis: <Media omitted>
+2/7/26, 7:53 PM - Bruno Reis: call me when you can
+2/7/26, 7:59 PM - Ana Lima: <Media omitted>
+2/7/26, 10:04 PM - Ana Lima: first line
+second line of the same message
+2/7/26, 10:13 PM - Ana Lima: I need to buy bread
+2/7/26, 10:16 PM - Ana Lima: good night, see you tomorrow
+2/7/26, 10:16 PM - Bruno Reis: hi, how are you?
+2/7/26, 10:18 PM - Ana Lima: good morning!
+2/7/26, 10:23 PM - Ana Lima: dinner out tonight?
+2/8/26, 8:00 PM - Bruno Reis: <Media omitted>
+2/8/26, 8:03 PM - Ana Lima: ok, deal
+2/8/26, 9:06 PM - Bruno Reis: dinner out tonight?
+2/8/26, 9:08 PM - Ana Lima: good night, see you tomorrow
+2/9/26, 1:01 AM - Ana Lima: look at this: https://example.com/post/123
+2/9/26, 1:07 AM - Bruno Reis: good morning!
+2/9/26, 1:11 AM - Ana Lima: I miss you
+2/10/26, 8:43 PM - Ana Lima: first line
+second line of the same message
+2/10/26, 8:50 PM - Ana Lima: <Media omitted>
+2/10/26, 8:51 PM - Bruno Reis: good morning!
+2/10/26, 9:03 PM - Bruno Reis: <Media omitted>
+2/10/26, 10:32 PM - Bruno Reis: I miss you
+2/11/26, 1:11 AM - Ana Lima: look at this: https://example.com/post/123
+2/11/26, 1:16 AM - Ana Lima: hi, how are you?
+2/11/26, 1:16 AM - Bruno Reis: dinner out tonight?
+2/11/26, 10:12 PM - Bruno Reis: I miss you
+2/12/26, 1:31 PM - Bruno Reis: I need to buy bread
+2/15/26, 12:54 AM - Bruno Reis: <Media omitted>
+2/16/26, 6:28 PM - Bruno Reis: did you see the game last night?
+2/16/26, 6:29 PM - Ana Lima: call me when you can
+2/16/26, 6:39 PM - Ana Lima: first line
+second line of the same message
+2/16/26, 10:41 PM - Bruno Reis: <Media omitted>
+2/16/26, 10:46 PM - Ana Lima: hi, how are you?
+2/16/26, 10:49 PM - Bruno Reis: hi, how are you?
+2/16/26, 10:55 PM - Ana Lima: hi, how are you?
+2/17/26, 12:34 AM - Ana Lima: good night, see you tomorrow
+2/17/26, 12:40 AM - Bruno Reis: good night, see you tomorrow
+2/19/26, 8:56 PM - Bruno Reis: ok, deal
+2/19/26, 9:00 PM - Ana Lima: I will be there in 10 minutes
+2/19/26, 11:09 PM - Bruno Reis: did you see the game last night?
+2/19/26, 11:25 PM - Ana Lima: look at this: https://example.com/post/123
+2/21/26, 10:10 PM - Ana Lima: did you see the game last night?
+2/21/26, 10:13 PM - Bruno Reis: good night, see you tomorrow
+2/21/26, 10:17 PM - Ana Lima: did you see the game last night?
+2/23/26, 1:33 PM - Bruno Reis: first line
+second line of the same message
+2/23/26, 1:34 PM - Ana Lima: call me when you can
+2/24/26, 10:23 PM - Bruno Reis: call me when you can
+2/24/26, 11:08 PM - Bruno Reis: call me when you can
+2/24/26, 11:09 PM - Ana Lima: good night, see you tomorrow
+2/24/26, 11:14 PM - Ana Lima: haha that was good
+2/24/26, 11:15 PM - Bruno Reis: I need to buy bread
+2/24/26, 11:15 PM - Ana Lima: good morning!
+2/24/26, 11:16 PM - Ana Lima: <Media omitted>
+2/24/26, 11:17 PM - Bruno Reis: I need to buy bread
+2/25/26, 7:44 PM - Bruno Reis: did you see the game last night?
+2/28/26, 7:41 AM - Bruno Reis: first line
+second line of the same message
+2/28/26, 7:51 AM - Bruno Reis: ok, deal
+2/28/26, 9:59 AM - Ana Lima: I miss you
