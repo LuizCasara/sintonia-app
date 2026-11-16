@@ -1,3 +1,4 @@
+import { demoMonths } from './demo-months';
 import type { Report } from './metrics';
 
 /** Relatório fictício e fixo, para desenhar as telas sem dados reais. */
@@ -13,13 +14,7 @@ export function getDemoReport(locale: 'pt' | 'en'): Report {
         A: { messages: 61840, words: 402300, characters: 2210500, uniqueWords: 18420 },
         B: { messages: 54210, words: 318900, characters: 1750200, uniqueWords: 15310 },
       },
-      perMonth: [
-        { month: '2019-03', A: 820, B: 760, whatsapp: 1580, telegram: 0 },
-        { month: '2019-04', A: 1210, B: 1100, whatsapp: 2310, telegram: 0 },
-        { month: '2019-05', A: 1050, B: 990, whatsapp: 2040, telegram: 0 },
-        { month: '2024-06', A: 540, B: 480, whatsapp: 600, telegram: 420 },
-        { month: '2024-07', A: 610, B: 520, whatsapp: 450, telegram: 680 },
-      ],
+      perMonth: demoMonths(),
     },
     // Equilíbrio: decisão em aberto, então a demo também fica sem pontos.
     balance: { points: null },

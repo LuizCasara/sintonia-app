@@ -1,6 +1,148 @@
 @import 'tailwindcss';
 
-/* Tokens do visual: a rodada 2 preenche. */
+/* Tokens do visual "Sintonia": duas frequências que entram em fase. */
 @theme {
-  /* --color-brand: ...; */
+  --color-void: #06060c; /* fundo */
+  --color-panel: #0e0e1a; /* cards (borda #ffffff14) */
+  --color-ink: #e8e8f4;
+  --color-muted: #8a8aa6;
+  --color-a: #22e5ff; /* pessoa A */
+  --color-b: #ff3dbd; /* pessoa B */
+  --color-sync: #b18cff; /* A + B */
+  --color-ok: #a3ff5c;
+  --color-line: #ffffff14;
+}
+
+@theme inline {
+  --font-display: var(--font-space), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    background: var(--color-void);
+    color-scheme: dark;
+  }
+  body {
+    background:
+      radial-gradient(
+        60rem 30rem at 50% -10%,
+        color-mix(in srgb, var(--color-sync) 12%, transparent),
+        transparent
+      ),
+      var(--color-void);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+  }
+  /* Foco visível: anel violeta */
+  :focus-visible {
+    outline: 2px solid var(--color-sync);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Glow = cor a 40% */
+.glow-a {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--color-a) 40%, transparent));
+}
+.glow-b {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--color-b) 40%, transparent));
+}
+.glow-sync {
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--color-sync) 40%, transparent));
+}
+.panel {
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+}
+.panel-hover {
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+.panel-hover:hover {
+  border-color: color-mix(in srgb, var(--color-sync) 60%, transparent);
+  box-shadow: 0 0 28px color-mix(in srgb, var(--color-sync) 40%, transparent);
+}
+
+/* Botões (alvo de toque mínimo 44px) */
+.btn {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+  font-weight: 600;
+  transition:
+    box-shadow 0.2s,
+    background 0.2s;
+}
+.btn-primary {
+  background: color-mix(in srgb, var(--color-sync) 22%, transparent);
+  border-color: var(--color-sync);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-sync) 40%, transparent);
+}
+.btn-primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-sync) 35%, transparent);
+}
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--color-sync);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* SyncWave: B começa defasada e entra em fase com A */
+@keyframes sync-flow {
+  to {
+    transform: translateX(-120px);
+  }
+}
+@keyframes sync-align {
+  from {
+    transform: translateX(60px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes sync-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.sync-flow {
+  animation: sync-flow 6s linear infinite;
+}
+.sync-align {
+  animation: sync-align 4s ease-in-out 0.4s both;
+}
+.sync-appear {
+  animation: sync-appear 1.5s ease-in 3.6s both;
+}
+
+/* Sem animação: estado final (ondas alinhadas) */
+@media (prefers-reduced-motion: reduce) {
+  .sync-flow,
+  .sync-align,
+  .sync-appear {
+    animation: none;
+  }
 }
