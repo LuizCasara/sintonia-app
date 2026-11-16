@@ -3,7 +3,16 @@
     "language": "Idioma",
     "demoBanner": "Dados fictícios de demonstração",
     "reportNav": "Relatório",
-    "nav": { "timeline": "Linha do tempo", "dashboard": "Painel", "actions": "Ações" }
+    "nav": {
+      "timeline": "Linha do tempo",
+      "dashboard": "Painel",
+      "actions": "Ações"
+    },
+    "navShort": {
+      "timeline": "História",
+      "dashboard": "Painel",
+      "actions": "Ações"
+    }
   },
   "home": {
     "title": "Veja o quanto vocês estão em sintonia",
@@ -34,7 +43,10 @@
       "disabled": "Marque o consentimento acima para enviar arquivos",
       "formats": "Aceita .txt, .zip e .json"
     },
-    "files": { "title": "Arquivos escolhidos", "remove": "Remover {name}" },
+    "files": {
+      "title": "Arquivos escolhidos",
+      "remove": "Remover {name}"
+    },
     "formats": {
       "whatsapp-android": "WhatsApp (Android)",
       "whatsapp-ios": "WhatsApp (iPhone)",
@@ -68,7 +80,8 @@
     },
     "progressLabel": "Progresso da análise",
     "done": "Pronto! Sua sintonia está esperando.",
-    "open": "Ver a linha do tempo"
+    "open": "Ver a linha do tempo",
+    "stepDone": "concluída"
   },
   "timeline": {
     "title": "A história de vocês",
@@ -84,9 +97,22 @@
       "peak": "Pico de conversa",
       "valley": "Vale de conversa"
     },
-    "phaseDetail": "Volume {pct}% em relação à média recente",
-    "firstDetail": "Uma das primeiras vezes de vocês dois.",
-    "counter": "Marco {current} de {total}"
+    "counter": "Marco {current} de {total}",
+    "chip": {
+      "first": "Primeira vez",
+      "peak": "Pico",
+      "valley": "Vale"
+    },
+    "legend": {
+      "firsts": "Primeiras vezes",
+      "phases": "Fases (pico/vale)"
+    },
+    "desc": {
+      "start": "Onde tudo começou. Desde então, {total} mensagens.",
+      "after": "{days} dias depois da primeira mensagem.",
+      "peak": "Pico: +{pct}% de mensagens acima da média",
+      "valley": "Vale: {pct}% de mensagens abaixo da média"
+    }
   },
   "dashboard": {
     "title": "Painel",
@@ -95,7 +121,7 @@
     "close": "Fechar",
     "balancePending": "Fórmula em definição",
     "cards": {
-      "volume": "Volume por mês",
+      "volume": "Mensagens no total",
       "perPerson": "Mensagens por pessoa",
       "response": "Tempo de resposta",
       "started": "Quem inicia conversas",
@@ -132,7 +158,13 @@
       "goodNight": "Dias seguidos de boa noite",
       "days": "{count} dias",
       "lateNight": "Madrugada por ano",
-      "lastMonths": "Últimos 12 meses"
+      "lastMonths": "Últimos 12 meses",
+      "inYears": "em {years} anos",
+      "perMonth": "por mês",
+      "audioLegend": "Áudio",
+      "textLegend": "Texto",
+      "morning": "Bom dia",
+      "night": "Boa noite"
     }
   },
   "actions": {

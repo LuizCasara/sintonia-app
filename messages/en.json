@@ -3,7 +3,16 @@
     "language": "Language",
     "demoBanner": "Fictional demo data",
     "reportNav": "Report",
-    "nav": { "timeline": "Timeline", "dashboard": "Dashboard", "actions": "Actions" }
+    "nav": {
+      "timeline": "Timeline",
+      "dashboard": "Dashboard",
+      "actions": "Actions"
+    },
+    "navShort": {
+      "timeline": "Story",
+      "dashboard": "Dashboard",
+      "actions": "Actions"
+    }
   },
   "home": {
     "title": "See how in sync you are",
@@ -34,7 +43,10 @@
       "disabled": "Check the consent above to upload files",
       "formats": "Accepts .txt, .zip and .json"
     },
-    "files": { "title": "Chosen files", "remove": "Remove {name}" },
+    "files": {
+      "title": "Chosen files",
+      "remove": "Remove {name}"
+    },
     "formats": {
       "whatsapp-android": "WhatsApp (Android)",
       "whatsapp-ios": "WhatsApp (iPhone)",
@@ -68,7 +80,8 @@
     },
     "progressLabel": "Analysis progress",
     "done": "Done! Your sync is waiting.",
-    "open": "See the timeline"
+    "open": "See the timeline",
+    "stepDone": "done"
   },
   "timeline": {
     "title": "Your story",
@@ -84,9 +97,22 @@
       "peak": "Chat peak",
       "valley": "Chat valley"
     },
-    "phaseDetail": "Volume {pct}% versus the recent average",
-    "firstDetail": "One of your first times together.",
-    "counter": "Milestone {current} of {total}"
+    "counter": "Milestone {current} of {total}",
+    "chip": {
+      "first": "First time",
+      "peak": "Peak",
+      "valley": "Valley"
+    },
+    "legend": {
+      "firsts": "First times",
+      "phases": "Phases (peak/valley)"
+    },
+    "desc": {
+      "start": "Where it all began. Since then, {total} messages.",
+      "after": "{days} days after the first message.",
+      "peak": "Peak: +{pct}% messages above average",
+      "valley": "Valley: {pct}% messages below average"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
@@ -95,7 +121,7 @@
     "close": "Close",
     "balancePending": "Formula being defined",
     "cards": {
-      "volume": "Volume per month",
+      "volume": "Total messages",
       "perPerson": "Messages per person",
       "response": "Response time",
       "started": "Who starts chats",
@@ -132,7 +158,13 @@
       "goodNight": "Good-night streak",
       "days": "{count} days",
       "lateNight": "Late night per year",
-      "lastMonths": "Last 12 months"
+      "lastMonths": "Last 12 months",
+      "inYears": "in {years} years",
+      "perMonth": "per month",
+      "audioLegend": "Voice",
+      "textLegend": "Text",
+      "morning": "Good morning",
+      "night": "Good night"
     }
   },
   "actions": {

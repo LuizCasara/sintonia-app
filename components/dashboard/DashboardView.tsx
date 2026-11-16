@@ -4,7 +4,16 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useState, type ReactNode } from 'react';
 import { useReport } from '@/components/report/ReportProvider';
 import { fmtDuration, fmtNum, fmtPct, weekdayName } from '@/lib/format';
-import { DualBar, Heatmap, PersonTable, Spark, StackedBars } from './charts';
+import {
+  DualBar,
+  Heatmap,
+  MediaBars,
+  NeutralBar,
+  PersonRow,
+  PersonTable,
+  Spark,
+  StackedBars,
+} from './charts';
 import { DetailPanel } from './DetailPanel';
 
 type CardId =
@@ -19,6 +28,7 @@ type CardId =
   | 'apps';
 
 const BANDS = ['00', '04', '08', '12', '16', '20']; // faixas de 4 h
+const firstName = (full: string) => full.split(' ')[0] ?? full;
 
 /** Painel: grid de cards; o clique abre o detalhe (drawer / bottom sheet). */
 export function DashboardView() {
@@ -29,18 +39,21 @@ export function DashboardView() {
   const close = useCallback(() => setOpen(null), []);
 
   const n = (v: number) => fmtNum(locale, v);
-  const { A: nameA, B: nameB } = r.people;
+  const nameA = firstName(r.people.A);
+  const nameB = firstName(r.people.B);
   const months = r.volume.perMonth;
   const m = (key: string) => t(`m.${key}`);
   // Linhas A × B para as tabelas de detalhe
-  const rows = (items: [string, number | string, number | string][]) =>
-    items.map(([key, a, b]) => ({
-      label: m(key),
-      a: typeof a === 'number' ? n(a) : a,
-      b: typeof b === 'number' ? n(b) : b,
-    }));
   const table = (items: [string, number | string, number | string][]) => (
-    <PersonTable rows={rows(items)} nameA={nameA} nameB={nameB} />
+    <PersonTable
+      nameA={nameA}
+      nameB={nameB}
+      rows={items.map(([key, a, b]) => ({
+        label: m(key),
+        a: typeof a === 'number' ? n(a) : a,
+        b: typeof b === 'number' ? n(b) : b,
+      }))}
+    />
   );
 
   const vol = r.volume.perPerson;
@@ -48,17 +61,26 @@ export function DashboardView() {
   const res = r.response.perPerson;
   const lang = r.language.perPerson;
   const med = r.media.perPerson;
+  const years = Math.max(1, Math.round(r.period.days / 365));
+  const lastApps = r.apps.perYear.at(-1);
   const last12 = months.slice(-12).map((x) => ({ label: x.month, a: x.A, b: x.B }));
   const days = Array.from({ length: 7 }, (_, d) => weekdayName(locale, d));
   const bands = BANDS.map((b, i) => `${b}–${BANDS[i + 1] ?? '24'}`);
+  const emojis = (who: 'A' | 'B', count: number) =>
+    lang[who].topEmojis
+      .slice(0, count)
+      .map((e) => e.emoji)
+      .join(' ');
 
-  const cards: { id: CardId; summary: ReactNode; detail: ReactNode }[] = [
+  const cards: { id: CardId; span?: string; summary: ReactNode; detail: ReactNode }[] = [
     {
       id: 'volume',
       summary: (
         <>
           <p className="font-display text-3xl font-bold">{n(vol.A.messages + vol.B.messages)}</p>
+          <p className="mb-1 text-sm text-muted">{t('m.inYears', { years })}</p>
           <Spark a={months.map((x) => x.A)} b={months.map((x) => x.B)} />
+          <p className="mt-1 text-xs text-muted">{m('perMonth')}</p>
         </>
       ),
       detail: (
@@ -71,7 +93,7 @@ export function DashboardView() {
     {
       id: 'perPerson',
       summary: (
-        <DualBar a={vol.A.messages} b={vol.B.messages} labelA={nameA} labelB={nameB} fmt={n} />
+        <DualBar a={vol.A.messages} b={vol.B.messages} nameA={nameA} nameB={nameB} fmt={n} />
       ),
       detail: table([
         ['messages', vol.A.messages, vol.B.messages],
@@ -83,9 +105,13 @@ export function DashboardView() {
     {
       id: 'response',
       summary: (
-        <div className="flex justify-between font-display text-2xl font-bold">
-          <span className="text-a">{fmtDuration(res.A.avgFirstResponseSec)}</span>
-          <span className="text-b">{fmtDuration(res.B.avgFirstResponseSec)}</span>
+        <div className="space-y-2 font-display text-xl font-bold">
+          <PersonRow who="A" name={nameA}>
+            {fmtDuration(res.A.avgFirstResponseSec)}
+          </PersonRow>
+          <PersonRow who="B" name={nameB}>
+            {fmtDuration(res.B.avgFirstResponseSec)}
+          </PersonRow>
         </div>
       ),
       detail: table([
@@ -100,7 +126,7 @@ export function DashboardView() {
     {
       id: 'started',
       summary: (
-        <DualBar a={ses.A.started} b={ses.B.started} labelA={nameA} labelB={nameB} fmt={n} />
+        <DualBar a={ses.A.started} b={ses.B.started} nameA={nameA} nameB={nameB} fmt={n} />
       ),
       detail: table([
         ['started', ses.A.started, ses.B.started],
@@ -110,39 +136,15 @@ export function DashboardView() {
       ]),
     },
     {
-      id: 'heatmap',
-      summary: (
-        <Heatmap data={r.hours.heatmap} rows={days} cols={bands} label={t('cards.heatmap')} />
-      ),
-      detail: (
-        <div className="space-y-5">
-          {table([
-            ['earliest', r.hours.earliest.A ?? '—', r.hours.earliest.B ?? '—'],
-            ['latest', r.hours.latest.A ?? '—', r.hours.latest.B ?? '—'],
-          ])}
-          <h3 className="text-sm font-semibold text-muted">{m('lateNight')}</h3>
-          <StackedBars
-            items={r.hours.lateNightPerYear.map((y) => ({ label: String(y.year), a: y.A, b: y.B }))}
-          />
-        </div>
-      ),
-    },
-    {
       id: 'emojis',
       summary: (
-        <div className="flex justify-between text-2xl">
-          <span>
-            {lang.A.topEmojis
-              .slice(0, 3)
-              .map((e) => e.emoji)
-              .join(' ')}
-          </span>
-          <span>
-            {lang.B.topEmojis
-              .slice(0, 3)
-              .map((e) => e.emoji)
-              .join(' ')}
-          </span>
+        <div className="space-y-2 text-xl">
+          <PersonRow who="A" name={nameA}>
+            {emojis('A', 3)}
+          </PersonRow>
+          <PersonRow who="B" name={nameB}>
+            {emojis('B', 3)}
+          </PersonRow>
         </div>
       ),
       detail: (
@@ -167,7 +169,16 @@ export function DashboardView() {
     },
     {
       id: 'media',
-      summary: <DualBar a={med.A.audios} b={med.B.audios} labelA={nameA} labelB={nameB} fmt={n} />,
+      summary: (
+        <MediaBars
+          audioLabel={m('audioLegend')}
+          textLabel={m('textLegend')}
+          rows={[
+            { who: 'A', name: nameA, audio: med.A.audios, text: med.A.texts },
+            { who: 'B', name: nameB, audio: med.B.audios, text: med.B.texts },
+          ]}
+        />
+      ),
       detail: table([
         ['audios', med.A.audios, med.B.audios],
         ['texts', med.A.texts, med.B.texts],
@@ -177,12 +188,45 @@ export function DashboardView() {
       ]),
     },
     {
+      id: 'heatmap',
+      span: 'sm:col-span-2',
+      summary: (
+        <Heatmap data={r.hours.heatmap} rows={days} cols={bands} label={t('cards.heatmap')} />
+      ),
+      detail: (
+        <div className="space-y-5">
+          {table([
+            ['earliest', r.hours.earliest.A ?? '—', r.hours.earliest.B ?? '—'],
+            ['latest', r.hours.latest.A ?? '—', r.hours.latest.B ?? '—'],
+          ])}
+          <h3 className="text-sm font-semibold text-muted">{m('lateNight')}</h3>
+          <StackedBars
+            items={r.hours.lateNightPerYear.map((y) => ({
+              label: String(y.year),
+              a: y.A,
+              b: y.B,
+            }))}
+          />
+        </div>
+      ),
+    },
+    {
       id: 'streaks',
       summary: (
-        <div className="flex justify-between font-display text-2xl font-bold text-ok">
-          <span>☀ {r.streaks.goodMorningDays}</span>
-          <span>☾ {r.streaks.goodNightDays}</span>
-        </div>
+        <ul className="space-y-2 text-ok">
+          <li className="flex items-baseline justify-between gap-2">
+            <span className="text-sm text-muted">☀ {m('morning')}</span>
+            <span className="font-display text-xl font-bold">
+              {t('m.days', { count: r.streaks.goodMorningDays })}
+            </span>
+          </li>
+          <li className="flex items-baseline justify-between gap-2">
+            <span className="text-sm text-muted">☾ {m('night')}</span>
+            <span className="font-display text-xl font-bold">
+              {t('m.days', { count: r.streaks.goodNightDays })}
+            </span>
+          </li>
+        </ul>
       ),
       detail: (
         <ul className="space-y-3">
@@ -200,12 +244,11 @@ export function DashboardView() {
     {
       id: 'apps',
       summary: (
-        <DualBar
-          a={r.apps.perYear.at(-1)?.whatsappPct ?? 0}
-          b={r.apps.perYear.at(-1)?.telegramPct ?? 0}
+        <NeutralBar
+          a={lastApps?.whatsappPct ?? 0}
+          b={lastApps?.telegramPct ?? 0}
           labelA="WhatsApp"
           labelB="Telegram"
-          fmt={(v) => `${v}%`}
         />
       ),
       detail: (
@@ -216,8 +259,8 @@ export function DashboardView() {
                 <th scope="row" className="py-2 text-left font-normal text-muted">
                   {y.year}
                 </th>
-                <td className="py-2 text-right">WhatsApp {y.whatsappPct}%</td>
-                <td className="py-2 text-right">Telegram {y.telegramPct}%</td>
+                <td className="py-2 text-right text-sync">WhatsApp {y.whatsappPct}%</td>
+                <td className="py-2 text-right text-muted">Telegram {y.telegramPct}%</td>
               </tr>
             ))}
           </tbody>
@@ -242,7 +285,7 @@ export function DashboardView() {
             type="button"
             aria-haspopup="dialog"
             onClick={() => setOpen(c.id)}
-            className="panel panel-hover flex min-h-36 flex-col gap-3 p-5 text-left"
+            className={`panel panel-hover flex flex-col gap-3 p-5 text-left ${c.span ?? ''}`}
           >
             <h2 className="text-sm font-semibold text-muted">{t(`cards.${c.id}`)}</h2>
             <div className="w-full">{c.summary}</div>
@@ -250,7 +293,7 @@ export function DashboardView() {
         ))}
 
         {/* Equilíbrio: a fórmula ainda não foi decidida, então nada de número ou nota */}
-        <section className="panel flex min-h-36 flex-col gap-3 p-5">
+        <section className="panel flex flex-col gap-3 p-5 sm:col-span-2">
           <h2 className="text-sm font-semibold text-muted">{t('cards.balance')}</h2>
           <p className="font-display text-xl font-bold text-sync">{t('balancePending')}</p>
         </section>
