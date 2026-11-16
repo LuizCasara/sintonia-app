@@ -49,4 +49,9 @@ describe('buildPrompt', () => {
     expect(text).not.toContain('Nome Real');
   });
 
+  it('não pede nota de Sintonia na V1', () => {
+    const text = buildPrompt(getDemoReport('pt'), { locale: 'pt', includeDictionary: false });
+    expect(text).not.toMatch(/nota de 0 a 10/i);
+    expect(text).not.toContain('**Sintonia**');
+  });
 });
