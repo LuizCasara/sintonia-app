@@ -35,77 +35,80 @@ export function ProcessingView() {
       <div className="pointer-events-none fixed inset-0 -z-0 opacity-80">
         <Particles progress={pct / 100} />
       </div>
-      <main className="relative z-10 mx-auto flex min-h-[70dvh] max-w-3xl flex-col justify-center gap-6 px-4 sm:px-6">
-        <h1 className="font-display text-3xl font-bold sm:text-4xl">{t('title')}</h1>
+      <main className="relative z-10 mx-auto flex min-h-[70dvh] max-w-3xl flex-col justify-center px-4 sm:px-6">
+        {/* Painel de vidro: o texto fica legível sobre as partículas */}
+        <div className="flex flex-col gap-6 rounded-3xl border border-line bg-void/60 p-6 backdrop-blur-md sm:p-8">
+          <h1 className="font-display text-3xl font-bold sm:text-4xl">{t('title')}</h1>
 
-        <div
-          role="progressbar"
-          aria-label={t('progressLabel')}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={Math.round(pct)}
-          className="h-3 overflow-hidden rounded-full border border-line bg-panel"
-        >
           <div
-            className="h-full rounded-full bg-sync shadow-[0_0_16px_var(--color-sync)]"
-            style={{ width: `${pct}%` }}
-          />
-        </div>
+            role="progressbar"
+            aria-label={t('progressLabel')}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(pct)}
+            className="h-3 overflow-hidden rounded-full border border-line bg-panel"
+          >
+            <div
+              className="h-full rounded-full bg-sync shadow-[0_0_16px_var(--color-sync)]"
+              style={{ width: `${pct}%` }}
+            />
+          </div>
 
-        <div className="flex items-baseline justify-between">
-          <p aria-live="polite" className="text-lg">
-            {done ? t('done') : t(`steps.${step}`)}
-          </p>
-          <span className="font-display text-2xl font-bold text-sync">{Math.round(pct)}%</span>
-        </div>
+          <div className="flex items-baseline justify-between">
+            <p aria-live="polite" className="text-lg">
+              {done ? t('done') : t(`steps.${step}`)}
+            </p>
+            <span className="font-display text-2xl font-bold text-sync">{Math.round(pct)}%</span>
+          </div>
 
-        {/* Stepper: uma linha no desktop, vertical no mobile; ✓ nas etapas concluídas */}
-        <ol className="flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:gap-2">
-          {STEPS.map((s, i) => {
-            const complete = i < stepIndex || done;
-            return (
-              <li key={s} className="flex items-center gap-2 sm:flex-1 sm:last:flex-none">
-                <span
-                  aria-current={i === stepIndex && !done ? 'step' : undefined}
-                  className={`flex items-center gap-2 whitespace-nowrap ${
-                    complete ? 'text-ok' : i === stepIndex ? 'text-ink' : 'text-muted'
-                  }`}
-                >
+          {/* Stepper: uma linha no desktop, vertical no mobile; ✓ nas etapas concluídas */}
+          <ol className="flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:gap-2">
+            {STEPS.map((s, i) => {
+              const complete = i < stepIndex || done;
+              return (
+                <li key={s} className="flex items-center gap-2 sm:flex-1 sm:last:flex-none">
                   <span
-                    className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-bold ${
-                      complete
-                        ? 'border-ok bg-ok/15'
-                        : i === stepIndex
-                          ? 'border-sync shadow-[0_0_10px_var(--color-sync)]'
-                          : 'border-line'
+                    aria-current={i === stepIndex && !done ? 'step' : undefined}
+                    className={`flex items-center gap-2 whitespace-nowrap ${
+                      complete ? 'text-ok' : i === stepIndex ? 'text-ink' : 'text-muted'
                     }`}
                   >
-                    {complete ? (
-                      <>
-                        ✓<span className="sr-only">{t('stepDone')}</span>
-                      </>
-                    ) : (
-                      i + 1
-                    )}
+                    <span
+                      className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-bold ${
+                        complete
+                          ? 'border-ok bg-ok/15'
+                          : i === stepIndex
+                            ? 'border-sync shadow-[0_0_10px_var(--color-sync)]'
+                            : 'border-line'
+                      }`}
+                    >
+                      {complete ? (
+                        <>
+                          ✓<span className="sr-only">{t('stepDone')}</span>
+                        </>
+                      ) : (
+                        i + 1
+                      )}
+                    </span>
+                    {t(`steps.${s}`)}
                   </span>
-                  {t(`steps.${s}`)}
-                </span>
-                {i < STEPS.length - 1 && (
-                  <span
-                    aria-hidden="true"
-                    className={`hidden h-px flex-1 sm:block ${complete ? 'bg-ok/50' : 'bg-line'}`}
-                  />
-                )}
-              </li>
-            );
-          })}
-        </ol>
+                  {i < STEPS.length - 1 && (
+                    <span
+                      aria-hidden="true"
+                      className={`hidden h-px flex-1 sm:block ${complete ? 'bg-ok/50' : 'bg-line'}`}
+                    />
+                  )}
+                </li>
+              );
+            })}
+          </ol>
 
-        {done && (
-          <Link href="/report/timeline" className="btn btn-primary self-start">
-            {t('open')}
-          </Link>
-        )}
+          {done && (
+            <Link href="/report/timeline" className="btn btn-primary self-start">
+              {t('open')}
+            </Link>
+          )}
+        </div>
       </main>
     </>
   );
