@@ -1,0 +1,35 @@
+# ── Dados reais de conversa: NUNCA entram no repo ──
+# Exports do WhatsApp (.txt e .zip)
+*.txt
+*.zip
+_chat.txt
+WhatsApp Chat*
+Conversa do WhatsApp*
+# Exports do Telegram Desktop
+result.json
+ChatExport*/
+# Pasta local para testar com dados reais
+data/real/
+# Exceção: só fixtures fictícias geradas pelo script
+!fixtures/**/*.txt
+!fixtures/**/result.json
+# robots.txt/LICENSE-like arquivos públicos
+!public/robots.txt
+
+# ── Node / Next ──
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# ── Testes ──
+playwright-report/
+test-results/
+blob-report/
+
+# ── Ambiente ──
+.env*
+.DS_Store
+*.log
