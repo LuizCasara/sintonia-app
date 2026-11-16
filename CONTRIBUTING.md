@@ -36,7 +36,7 @@ Rode `rg "TODO\(Luiz\)"`. Principais:
 - `lib/metrics/*.ts`: uma métrica por arquivo (`lexicon.ts` guarda os léxicos, hoje vazios)
 - `workers/analyze.worker.ts`: ligar as etapas
 
-Decisões: `docs/DECISOES.md`. Ainda em aberto: `rg "DECISÃO EM ABERTO"` (fórmula das notas; fonte da lista de frequência).
+Decisões: `docs/DECISOES.md`. Ainda em aberto: `rg "DECISÃO EM ABERTO"` (fórmula das notas). Data ambígua está adiada. CI não bloqueia o desenvolvimento.
 
 ## Estilo
 
