@@ -11,6 +11,7 @@
   --color-sync: #b18cff; /* A + B */
   --color-ok: #a3ff5c;
   --color-line: #ffffff14;
+  --color-danger: #ff7a85; /* só para "apagar tudo" */
 }
 
 @theme inline {

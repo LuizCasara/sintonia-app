@@ -35,7 +35,7 @@ export function ProcessingView() {
       <div className="pointer-events-none fixed inset-0 -z-0 opacity-80">
         <Particles progress={pct / 100} />
       </div>
-      <main className="relative z-10 mx-auto flex min-h-[70dvh] max-w-xl flex-col justify-center gap-6 px-4 sm:px-6">
+      <main className="relative z-10 mx-auto flex min-h-[70dvh] max-w-3xl flex-col justify-center gap-6 px-4 sm:px-6">
         <h1 className="font-display text-3xl font-bold sm:text-4xl">{t('title')}</h1>
 
         <div
@@ -59,21 +59,46 @@ export function ProcessingView() {
           <span className="font-display text-2xl font-bold text-sync">{Math.round(pct)}%</span>
         </div>
 
-        <ol className="flex flex-wrap gap-2 text-sm">
-          {STEPS.map((s, i) => (
-            <li
-              key={s}
-              className={`rounded-full border px-3 py-1 ${
-                i < stepIndex || done
-                  ? 'border-ok/50 text-ok'
-                  : i === stepIndex
-                    ? 'border-sync text-ink'
-                    : 'border-line text-muted'
-              }`}
-            >
-              {t(`steps.${s}`)}
-            </li>
-          ))}
+        {/* Stepper: uma linha no desktop, vertical no mobile; ✓ nas etapas concluídas */}
+        <ol className="flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:gap-2">
+          {STEPS.map((s, i) => {
+            const complete = i < stepIndex || done;
+            return (
+              <li key={s} className="flex items-center gap-2 sm:flex-1 sm:last:flex-none">
+                <span
+                  aria-current={i === stepIndex && !done ? 'step' : undefined}
+                  className={`flex items-center gap-2 whitespace-nowrap ${
+                    complete ? 'text-ok' : i === stepIndex ? 'text-ink' : 'text-muted'
+                  }`}
+                >
+                  <span
+                    className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-bold ${
+                      complete
+                        ? 'border-ok bg-ok/15'
+                        : i === stepIndex
+                          ? 'border-sync shadow-[0_0_10px_var(--color-sync)]'
+                          : 'border-line'
+                    }`}
+                  >
+                    {complete ? (
+                      <>
+                        ✓<span className="sr-only">{t('stepDone')}</span>
+                      </>
+                    ) : (
+                      i + 1
+                    )}
+                  </span>
+                  {t(`steps.${s}`)}
+                </span>
+                {i < STEPS.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className={`hidden h-px flex-1 sm:block ${complete ? 'bg-ok/50' : 'bg-line'}`}
+                  />
+                )}
+              </li>
+            );
+          })}
         </ol>
 
         {done && (

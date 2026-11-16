@@ -8,7 +8,15 @@ const DOT: Record<Who, string> = { A: 'bg-a', B: 'bg-b' };
 const TEXT: Record<Who, string> = { A: 'text-a', B: 'text-b' };
 
 /** Ponto colorido + nome da pessoa. */
-export function PersonTag({ who, name, className = '' }: { who: Who; name: string; className?: string }) {
+export function PersonTag({
+  who,
+  name,
+  className = '',
+}: {
+  who: Who;
+  name: string;
+  className?: string;
+}) {
   return (
     <span className={`inline-flex items-center gap-1.5 font-semibold ${TEXT[who]} ${className}`}>
       <span className={`size-2.5 shrink-0 rounded-full ${DOT[who]}`} aria-hidden="true" />
@@ -18,7 +26,15 @@ export function PersonTag({ who, name, className = '' }: { who: Who; name: strin
 }
 
 /** Uma linha por pessoa: tag à esquerda, conteúdo à direita. */
-export function PersonRow({ who, name, children }: { who: Who; name: string; children: ReactNode }) {
+export function PersonRow({
+  who,
+  name,
+  children,
+}: {
+  who: Who;
+  name: string;
+  children: ReactNode;
+}) {
   return (
     <div className="flex items-center justify-between gap-3">
       <PersonTag who={who} name={name} />
@@ -213,7 +229,7 @@ export function Heatmap({
           {row.map((v, c) => (
             <span
               key={c}
-              className="h-5 rounded-sm bg-sync sm:h-6"
+              className="h-5 rounded-sm bg-sync sm:h-8"
               style={{ opacity: 0.08 + 0.92 * (v / max) }}
             />
           ))}

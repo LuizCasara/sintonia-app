@@ -2,20 +2,20 @@
 
 import { useEffect, useRef } from 'react';
 
-const COUNT = 90; // menos de 120, para ficar leve
+const PER_FLOW = 56; // 2 fluxos x 56 = 112 partículas (menos de 120)
 
 interface Particle {
   x: number;
   y: number;
-  vx: number;
-  vy: number;
-  tx: number; // alvo na linha central
-  side: 1 | -1; // A fica acima, B abaixo, até convergirem
-  color: 'a' | 'b';
+  speed: number; // px por frame
+  jitter: number; // espalhamento vertical
+  flow: 0 | 1; // 0 = A (ciano), 1 = B (magenta)
 }
 
 /**
- * Partículas em canvas. `progress` (0 a 1) é a atração: no fim, A e B se juntam numa linha.
+ * Dois fluxos de partículas (A ciano, B magenta) em forma de onda.
+ * `progress` (0 a 1): no começo os fluxos estão separados e defasados;
+ * conforme sobe, eles se aproximam e entram em fase (uma onda só).
  * Para quando a aba some; com prefers-reduced-motion desenha só o estado final.
  */
 export function Particles({ progress = 0 }: { progress?: number }) {
@@ -31,15 +31,23 @@ export function Particles({ progress = 0 }: { progress?: number }) {
     if (!canvas || !ctx) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const css = getComputedStyle(document.documentElement);
-    const colors = { a: css.getPropertyValue('--color-a'), b: css.getPropertyValue('--color-b') };
+    const colors = [css.getPropertyValue('--color-a'), css.getPropertyValue('--color-b')];
 
     let w = 0;
     let h = 0;
-    let particles: Particle[] = [];
+    let time = 0;
     let raf = 0;
+    let particles: Particle[] = [];
 
-    function targetY(p: Particle, prog: number) {
-      return h / 2 + p.side * (1 - prog) * h * 0.18;
+    // Altura da onda do fluxo `flow` na posição x.
+    function waveY(flow: 0 | 1, x: number, prog: number) {
+      const apart = 1 - prog; // 1 = separados e defasados, 0 = juntos e em fase
+      const phase = flow === 1 ? Math.PI * apart : 0;
+      const side = flow === 0 ? -1 : 1;
+      const amp = h * 0.16;
+      return (
+        h / 2 + side * apart * h * 0.2 + amp * Math.sin((x / w) * Math.PI * 4 + time * 0.03 + phase)
+      );
     }
 
     function resize() {
@@ -49,49 +57,58 @@ export function Particles({ progress = 0 }: { progress?: number }) {
       canvas!.width = w * dpr;
       canvas!.height = h * dpr;
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
-      particles = Array.from({ length: COUNT }, (_, i) => {
-        const tx = Math.random() * w;
-        const side = i % 2 === 0 ? 1 : -1;
-        const p: Particle = {
-          x: Math.random() * w,
-          y: Math.random() * h,
-          vx: 0,
-          vy: 0,
-          tx,
-          side,
-          color: side === 1 ? 'a' : 'b',
+      particles = Array.from({ length: PER_FLOW * 2 }, (_, i) => {
+        const flow = (i % 2) as 0 | 1;
+        const x = Math.random() * w;
+        return {
+          x,
+          y: reduced ? waveY(flow, x, 1) : Math.random() * h,
+          speed: 0.5 + Math.random() * 1.2,
+          jitter: (Math.random() - 0.5) * 14,
+          flow,
         };
-        if (reduced) {
-          p.x = tx;
-          p.y = targetY(p, 1);
-        }
-        return p;
       });
-      draw();
+      draw(reduced ? 1 : progressRef.current);
     }
 
-    function draw() {
+    function draw(prog: number) {
       ctx!.clearRect(0, 0, w, h);
+      ctx!.globalCompositeOperation = 'lighter'; // A + B juntos clareiam
+      // Fio fino de cada onda, para o fluxo ficar legível
+      for (const flow of [0, 1] as const) {
+        ctx!.strokeStyle = colors[flow] as string;
+        ctx!.globalAlpha = 0.22;
+        ctx!.lineWidth = 1.5;
+        ctx!.beginPath();
+        for (let x = 0; x <= w; x += 10) {
+          const y = waveY(flow, x, prog);
+          if (x === 0) ctx!.moveTo(x, y);
+          else ctx!.lineTo(x, y);
+        }
+        ctx!.stroke();
+      }
+      ctx!.globalAlpha = 1;
       for (const p of particles) {
-        ctx!.fillStyle = colors[p.color];
-        ctx!.shadowColor = colors[p.color];
+        ctx!.fillStyle = colors[p.flow] as string;
+        ctx!.shadowColor = colors[p.flow] as string;
         ctx!.shadowBlur = 8;
         ctx!.beginPath();
-        ctx!.arc(p.x, p.y, 1.8, 0, Math.PI * 2);
+        ctx!.arc(p.x, p.y, 1.9, 0, Math.PI * 2);
         ctx!.fill();
       }
+      ctx!.shadowBlur = 0;
     }
 
     function tick() {
       const prog = progressRef.current;
-      const pull = 0.002 + 0.02 * prog;
+      time += 1;
       for (const p of particles) {
-        p.vx = (p.vx + (p.tx - p.x) * pull * 0.2 + (Math.random() - 0.5) * 0.15) * 0.93;
-        p.vy = (p.vy + (targetY(p, prog) - p.y) * pull + (Math.random() - 0.5) * 0.15) * 0.93;
-        p.x += p.vx;
-        p.y += p.vy;
+        p.x += p.speed;
+        if (p.x > w) p.x -= w;
+        const target = waveY(p.flow, p.x, prog) + p.jitter * (1 - prog * 0.7);
+        p.y += (target - p.y) * 0.12; // acompanha a onda suavemente
       }
-      draw();
+      draw(prog);
       raf = requestAnimationFrame(tick);
     }
 

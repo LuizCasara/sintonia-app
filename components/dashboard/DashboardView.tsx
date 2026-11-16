@@ -75,6 +75,7 @@ export function DashboardView() {
   const cards: { id: CardId; span?: string; summary: ReactNode; detail: ReactNode }[] = [
     {
       id: 'volume',
+      span: 'sm:col-span-2',
       summary: (
         <>
           <p className="font-display text-3xl font-bold">{n(vol.A.messages + vol.B.messages)}</p>
@@ -93,7 +94,17 @@ export function DashboardView() {
     {
       id: 'perPerson',
       summary: (
-        <DualBar a={vol.A.messages} b={vol.B.messages} nameA={nameA} nameB={nameB} fmt={n} />
+        <div className="space-y-4">
+          <DualBar a={vol.A.messages} b={vol.B.messages} nameA={nameA} nameB={nameB} fmt={n} />
+          <div className="space-y-1 text-sm text-muted">
+            <PersonRow who="A" name={nameA}>
+              {n(vol.A.words)} {m('words').toLowerCase()}
+            </PersonRow>
+            <PersonRow who="B" name={nameB}>
+              {n(vol.B.words)} {m('words').toLowerCase()}
+            </PersonRow>
+          </div>
+        </div>
       ),
       detail: table([
         ['messages', vol.A.messages, vol.B.messages],
@@ -125,9 +136,7 @@ export function DashboardView() {
     },
     {
       id: 'started',
-      summary: (
-        <DualBar a={ses.A.started} b={ses.B.started} nameA={nameA} nameB={nameB} fmt={n} />
-      ),
+      summary: <DualBar a={ses.A.started} b={ses.B.started} nameA={nameA} nameB={nameB} fmt={n} />,
       detail: table([
         ['started', ses.A.started, ses.B.started],
         ['ended', ses.A.ended, ses.B.ended],
@@ -271,6 +280,23 @@ export function DashboardView() {
 
   const active = cards.find((c) => c.id === open);
 
+  function renderCard(id: CardId) {
+    const c = cards.find((x) => x.id === id);
+    if (!c) return null;
+    return (
+      <button
+        key={c.id}
+        type="button"
+        aria-haspopup="dialog"
+        onClick={() => setOpen(c.id)}
+        className={`panel panel-hover flex flex-col gap-3 p-5 text-left ${c.span ?? ''}`}
+      >
+        <h2 className="text-sm font-semibold text-muted">{t(`cards.${c.id}`)}</h2>
+        <div className="w-full">{c.summary}</div>
+      </button>
+    );
+  }
+
   return (
     <main className="mx-auto max-w-5xl space-y-6 px-4 pt-4 sm:px-6">
       <header>
@@ -279,21 +305,19 @@ export function DashboardView() {
       </header>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {cards.map((c) => (
-          <button
-            key={c.id}
-            type="button"
-            aria-haspopup="dialog"
-            onClick={() => setOpen(c.id)}
-            className={`panel panel-hover flex flex-col gap-3 p-5 text-left ${c.span ?? ''}`}
-          >
-            <h2 className="text-sm font-semibold text-muted">{t(`cards.${c.id}`)}</h2>
-            <div className="w-full">{c.summary}</div>
-          </button>
-        ))}
+        {(['volume', 'perPerson', 'response', 'started', 'emojis', 'heatmap'] as const).map(
+          renderCard,
+        )}
+
+        {/* Mídia e sequências empilhados ao lado do heatmap (sem espaço morto) */}
+        <div className="grid gap-4 sm:col-span-2 sm:grid-cols-2 lg:col-span-1 lg:grid-cols-1">
+          {(['media', 'streaks'] as const).map(renderCard)}
+        </div>
+
+        {renderCard('apps')}
 
         {/* Equilíbrio: a fórmula ainda não foi decidida, então nada de número ou nota */}
-        <section className="panel flex flex-col gap-3 p-5 sm:col-span-2">
+        <section className="panel flex flex-col gap-3 p-5 lg:col-span-2">
           <h2 className="text-sm font-semibold text-muted">{t('cards.balance')}</h2>
           <p className="font-display text-xl font-bold text-sync">{t('balancePending')}</p>
         </section>
