@@ -39,6 +39,8 @@ Um casal pode ter sintonia alta e equilíbrio baixo (uma pessoa carrega, a outra
 
 **Performance (150 mil mensagens em menos de 5 s).** Um script gera a fixture fictícia uma vez (seed fixa) e a salva. Um teste lê essa fixture e mede o tempo do parser e das métricas. Roda à parte (`pnpm bench`), fora da CI de cada push.
 
+**Lista de frequência (dicionário do casal).** Leipzig Corpora Collection, corpora `por_news_2024_30K` e `eng_news_2024_30K`. Licença **CC BY 4.0**, compatível com o MIT do repo desde que a atribuição fique no arquivo. Lista derivada (as 10 mil palavras mais frequentes de cada idioma) em `lib/lexicon/frequency/`; atribuição em `SOURCES.md`. Fontes em CC BY-SA 4.0 (wordfreq, OpenSubtitles/FrequencyWords) foram descartadas por causa do ShareAlike.
+
 ## Adiado
 
 **Data ambígua (DD/MM vs MM/DD).** Vale ao carregar o export, não ao mudar o idioma. Por agora não resolvemos. Vamos olhar o formato real dos exports (idioma do celular, cabeçalhos, exemplos) e decidir com base nisso.
@@ -50,5 +52,3 @@ Um casal pode ter sintonia alta e equilíbrio baixo (uma pessoa carrega, a outra
 ## Pendente, análise
 
 **Bibliotecas (visx, framer-motion/motion, fflate, react-pdf com lazy load, html-to-image).** Analisar cada uma por segurança, tamanho e manutenção, antes de confirmar no marco correspondente.
-
-**Lista de frequência (dicionário do casal).** Precisa de uma lista pública de palavras comuns, com licença compatível com MIT. Fonte e licença ainda não escolhidas.

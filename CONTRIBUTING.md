@@ -14,7 +14,7 @@ Sem Chromium do Playwright? Aponte `PW_CHROME_PATH` para um Chrome instalado.
 
 - `app/[locale]/` — páginas (pt e en), site estático
 - `components/` — componentes de tela (rodada 2)
-- `lib/` — `model.ts` (tipos), `parsers/`, `merge.ts`, `metrics/`, `prompt.ts`, `demo.ts`
+- `lib/` — `model.ts` (tipos), `parsers/`, `merge.ts`, `metrics/`, `prompt.ts`, `demo.ts`, `lexicon/` (listas e frequência)
 - `workers/` — `analyze.worker.ts` (roda tudo fora da thread da tela)
 - `fixtures/` — gerador e conversas fictícias
 - `messages/` — textos pt e en · `i18n/` — config do next-intl
@@ -33,10 +33,10 @@ Rode `rg "TODO\(Luiz\)"`. Principais:
 
 - `lib/parsers/whatsapp.ts` e `telegram.ts`: os parsers
 - `lib/merge.ts`: `suggestPeople` e `mergeChats`
-- `lib/metrics/*.ts`: uma métrica por arquivo (`lexicon.ts` guarda os léxicos, hoje vazios)
+- `lib/metrics/*.ts`: uma métrica por arquivo (`lexicon.ts` reexporta `lib/lexicon/`; listas ainda são rascunho)
 - `workers/analyze.worker.ts`: ligar as etapas
 
-Decisões: `docs/DECISOES.md`. Ainda em aberto: `rg "DECISÃO EM ABERTO"` (fórmula das notas). Data ambígua está adiada. CI não bloqueia o desenvolvimento.
+Decisões: `docs/DECISOES.md`. Ainda em aberto: `rg "DECISÃO EM ABERTO"` (fórmula das notas). Data ambígua está adiada. CI não bloqueia o desenvolvimento. Lista de frequência: `lib/lexicon/frequency/SOURCES.md`.
 
 ## Estilo
 
