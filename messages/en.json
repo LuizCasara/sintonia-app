@@ -1,0 +1,20 @@
+{
+  "home": {
+    "title": "Sintonia"
+  },
+  "confirm": {
+    "title": "Confirm people"
+  },
+  "processing": {
+    "title": "Processing"
+  },
+  "timeline": {
+    "title": "Timeline"
+  },
+  "dashboard": {
+    "title": "Dashboard"
+  },
+  "actions": {
+    "title": "Actions"
+  }
+}
