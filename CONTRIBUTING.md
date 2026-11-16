@@ -18,6 +18,7 @@ Sem Chromium do Playwright? Aponte `PW_CHROME_PATH` para um Chrome instalado.
 - `workers/` — `analyze.worker.ts` (roda tudo fora da thread da tela)
 - `fixtures/` — gerador e conversas fictícias
 - `messages/` — textos pt e en · `i18n/` — config do next-intl
+- `docs/` — decisões registradas (`DECISOES.md`)
 - `tests/unit` (Vitest) · `tests/e2e` (Playwright)
 
 ## Fluxo de dados
@@ -35,7 +36,7 @@ Rode `rg "TODO\(Luiz\)"`. Principais:
 - `lib/metrics/*.ts`: uma métrica por arquivo (`lexicon.ts` guarda os léxicos, hoje vazios)
 - `workers/analyze.worker.ts`: ligar as etapas
 
-Decisões em aberto: `rg "DECISÃO EM ABERTO"` (fórmula do equilíbrio e qualquer "nota").
+Decisões: `docs/DECISOES.md`. Ainda em aberto: `rg "DECISÃO EM ABERTO"` (fórmula das notas; fonte da lista de frequência).
 
 ## Estilo
 
