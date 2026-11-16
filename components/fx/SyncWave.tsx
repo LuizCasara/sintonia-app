@@ -3,7 +3,7 @@
 
 const PERIOD = 120; // largura de um ciclo (o loop CSS anda exatamente 1 ciclo)
 const WIDTH = 720;
-const HEIGHT = 120;
+const HEIGHT = 140; // sobra espaço em cima e embaixo para o glow
 
 function wavePath(amp: number): string {
   const points: string[] = [];
@@ -24,7 +24,7 @@ export function SyncWave({ className = '', amp = 34 }: { className?: string; amp
     <svg
       viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
       preserveAspectRatio="none"
-      className={className}
+      className={`wave-fade ${className}`}
       aria-hidden="true"
     >
       <g className="glow-a">
