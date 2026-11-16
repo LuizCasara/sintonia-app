@@ -35,8 +35,10 @@
       }
     },
     "consent": {
-      "label": "Tenho permissão da outra pessoa para analisar esta conversa.",
-      "hint": "Marque para liberar o envio de arquivos."
+      "draft": "Rascunho para revisão",
+      "body": "O Sintonia roda só no seu navegador. Não há cadastro. Nenhuma mensagem, nome ou arquivo é enviado a um servidor. Fechar ou recarregar a aba apaga tudo.",
+      "label": "Li o aviso e declaro que tenho o direito de analisar esta conversa, com o acordo da outra pessoa.",
+      "hint": "Marque para liberar o envio dos arquivos. Não use uma conversa de terceiros, nem de um grupo em que as outras pessoas não concordaram."
     },
     "drop": {
       "idle": "Arraste os arquivos aqui ou toque para escolher",

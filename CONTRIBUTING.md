@@ -18,7 +18,7 @@ Sem Chromium do Playwright? Aponte `PW_CHROME_PATH` para um Chrome instalado.
 - `workers/` — `analyze.worker.ts` (roda tudo fora da thread da tela)
 - `fixtures/` — gerador, conversas fictícias e fixture de benchmark (`fixtures/bench/`)
 - `messages/` — textos pt e en · `i18n/` — config do next-intl
-- `docs/` — decisões registradas (`DECISOES.md`)
+- `docs/` — decisões (`DECISOES.md`), bibliotecas (`BIBLIOTECAS.md`), termo LGPD (`LGPD.md`, rascunho)
 - `tests/unit` (Vitest) · `tests/e2e` (Playwright)
 
 ## Fluxo de dados

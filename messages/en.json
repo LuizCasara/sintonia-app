@@ -35,8 +35,10 @@
       }
     },
     "consent": {
-      "label": "I have the other person's permission to analyze this chat.",
-      "hint": "Check this to enable file upload."
+      "draft": "Draft for review",
+      "body": "Sintonia runs only in your browser. There is no account. No message, name, or file is sent to a server. Closing or reloading the tab erases everything.",
+      "label": "I have read the notice and I declare that I have the right to analyze this chat, with the other person's agreement.",
+      "hint": "Check this to enable file upload. Do not use a chat you are not part of, or a group chat unless the other people have agreed."
     },
     "drop": {
       "idle": "Drag files here or tap to choose",

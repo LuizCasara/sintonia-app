@@ -29,7 +29,7 @@ Um casal pode ter sintonia alta e equilíbrio baixo (uma pessoa carrega, a outra
 
 **Links.** Tipo próprio (`kind: 'link'`). Entram nas estatísticas (quem manda mais link). Não contam como texto.
 
-**Consentimento LGPD.** O texto é escrito pelo Akita.
+**Consentimento LGPD.** O texto é escrito pelo Akita. Rascunho em `docs/LGPD.md` e nas chaves `home.consent` (pt e en), à espera da revisão do Luiz.
 
 **Primeira tela do relatório.** Abre na linha do tempo.
 

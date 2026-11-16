@@ -46,18 +46,24 @@ export function UploadPanel() {
 
   return (
     <section className="panel space-y-4 p-5 sm:p-6">
-      <label className="flex min-h-11 cursor-pointer items-start gap-3">
-        <input
-          type="checkbox"
-          checked={consent}
-          onChange={(e) => setConsent(e.target.checked)}
-          className="mt-1 size-5 shrink-0 accent-[var(--color-sync)]"
-        />
-        <span>
-          <span className="block font-medium">{t('consent.label')}</span>
-          <span className="text-sm text-muted">{t('consent.hint')}</span>
-        </span>
-      </label>
+      <div className="space-y-3">
+        <p className="text-xs font-medium uppercase tracking-wide text-muted">
+          {t('consent.draft')}
+        </p>
+        <p className="text-sm text-muted">{t('consent.body')}</p>
+        <label className="flex min-h-11 cursor-pointer items-start gap-3">
+          <input
+            type="checkbox"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            className="mt-1 size-5 shrink-0 accent-[var(--color-sync)]"
+          />
+          <span>
+            <span className="block font-medium">{t('consent.label')}</span>
+            <span className="text-sm text-muted">{t('consent.hint')}</span>
+          </span>
+        </label>
+      </div>
 
       <div onDragOver={(e) => e.preventDefault()} onDrop={onDrop}>
         <input
