@@ -3,18 +3,23 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { useReport } from '@/components/report/ReportProvider';
-import { fmtDate } from '@/lib/format';
+import { fmtDate, fmtNum } from '@/lib/format';
 
 const STEP = 24; // px por mês
-const HEIGHT = 120; // altura da sparkline
+const CHART_H = 120; // altura da sparkline
+const TOP = 44; // espaço acima do gráfico (rótulo do marco)
+const PAD_LEFT = 28; // padding pequeno à esquerda
+const AXIS_H = 68; // eixo com marcos e anos abaixo do gráfico
+
+type Kind = 'first' | 'peak' | 'valley';
 
 interface Milestone {
   id: string;
-  kind: 'first' | 'phase';
+  kind: Kind;
   titleKey: string;
   date: string; // ISO
   monthIndex: number;
-  detail?: { pct: number };
+  pct?: number;
 }
 
 /** Linha do tempo: trilho mensal com sparkline A/B e marcos navegáveis. */
@@ -26,36 +31,33 @@ export function TimelineView() {
   const [sel, setSel] = useState(0);
   const markerRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  // Marcos = primeiras vezes + fases, em ordem de data.
+  // Marcos = primeiras vezes + fases (pico/vale), em ordem de data.
   const milestones: Milestone[] = [];
-  const firsts = report.firsts;
   for (const key of ['firstMessage', 'firstILoveYou', 'firstPhoto', 'firstAudio'] as const) {
-    const date = firsts[key];
+    const date = report.firsts[key];
     if (date) milestones.push({ id: key, kind: 'first', titleKey: key, date, monthIndex: 0 });
   }
   for (const p of report.phases.phases) {
     milestones.push({
       id: `phase-${p.date}`,
-      kind: 'phase',
+      kind: p.kind,
       titleKey: p.kind,
       date: p.date,
       monthIndex: 0,
-      detail: { pct: p.changePct },
+      pct: p.changePct,
     });
   }
   milestones.sort((a, b) => a.date.localeCompare(b.date));
-  for (const m of milestones) {
-    m.monthIndex = Math.max(
+  for (const ms of milestones) {
+    ms.monthIndex = Math.max(
       0,
-      months.findIndex((x) => x.month === m.date.slice(0, 7)),
+      months.findIndex((x) => x.month === ms.date.slice(0, 7)),
     );
   }
 
   const current = milestones[sel];
-
-  function go(delta: number) {
+  const go = (delta: number) =>
     setSel((s) => Math.min(milestones.length - 1, Math.max(0, s + delta)));
-  }
 
   function onKeyDown(e: KeyboardEvent) {
     const keys: Record<string, () => void> = {
@@ -71,7 +73,7 @@ export function TimelineView() {
     }
   }
 
-  // Mantém o marco selecionado no centro do trilho.
+  // Traz o marco selecionado para a vista, com scroll suave.
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     markerRefs.current[sel]?.scrollIntoView({
@@ -82,14 +84,35 @@ export function TimelineView() {
   }, [sel]);
 
   // Sparkline: uma polyline por pessoa.
-  const max = Math.max(1, ...months.map((m) => Math.max(m.A, m.B)));
+  // Escala entre o mínimo e o máximo (não parte de zero), para picos e vales aparecerem.
+  const max = Math.max(1, ...months.map((x) => Math.max(x.A, x.B)));
+  const min = Math.min(...months.map((x) => Math.min(x.A, x.B))) * 0.9;
   const line = (who: 'A' | 'B') =>
     months
-      .map((m, i) => `${i * STEP},${(HEIGHT - (m[who] / max) * (HEIGHT - 10)).toFixed(1)}`)
+      .map(
+        (x, i) =>
+          `${i * STEP},${(CHART_H - ((x[who] - min) / (max - min)) * (CHART_H - 10)).toFixed(1)}`,
+      )
       .join(' ');
   const width = (months.length - 1) * STEP;
+  const total = report.volume.perPerson.A.messages + report.volume.perPerson.B.messages;
+  const firstDate = report.firsts.firstMessage;
 
-  const title = current ? t(`milestones.${current.titleKey}`) : '';
+  function description(ms: Milestone): string {
+    if (ms.kind === 'peak') return t('desc.peak', { pct: Math.abs(ms.pct ?? 0) });
+    if (ms.kind === 'valley') return t('desc.valley', { pct: Math.abs(ms.pct ?? 0) });
+    if (ms.id === 'firstMessage') return t('desc.start', { total: fmtNum(locale, total) });
+    const days = firstDate
+      ? Math.round((Date.parse(ms.date) - Date.parse(firstDate)) / 86_400_000)
+      : 0;
+    return t('desc.after', { days: fmtNum(locale, days) });
+  }
+
+  const dotClass = (kind: Kind) =>
+    kind === 'first' ? 'rounded-full bg-ok' : 'rotate-45 rounded-[3px] bg-sync';
+  const glowColor = (kind: Kind) => (kind === 'first' ? 'var(--color-ok)' : 'var(--color-sync)');
+  const chipClass = (kind: Kind) =>
+    kind === 'first' ? 'border-ok/60 text-ok' : 'border-sync/60 text-sync';
 
   return (
     <main className="mx-auto max-w-5xl space-y-6 px-4 pt-4 sm:px-6">
@@ -109,15 +132,21 @@ export function TimelineView() {
         onKeyDown={onKeyDown}
         className="panel snap-x snap-proximity overflow-x-auto overscroll-x-contain"
       >
-        {/* Padding lateral deixa o primeiro e o último marco chegarem ao centro */}
         <div
-          className="relative box-content py-6"
-          style={{ width: width + 2 * STEP, paddingInline: '45%' }}
+          className="relative"
+          style={{
+            width: PAD_LEFT + width + 24,
+            height: TOP + CHART_H + AXIS_H,
+            // espaço à direita para o último marco poder chegar ao centro
+            boxSizing: 'content-box',
+            paddingRight: '45%',
+          }}
         >
           <svg
             width={width}
-            height={HEIGHT}
-            className="ml-3 block overflow-visible"
+            height={CHART_H}
+            className="absolute overflow-visible"
+            style={{ left: PAD_LEFT, top: TOP }}
             aria-hidden="true"
           >
             <polyline
@@ -135,60 +164,113 @@ export function TimelineView() {
               className="glow-b"
             />
           </svg>
-          <div className="relative mt-2 h-14 ml-3" style={{ width }}>
-            <div className="absolute inset-x-0 top-5 h-px bg-line" />
-            {months.map((m, i) =>
-              m.month.endsWith('-01') || i === 0 ? (
-                <span
-                  key={m.month}
-                  className="absolute top-9 -translate-x-1/2 text-xs text-muted"
-                  style={{ left: i * STEP }}
-                >
-                  {m.month.slice(0, 4)}
-                </span>
-              ) : null,
-            )}
-            {milestones.map((m, i) => (
-              <button
-                key={m.id}
-                ref={(el) => {
-                  markerRefs.current[i] = el;
+
+          {/* Eixo e anos (todo ano tem rótulo) */}
+          <div
+            className="absolute h-px bg-line"
+            style={{ left: PAD_LEFT, width, top: TOP + CHART_H + 22 }}
+          />
+          {months.map((x, i) =>
+            x.month.endsWith('-01') || i === 0 ? (
+              <span
+                key={x.month}
+                className="absolute text-xs text-muted"
+                style={{
+                  left: PAD_LEFT + i * STEP,
+                  top: TOP + CHART_H + 46,
+                  transform: 'translateX(-50%)',
                 }}
-                type="button"
-                aria-pressed={i === sel}
-                aria-label={`${t(`milestones.${m.titleKey}`)} · ${fmtDate(locale, m.date)}`}
-                onClick={() => setSel(i)}
-                className="absolute top-0 flex size-11 -translate-x-1/2 snap-center items-center justify-center"
-                style={{ left: m.monthIndex * STEP }}
               >
-                <span
-                  className={`block rounded-full ${m.kind === 'first' ? 'bg-ok' : 'bg-sync'} ${
-                    i === sel ? 'size-5 ring-2 ring-ink' : 'size-3'
-                  }`}
-                  style={{
-                    boxShadow: `0 0 ${i === sel ? 18 : 10}px color-mix(in srgb, ${
-                      m.kind === 'first' ? 'var(--color-ok)' : 'var(--color-sync)'
-                    } 40%, transparent)`,
-                  }}
-                />
-              </button>
-            ))}
-          </div>
+                {x.month.slice(0, 4)}
+              </span>
+            ) : null,
+          )}
+
+          {/* Linha vertical + rótulo curto do marco selecionado */}
+          {current && (
+            <>
+              <div
+                aria-hidden="true"
+                className="absolute w-px"
+                style={{
+                  left: PAD_LEFT + current.monthIndex * STEP,
+                  top: TOP - 8,
+                  height: CHART_H + 30,
+                  background: `linear-gradient(${glowColor(current.kind)}, transparent)`,
+                }}
+              />
+              <span
+                aria-hidden="true"
+                className={`absolute whitespace-nowrap rounded-full border bg-panel px-2.5 py-0.5 text-xs font-semibold ${chipClass(current.kind)}`}
+                style={{
+                  left: PAD_LEFT + current.monthIndex * STEP,
+                  top: 6,
+                  // perto da borda esquerda o rótulo não pode ser cortado
+                  transform: current.monthIndex < 3 ? 'translateX(-12px)' : 'translateX(-50%)',
+                }}
+              >
+                {t(`milestones.${current.titleKey}`)}
+              </span>
+            </>
+          )}
+
+          {milestones.map((ms, i) => (
+            <button
+              key={ms.id}
+              ref={(el) => {
+                markerRefs.current[i] = el;
+              }}
+              type="button"
+              aria-pressed={i === sel}
+              aria-label={`${t(`milestones.${ms.titleKey}`)} · ${fmtDate(locale, ms.date)}`}
+              onClick={() => setSel(i)}
+              className="absolute flex size-11 -translate-x-1/2 snap-center items-center justify-center"
+              style={{ left: PAD_LEFT + ms.monthIndex * STEP, top: TOP + CHART_H }}
+            >
+              <span
+                className={`block ${dotClass(ms.kind)} ${
+                  i === sel ? 'size-6 ring-2 ring-ink ring-offset-2 ring-offset-panel' : 'size-3'
+                }`}
+                style={{
+                  boxShadow: `0 0 ${i === sel ? 22 : 10}px color-mix(in srgb, ${glowColor(ms.kind)} 40%, transparent)`,
+                }}
+              />
+            </button>
+          ))}
         </div>
       </div>
 
+      {/* Legenda dos marcos (forma + cor distintas) */}
+      <p className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted">
+        <span className="inline-flex items-center gap-2">
+          <span className="size-3 rounded-full bg-ok" aria-hidden="true" />
+          {t('legend.firsts')}
+        </span>
+        <span className="inline-flex items-center gap-2">
+          <span className="size-2.5 rotate-45 rounded-[3px] bg-sync" aria-hidden="true" />
+          {t('legend.phases')}
+        </span>
+      </p>
+
       {current && (
         <article aria-live="polite" className="panel p-6">
-          <p className="text-sm text-muted">
-            {t('counter', { current: sel + 1, total: milestones.length })}
-          </p>
-          <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">{title}</h2>
+          <div className="flex items-center justify-between gap-3">
+            <span
+              className={`rounded-full border px-3 py-0.5 text-xs font-semibold uppercase tracking-wide ${chipClass(current.kind)}`}
+            >
+              {t(`chip.${current.kind}`)}
+            </span>
+            <span className="text-sm text-muted">
+              {t('counter', { current: sel + 1, total: milestones.length })}
+            </span>
+          </div>
+          <h2 className="mt-3 font-display text-2xl font-bold sm:text-3xl">
+            {t(`milestones.${current.titleKey}`)}
+          </h2>
           <p className="mt-1 text-lg text-sync">
             {fmtDate(locale, current.date, current.kind === 'first')}
           </p>
-          <p className="mt-2 text-muted">
-            {current.detail ? t('phaseDetail', { pct: current.detail.pct }) : t('firstDetail')}
-          </p>
+          <p className="mt-2 text-muted">{description(current)}</p>
         </article>
       )}
 

@@ -15,14 +15,14 @@ export function demoMonths(): Months {
     const month = ((2 + i) % 12) + 1;
     const noise = Math.sin(i * 12.9898) * 0.5 + 0.5; // "aleatório" fixo
     const total = Math.round(
-      700 +
-        500 * Math.exp(-i / 45) +
-        180 * Math.sin(i / 3.2) + // ondas de alguns meses
-        bump(i, 1, 1300) +
-        bump(i, 13, 800) +
-        bump(i, 58, 650) -
-        bump(i, 41, 650) +
-        noise * 140,
+      800 +
+        120 * Math.exp(-i / 35) +
+        110 * Math.sin(i / 3.2) + // ondas de alguns meses
+        bump(i, 1, 380) +
+        bump(i, 13, 520) +
+        bump(i, 58, 600) -
+        bump(i, 41, 480) +
+        noise * 90,
     );
     const a = Math.round(total * 0.53);
     const telegramShare = i < 30 ? 0 : Math.min(0.55, (i - 30) / 120);
