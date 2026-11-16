@@ -49,6 +49,6 @@ Um casal pode ter sintonia alta e equilíbrio baixo (uma pessoa carrega, a outra
 
 **CI.** O workflow está em `ci/ci.yml`. Para ir para `.github/workflows/`, falta a permissão `workflow` no GitHub ou mover o arquivo pela interface. Não impede o desenvolvimento.
 
-## Pendente, análise
+## Análise feita, confirmação no marco
 
-**Bibliotecas (visx, framer-motion/motion, fflate, react-pdf com lazy load, html-to-image).** Analisar cada uma por segurança, tamanho e manutenção, antes de confirmar no marco correspondente.
+**Bibliotecas.** Análise em `docs/BIBLIOTECAS.md` (16/11/2026): `fflate` sim; `motion` (não `framer-motion`) no marco de animação; `@react-pdf/renderer` e `html-to-image` só com lazy load; `visx` só se o gráfico feito à mão não bastar. Nenhuma foi instalada ainda. Confirmar de novo no marco de cada uma.
