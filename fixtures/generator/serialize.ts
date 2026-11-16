@@ -47,7 +47,7 @@ function nameOf(conv: Conversation, m: Message): string {
 
 /** Texto da mensagem; mídia vira o placeholder dado por `media(kind)`. */
 function body(m: Message, media: (k: Kind) => string): string {
-  return m.kind === 'text' ? (m.text ?? '') : media(m.kind);
+  return m.kind === 'text' || m.kind === 'link' ? (m.text ?? '') : media(m.kind);
 }
 
 /** Export do WhatsApp Android. pt: `15/11/2026 22:10 - Nome: texto`; en: `11/15/26, 10:10 PM - Nome: text`. */
@@ -90,10 +90,10 @@ export function toTelegramJson(conv: Conversation): string {
         date: `${p.y}-${p.mo}-${p.d}T${pad(p.h)}:${p.mi}:${p.s}`,
         from: nameOf(conv, m),
         from_id: `user${m.authorId === 'A' ? 1 : 2}`,
-        // Em links o Telegram manda um array de entidades; imitamos isso.
+        // kind 'link' (e texto com URL) vira array de entidades, como no export real.
         text:
-          m.kind === 'text' && m.text?.includes('https://')
-            ? m.text
+          m.kind === 'link' || (m.kind === 'text' && m.text?.includes('https://'))
+            ? (m.text ?? '')
                 .split(/(https:\/\/\S+)/)
                 .filter(Boolean)
                 .map((t) => (t.startsWith('https://') ? { type: 'link', text: t } : t))

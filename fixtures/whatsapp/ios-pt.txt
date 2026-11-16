@@ -6,12 +6,12 @@
 [05/01/2026, 23:49:50] Ana Lima: tá bom, combinado
 [06/01/2026, 09:52:18] Bruno Reis: oi, tudo bem?
 [06/01/2026, 09:55:19] Ana Lima: me liga quando puder
-[06/01/2026, 09:56:53] Bruno Reis: olha isso: https://exemplo.com/post/123
+[06/01/2026, 09:56:53] Bruno Reis: amanhã a gente se fala
 [06/01/2026, 09:57:58] Ana Lima: chego em 10 minutos
 [06/01/2026, 10:01:18] Bruno Reis: que saudade
 [06/01/2026, 10:01:49] Bruno Reis: áudio ocultado
 [06/01/2026, 10:02:34] Bruno Reis: oi, tudo bem?
-[06/01/2026, 10:05:01] Ana Lima: olha isso: https://exemplo.com/post/123
+[06/01/2026, 10:05:01] Ana Lima: amanhã a gente se fala
 [07/01/2026, 01:20:08] Ana Lima: primeira linha
 segunda linha da mesma mensagem
 [07/01/2026, 01:24:44] Bruno Reis: preciso comprar pão
@@ -32,7 +32,7 @@ segunda linha da mesma mensagem
 [08/01/2026, 13:12:38] Ana Lima: vamos jantar fora hoje?
 [08/01/2026, 13:15:33] Bruno Reis: viu o jogo ontem?
 [08/01/2026, 13:19:08] Ana Lima: áudio ocultado
-[08/01/2026, 18:10:43] Ana Lima: olha isso: https://exemplo.com/post/123
+[08/01/2026, 18:10:43] Ana Lima: amanhã a gente se fala
 [08/01/2026, 18:11:49] Ana Lima: viu o jogo ontem?
 [08/01/2026, 18:12:08] Bruno Reis: que saudade
 [08/01/2026, 18:13:34] Ana Lima: oi, tudo bem?
@@ -73,7 +73,7 @@ segunda linha da mesma mensagem
 [14/01/2026, 00:01:05] Ana Lima: preciso comprar pão
 [14/01/2026, 00:06:01] Ana Lima: vamos jantar fora hoje?
 [14/01/2026, 00:09:23] Bruno Reis: imagem ocultada
-[14/01/2026, 00:13:47] Ana Lima: olha isso: https://exemplo.com/post/123
+[14/01/2026, 00:13:47] Ana Lima: amanhã a gente se fala
 [14/01/2026, 00:15:32] Bruno Reis: tá bom, combinado
 [14/01/2026, 20:56:07] Ana Lima: viu o jogo ontem?
 [14/01/2026, 20:57:01] Bruno Reis: bom dia!
@@ -82,32 +82,31 @@ segunda linha da mesma mensagem
 [14/01/2026, 21:03:05] Bruno Reis: imagem ocultada
 [15/01/2026, 00:22:27] Bruno Reis: chego em 10 minutos
 [15/01/2026, 00:25:05] Bruno Reis: preciso comprar pão
-[15/01/2026, 00:29:01] Ana Lima: olha isso: https://exemplo.com/post/123
+[15/01/2026, 00:29:01] Ana Lima: amanhã a gente se fala
 [15/01/2026, 00:29:23] Bruno Reis: vamos jantar fora hoje?
 [15/01/2026, 00:30:36] Ana Lima: documento omitido
 [15/01/2026, 00:34:49] Bruno Reis: me liga quando puder
 [15/01/2026, 00:38:31] Ana Lima: vamos jantar fora hoje?
-[15/01/2026, 12:50:53] Ana Lima: olha isso: https://exemplo.com/post/123
+[15/01/2026, 12:50:53] Ana Lima: amanhã a gente se fala
 [15/01/2026, 12:53:24] Ana Lima: figurinha omitida
 [15/01/2026, 12:54:12] Bruno Reis: me liga quando puder
 [16/01/2026, 01:14:28] Bruno Reis: boa noite, até amanhã
 [16/01/2026, 01:18:38] Bruno Reis: boa noite, até amanhã
 [16/01/2026, 01:22:28] Ana Lima: viu o jogo ontem?
-[16/01/2026, 01:25:00] Bruno Reis: olha isso: https://exemplo.com/post/123
+[16/01/2026, 01:25:00] Bruno Reis: amanhã a gente se fala
 [16/01/2026, 01:27:11] Ana Lima: viu o jogo ontem?
-[16/01/2026, 01:30:33] Bruno Reis: olha isso: https://exemplo.com/post/123
+[16/01/2026, 01:30:33] Bruno Reis: amanhã a gente se fala
 [16/01/2026, 12:09:05] Ana Lima: áudio ocultado
 [16/01/2026, 12:09:24] Ana Lima: figurinha omitida
 [16/01/2026, 12:10:53] Bruno Reis: vamos jantar fora hoje?
-[16/01/2026, 12:14:43] Bruno Reis: olha isso: https://exemplo.com/post/123
+[16/01/2026, 12:14:43] Bruno Reis: amanhã a gente se fala
 [16/01/2026, 12:15:42] Ana Lima: viu o jogo ontem?
 [16/01/2026, 12:19:59] Bruno Reis: bom dia!
 [17/01/2026, 22:35:07] Ana Lima: áudio ocultado
 [17/01/2026, 22:37:36] Bruno Reis: preciso comprar pão
 [17/01/2026, 22:41:53] Ana Lima: primeira linha
 segunda linha da mesma mensagem
-[17/01/2026, 22:46:44] Ana Lima: primeira linha
-segunda linha da mesma mensagem
+[17/01/2026, 22:46:44] Ana Lima: https://exemplo.com/video/456
 [17/01/2026, 22:47:36] Ana Lima: primeira linha
 segunda linha da mesma mensagem
 [17/01/2026, 22:50:06] Bruno Reis: imagem ocultada
@@ -116,7 +115,7 @@ segunda linha da mesma mensagem
 [17/01/2026, 23:05:36] Ana Lima: kkkkk essa foi boa
 [17/01/2026, 23:05:45] Bruno Reis: oi, tudo bem?
 [17/01/2026, 23:06:44] Ana Lima: que saudade
-[17/01/2026, 23:08:11] Ana Lima: olha isso: https://exemplo.com/post/123
+[17/01/2026, 23:08:11] Ana Lima: amanhã a gente se fala
 [17/01/2026, 23:08:29] Bruno Reis: viu o jogo ontem?
 [17/01/2026, 23:10:52] Ana Lima: bom dia!
 [18/01/2026, 22:04:55] Bruno Reis: primeira linha
@@ -135,14 +134,14 @@ segunda linha da mesma mensagem
 [23/01/2026, 22:48:56] Bruno Reis: chego em 10 minutos
 [23/01/2026, 22:53:40] Bruno Reis: preciso comprar pão
 [23/01/2026, 22:57:02] Ana Lima: vídeo ocultado
-[23/01/2026, 23:00:32] Ana Lima: olha isso: https://exemplo.com/post/123
+[23/01/2026, 23:00:32] Ana Lima: amanhã a gente se fala
 [23/01/2026, 23:05:08] Bruno Reis: bom dia!
 [24/01/2026, 19:35:56] Ana Lima: que saudade
 [24/01/2026, 19:37:37] Bruno Reis: bom dia!
 [24/01/2026, 19:39:05] Ana Lima: kkkkk essa foi boa
 [24/01/2026, 19:39:50] Bruno Reis: boa noite, até amanhã
 [24/01/2026, 19:42:58] Ana Lima: vamos jantar fora hoje?
-[24/01/2026, 19:45:21] Bruno Reis: bom dia!
+[24/01/2026, 19:45:21] Bruno Reis: olha isso: https://exemplo.com/post/123
 [24/01/2026, 19:47:08] Ana Lima: imagem ocultada
 [24/01/2026, 21:02:57] Bruno Reis: primeira linha
 segunda linha da mesma mensagem
@@ -150,11 +149,11 @@ segunda linha da mesma mensagem
 [24/01/2026, 21:08:50] Bruno Reis: primeira linha
 segunda linha da mesma mensagem
 [24/01/2026, 21:10:28] Ana Lima: vamos jantar fora hoje?
-[24/01/2026, 21:11:25] Bruno Reis: olha isso: https://exemplo.com/post/123
+[24/01/2026, 21:11:25] Bruno Reis: amanhã a gente se fala
 [24/01/2026, 21:14:09] Ana Lima: imagem ocultada
 [24/01/2026, 21:18:26] Bruno Reis: me liga quando puder
-[27/01/2026, 21:37:56] Ana Lima: olha isso: https://exemplo.com/post/123
-[27/01/2026, 21:38:52] Bruno Reis: olha isso: https://exemplo.com/post/123
+[27/01/2026, 21:37:56] Ana Lima: amanhã a gente se fala
+[27/01/2026, 21:38:52] Bruno Reis: amanhã a gente se fala
 [27/01/2026, 21:41:35] Ana Lima: preciso comprar pão
 [27/01/2026, 21:44:15] Ana Lima: viu o jogo ontem?
 [27/01/2026, 21:48:41] Ana Lima: boa noite, até amanhã
@@ -184,7 +183,7 @@ segunda linha da mesma mensagem
 [29/01/2026, 19:32:48] Bruno Reis: tá bom, combinado
 [29/01/2026, 19:37:05] Bruno Reis: imagem ocultada
 [29/01/2026, 19:40:39] Ana Lima: tá bom, combinado
-[30/01/2026, 21:05:08] Ana Lima: boa noite, até amanhã
+[30/01/2026, 21:05:08] Ana Lima: olha isso: https://exemplo.com/post/123
 [30/01/2026, 21:05:43] Bruno Reis: áudio ocultado
 [30/01/2026, 21:08:47] Ana Lima: preciso comprar pão
 [30/01/2026, 21:10:51] Bruno Reis: kkkkk essa foi boa
@@ -200,11 +199,11 @@ segunda linha da mesma mensagem
 [30/01/2026, 21:39:26] Bruno Reis: boa noite, até amanhã
 [30/01/2026, 21:39:42] Ana Lima: bom dia!
 [30/01/2026, 21:42:29] Ana Lima: vamos jantar fora hoje?
-[31/01/2026, 09:16:27] Ana Lima: olha isso: https://exemplo.com/post/123
+[31/01/2026, 09:16:27] Ana Lima: amanhã a gente se fala
 [31/01/2026, 09:17:50] Ana Lima: imagem ocultada
 [31/01/2026, 09:19:10] Bruno Reis: que saudade
 [31/01/2026, 09:23:38] Bruno Reis: chego em 10 minutos
-[31/01/2026, 09:26:51] Ana Lima: olha isso: https://exemplo.com/post/123
+[31/01/2026, 09:26:51] Ana Lima: amanhã a gente se fala
 [31/01/2026, 13:48:27] Ana Lima: preciso comprar pão
 [31/01/2026, 13:50:00] Ana Lima: kkkkk essa foi boa
 [31/01/2026, 13:53:26] Bruno Reis: boa noite, até amanhã
@@ -216,9 +215,9 @@ segunda linha da mesma mensagem
 [01/02/2026, 21:32:29] Ana Lima: primeira linha
 segunda linha da mesma mensagem
 [01/02/2026, 21:33:47] Bruno Reis: boa noite, até amanhã
-[01/02/2026, 21:34:07] Bruno Reis: olha isso: https://exemplo.com/post/123
+[01/02/2026, 21:34:07] Bruno Reis: amanhã a gente se fala
 [01/02/2026, 21:38:19] Bruno Reis: bom dia!
-[01/02/2026, 21:40:20] Bruno Reis: olha isso: https://exemplo.com/post/123
+[01/02/2026, 21:40:20] Bruno Reis: amanhã a gente se fala
 [01/02/2026, 21:42:13] Ana Lima: oi, tudo bem?
 [01/02/2026, 21:47:04] Bruno Reis: figurinha omitida
 [02/02/2026, 01:12:39] Ana Lima: chego em 10 minutos
@@ -269,7 +268,7 @@ segunda linha da mesma mensagem
 [06/02/2026, 20:19:22] Bruno Reis: imagem ocultada
 [06/02/2026, 20:21:42] Ana Lima: preciso comprar pão
 [06/02/2026, 20:22:41] Bruno Reis: imagem ocultada
-[07/02/2026, 19:53:50] Bruno Reis: me liga quando puder
+[07/02/2026, 19:53:50] Bruno Reis: https://exemplo.com/video/456
 [07/02/2026, 19:59:44] Ana Lima: imagem ocultada
 [07/02/2026, 22:04:54] Ana Lima: primeira linha
 segunda linha da mesma mensagem
@@ -282,7 +281,7 @@ segunda linha da mesma mensagem
 [08/02/2026, 20:03:00] Ana Lima: tá bom, combinado
 [08/02/2026, 21:06:01] Bruno Reis: vamos jantar fora hoje?
 [08/02/2026, 21:08:05] Ana Lima: boa noite, até amanhã
-[09/02/2026, 01:01:28] Ana Lima: olha isso: https://exemplo.com/post/123
+[09/02/2026, 01:01:28] Ana Lima: amanhã a gente se fala
 [09/02/2026, 01:07:22] Bruno Reis: bom dia!
 [09/02/2026, 01:11:23] Ana Lima: que saudade
 [10/02/2026, 20:43:01] Ana Lima: primeira linha
@@ -291,7 +290,7 @@ segunda linha da mesma mensagem
 [10/02/2026, 20:51:36] Bruno Reis: bom dia!
 [10/02/2026, 21:03:38] Bruno Reis: áudio ocultado
 [10/02/2026, 22:32:39] Bruno Reis: que saudade
-[11/02/2026, 01:11:52] Ana Lima: olha isso: https://exemplo.com/post/123
+[11/02/2026, 01:11:52] Ana Lima: amanhã a gente se fala
 [11/02/2026, 01:16:13] Ana Lima: oi, tudo bem?
 [11/02/2026, 01:16:44] Bruno Reis: vamos jantar fora hoje?
 [11/02/2026, 22:12:24] Bruno Reis: que saudade
@@ -310,7 +309,7 @@ segunda linha da mesma mensagem
 [19/02/2026, 20:56:31] Bruno Reis: tá bom, combinado
 [19/02/2026, 21:00:00] Ana Lima: chego em 10 minutos
 [19/02/2026, 23:09:47] Bruno Reis: viu o jogo ontem?
-[19/02/2026, 23:25:15] Ana Lima: olha isso: https://exemplo.com/post/123
+[19/02/2026, 23:25:15] Ana Lima: amanhã a gente se fala
 [21/02/2026, 22:10:54] Ana Lima: viu o jogo ontem?
 [21/02/2026, 22:13:43] Bruno Reis: boa noite, até amanhã
 [21/02/2026, 22:17:23] Ana Lima: viu o jogo ontem?

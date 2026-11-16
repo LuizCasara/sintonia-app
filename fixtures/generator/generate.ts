@@ -24,7 +24,7 @@ const TEXTS = {
     'me liga quando puder',
     'que saudade',
     'tá bom, combinado',
-    'olha isso: https://exemplo.com/post/123',
+    'amanhã a gente se fala',
     'primeira linha\nsegunda linha da mesma mensagem',
   ],
   en: [
@@ -39,9 +39,14 @@ const TEXTS = {
     'call me when you can',
     'I miss you',
     'ok, deal',
-    'look at this: https://example.com/post/123',
+    'talk tomorrow',
     'first line\nsecond line of the same message',
   ],
+};
+
+const LINK_TEXTS = {
+  pt: ['olha isso: https://exemplo.com/post/123', 'https://exemplo.com/video/456'],
+  en: ['look at this: https://example.com/post/123', 'https://example.com/video/456'],
 };
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -51,7 +56,9 @@ const START_HOURS = [7, 8, 9, 12, 13, 18, 19, 20, 21, 21, 22, 22, 23, 0, 1];
 /** Gera uma conversa fictícia. Mesma seed e mesmos parâmetros = mesma saída. */
 export function generateConversation(opts: GenerateOptions): Conversation {
   const rng = createRng(opts.seed);
-  const texts = TEXTS[opts.lang ?? 'pt'];
+  const lang = opts.lang ?? 'pt';
+  const texts = TEXTS[lang];
+  const linkTexts = LINK_TEXTS[lang];
   const startMs = opts.start.getTime();
   const endMs = opts.end.getTime();
   // Os horários são "locais": usamos o relógio UTC como se fosse o fuso local.
@@ -75,6 +82,7 @@ export function generateConversation(opts: GenerateOptions): Conversation {
         const kind = pickKind(rng.next());
         const msg: Message = { ts, source, authorId: author, kind };
         if (kind === 'text') msg.text = rng.pick(texts);
+        if (kind === 'link') msg.text = rng.pick(linkTexts);
         if (kind === 'audio') msg.durationSec = rng.int(3, 90);
         messages.push(msg);
       }
@@ -100,7 +108,8 @@ export function generateConversation(opts: GenerateOptions): Conversation {
 
 /** Sorteia o tipo da mensagem: maioria texto, o resto mídia. */
 function pickKind(r: number): Kind {
-  if (r < 0.82) return 'text';
+  if (r < 0.8) return 'text';
+  if (r < 0.82) return 'link';
   if (r < 0.9) return 'image';
   if (r < 0.95) return 'audio';
   if (r < 0.97) return 'sticker';

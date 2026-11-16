@@ -33,4 +33,13 @@ describe('gerador de fixtures', () => {
     expect(toWhatsAppIos(conv).length).toBeGreaterThan(0);
     expect(() => JSON.parse(toTelegramJson(conv))).not.toThrow();
   });
+
+  it('gera mensagens do tipo link, separadas de texto', () => {
+    const conv = generateConversation({ ...base, seed: 7, end: new Date('2026-06-01T00:00:00Z') });
+    const links = conv.messages.filter((m) => m.kind === 'link');
+    expect(links.length).toBeGreaterThan(0);
+    expect(links.every((m) => m.text?.includes('https://'))).toBe(true);
+    const serialized = toTelegramJson(conv);
+    expect(serialized).toContain('"type": "link"');
+  });
 });

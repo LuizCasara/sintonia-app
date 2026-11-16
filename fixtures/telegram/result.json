@@ -27,13 +27,7 @@
    "date": "2026-02-07T19:57:36",
    "from": "Bruno Reis",
    "from_id": "user2",
-   "text": [
-    "olha isso: ",
-    {
-     "type": "link",
-     "text": "https://exemplo.com/post/123"
-    }
-   ]
+   "text": "amanhã a gente se fala"
   },
   {
    "id": 4,
@@ -130,7 +124,12 @@
    "date": "2026-02-11T01:03:12",
    "from": "Bruno Reis",
    "from_id": "user2",
-   "text": "primeira linha\nsegunda linha da mesma mensagem"
+   "text": [
+    {
+     "type": "link",
+     "text": "https://exemplo.com/video/456"
+    }
+   ]
   },
   {
    "id": 16,
@@ -206,10 +205,9 @@
    "from": "Ana Lima",
    "from_id": "user1",
    "text": [
-    "olha isso: ",
     {
      "type": "link",
-     "text": "https://exemplo.com/post/123"
+     "text": "https://exemplo.com/video/456"
     }
    ]
   },
@@ -344,7 +342,12 @@
    "date": "2026-02-18T01:43:10",
    "from": "Ana Lima",
    "from_id": "user1",
-   "text": "viu o jogo ontem?"
+   "text": [
+    {
+     "type": "link",
+     "text": "https://exemplo.com/video/456"
+    }
+   ]
   },
   {
    "id": 41,
@@ -543,13 +546,7 @@
    "date": "2026-02-28T10:00:15",
    "from": "Bruno Reis",
    "from_id": "user2",
-   "text": [
-    "olha isso: ",
-    {
-     "type": "link",
-     "text": "https://exemplo.com/post/123"
-    }
-   ]
+   "text": "amanhã a gente se fala"
   },
   {
    "id": 65,
@@ -565,7 +562,13 @@
    "date": "2026-02-28T10:06:58",
    "from": "Bruno Reis",
    "from_id": "user2",
-   "text": "viu o jogo ontem?"
+   "text": [
+    "olha isso: ",
+    {
+     "type": "link",
+     "text": "https://exemplo.com/post/123"
+    }
+   ]
   }
  ]
 }

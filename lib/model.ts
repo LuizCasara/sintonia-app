@@ -9,7 +9,7 @@ export type Kind =
   | 'sticker'
   | 'gif'
   | 'document'
-  | 'link'
+  | 'link' // tipo próprio: entra nas estatísticas, não conta como texto
   | 'system'
   | 'deleted';
 

@@ -2,6 +2,7 @@ import type { Conversation } from '../model';
 import type { PerPerson } from './types';
 
 // Mídia: áudio x texto, fotos, vídeos, links.
+// Links têm tipo próprio: somam em `links`, não em `texts`.
 // TODO(Luiz): implementar. Hoje devolve valores vazios.
 
 export interface PersonMedia {

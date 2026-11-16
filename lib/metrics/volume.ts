@@ -2,6 +2,7 @@ import type { Conversation } from '../model';
 import type { PerPerson } from './types';
 
 // Volume: mensagens, palavras, caracteres, palavras únicas, por pessoa e por mês.
+// Mensagens `link` entram na contagem de mensagens, mas palavras/caracteres delas não contam como texto.
 // TODO(Luiz): implementar. Hoje devolve valores vazios.
 
 export interface PersonVolume {
