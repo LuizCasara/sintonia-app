@@ -40,4 +40,13 @@ describe('buildPrompt', () => {
     const withDict = buildPrompt(report, { locale: 'pt', includeDictionary: true });
     expect(withDict).toContain('jujuba');
   });
+
+  it('usa nomes inventados, nunca os do relatório', () => {
+    const report = { ...getDemoReport('pt'), people: { A: 'Nome Real A', B: 'Nome Real B' } };
+    const text = buildPrompt(report, { locale: 'pt', includeDictionary: false });
+    expect(text).toContain('Ana Lima');
+    expect(text).toContain('Bruno Reis');
+    expect(text).not.toContain('Nome Real');
+  });
+
 });
