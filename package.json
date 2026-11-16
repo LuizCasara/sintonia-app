@@ -11,7 +11,9 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "format": "prettier --write .",
-    "fixtures": "tsx fixtures/generator/cli.ts"
+    "fixtures": "tsx fixtures/generator/cli.ts",
+    "bench:generate": "tsx fixtures/generator/bench-cli.ts",
+    "bench": "tsx scripts/bench.ts"
   },
   "dependencies": {
     "comlink": "^4.4.2",

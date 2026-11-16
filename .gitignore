@@ -28,6 +28,7 @@ next-env.d.ts
 playwright-report/
 test-results/
 blob-report/
+fixtures/bench/last-run.json
 
 # ── Ambiente ──
 .env*

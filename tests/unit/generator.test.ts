@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { generateConversation } from '../../fixtures/generator/generate';
+import { generateBenchConversation, generateConversation } from '../../fixtures/generator/generate';
 import {
   toTelegramJson,
   toWhatsAppAndroid,
@@ -41,5 +41,18 @@ describe('gerador de fixtures', () => {
     expect(links.every((m) => m.text?.includes('https://'))).toBe(true);
     const serialized = toTelegramJson(conv);
     expect(serialized).toContain('"type": "link"');
+  });
+
+  it('o gerador de benchmark é determinístico e respeita o count', () => {
+    const opts = {
+      seed: 1,
+      count: 80,
+      start: new Date('2020-01-01T00:00:00Z'),
+      people: base.people,
+    };
+    const a = generateBenchConversation(opts);
+    const b = generateBenchConversation(opts);
+    expect(a).toEqual(b);
+    expect(a.messages).toHaveLength(80);
   });
 });

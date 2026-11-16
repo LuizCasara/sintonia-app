@@ -6,7 +6,7 @@
 
 ## Comandos
 
-`pnpm dev` · `pnpm build` · `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm test:e2e` (precisa de `pnpm build` antes) · `pnpm format` · `pnpm fixtures`
+`pnpm dev` · `pnpm build` · `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm test:e2e` (precisa de `pnpm build` antes) · `pnpm format` · `pnpm fixtures` · `pnpm bench:generate` · `pnpm bench` (150 mil msgs; fora do `pnpm test`)
 
 Sem Chromium do Playwright? Aponte `PW_CHROME_PATH` para um Chrome instalado.
 
@@ -16,7 +16,7 @@ Sem Chromium do Playwright? Aponte `PW_CHROME_PATH` para um Chrome instalado.
 - `components/` — componentes de tela (rodada 2)
 - `lib/` — `model.ts` (tipos), `parsers/`, `merge.ts`, `metrics/`, `prompt.ts`, `demo.ts`, `lexicon/` (listas e frequência)
 - `workers/` — `analyze.worker.ts` (roda tudo fora da thread da tela)
-- `fixtures/` — gerador e conversas fictícias
+- `fixtures/` — gerador, conversas fictícias e fixture de benchmark (`fixtures/bench/`)
 - `messages/` — textos pt e en · `i18n/` — config do next-intl
 - `docs/` — decisões registradas (`DECISOES.md`)
 - `tests/unit` (Vitest) · `tests/e2e` (Playwright)

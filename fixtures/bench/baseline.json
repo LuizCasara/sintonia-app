@@ -1,0 +1,16 @@
+{
+  "ranAt": "2026-11-16T20:44:34.580000-03:00",
+  "messages": 150000,
+  "timingsMs": {
+    "loadConversation": 75.6,
+    "parseWhatsApp": 0.2,
+    "parseTelegram": 0,
+    "computeReport": 0.4,
+    "parseAndMetrics": 0.7
+  },
+  "stubs": ["parseWhatsApp", "parseTelegram", "computeReport"],
+  "targetMs": 5000,
+  "targetApplied": false,
+  "underTarget": null,
+  "note": "Referência da primeira corrida (box de desenvolvimento). Tempos variam por máquina. Não é trava de CI. A meta de 5 s ainda não vale: parsers e métricas são stubs."
+}
