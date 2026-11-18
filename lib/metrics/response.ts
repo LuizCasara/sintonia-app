@@ -1,8 +1,11 @@
 import type { Conversation } from '../model';
 import type { PerPerson } from './types';
+import { talk } from './util';
+import { splitSessions } from './sessions';
 
 // Resposta: tempo médio da primeira resposta, taxa em até 10 min.
-// TODO(Luiz): implementar. Hoje devolve valores vazios.
+// "Primeira resposta" = primeira mensagem de uma pessoa depois que a outra falou, medida a partir
+// da última mensagem da outra. Só dentro da mesma sessão (menos de 6 h de intervalo).
 
 export interface PersonResponse {
   avgFirstResponseSec: number;
@@ -13,9 +16,26 @@ export interface ResponseMetrics {
   perPerson: PerPerson<PersonResponse>;
 }
 
-const empty: PersonResponse = { avgFirstResponseSec: 0, rateWithin10Min: 0 };
+const TEN_MIN_MS = 10 * 60 * 1000;
 
 export function computeResponse(conv: Conversation): ResponseMetrics {
-  void conv;
-  return { perPerson: { A: empty, B: empty } };
+  const sum = { A: 0, B: 0 };
+  const count = { A: 0, B: 0 };
+  const quick = { A: 0, B: 0 };
+
+  for (const s of splitSessions(talk(conv))) {
+    for (let i = 1; i < s.length; i++) {
+      const [prev, cur] = [s[i - 1]!, s[i]!];
+      if (prev.authorId === cur.authorId) continue;
+      const delta = cur.ts - prev.ts;
+      sum[cur.authorId] += delta;
+      count[cur.authorId]++;
+      if (delta <= TEN_MIN_MS) quick[cur.authorId]++;
+    }
+  }
+  const of = (w: 'A' | 'B'): PersonResponse => ({
+    avgFirstResponseSec: count[w] ? Math.round(sum[w] / count[w] / 1000) : 0,
+    rateWithin10Min: count[w] ? quick[w] / count[w] : 0,
+  });
+  return { perPerson: { A: of('A'), B: of('B') } };
 }

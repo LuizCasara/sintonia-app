@@ -10,6 +10,7 @@ import { computePhases, type PhasesMetrics } from './phases';
 import { computeResponse, type ResponseMetrics } from './response';
 import { computeSessions, type SessionsMetrics } from './sessions';
 import { computeStreaks, type StreaksMetrics } from './streaks';
+import { isoDay, talk } from './util';
 import { computeVolume, type VolumeMetrics } from './volume';
 
 /** Relatório completo: um bloco por grupo da spec §7 (espelha os campos do PROMPT-IA). */
@@ -32,11 +33,20 @@ export interface Report {
   apps: AppsMetrics;
 }
 
+/** Primeira e última mensagem do casal; dias = diferença entre as duas datas (mínimo 1). */
+export function computePeriod(conv: Conversation): Report['period'] {
+  const msgs = talk(conv);
+  const first = msgs[0];
+  const last = msgs[msgs.length - 1];
+  if (!first || !last) return { start: '', end: '', days: 0 };
+  const days = Math.max(1, Math.round((last.ts - first.ts) / 86_400_000));
+  return { start: isoDay(first.ts), end: isoDay(last.ts), days };
+}
+
 /** Roda todos os grupos de métricas. */
 export function computeReport(conv: Conversation): Report {
-  // TODO(Luiz): calcular period a partir da primeira e da última mensagem.
   return {
-    period: { start: '', end: '', days: 0 },
+    period: computePeriod(conv),
     people: { A: conv.people[0].displayName, B: conv.people[1].displayName },
     volume: computeVolume(conv),
     balance: computeBalance(conv),
