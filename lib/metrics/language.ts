@@ -21,14 +21,13 @@ export interface LanguageMetrics {
 }
 
 const EMOJI =
-  /\p{Extended_Pictographic}(?:️|[\u{1F3FB}-\u{1F3FF}]|‍\p{Extended_Pictographic}️?)*/gu;
+  /\p{Extended_Pictographic}(?:\ufe0f|[\u{1F3FB}-\u{1F3FF}]|\u200d\p{Extended_Pictographic}\ufe0f?)*/gu;
 
 // Risadas de tamanho livre, além da lista ("kkkkkkkkkkkkkk", "hahahahahaha", "rsrsrs").
-const countLaughs = phraseCounter([...LAUGHS.pt, ...LAUGHS.en], [
-  'k{2,}',
-  '(?:ha|he){2,}h?',
-  '(?:rs){2,}',
-]);
+const countLaughs = phraseCounter(
+  [...LAUGHS.pt, ...LAUGHS.en],
+  ['k{2,}', '(?:ha|he){2,}h?', '(?:rs){2,}'],
+);
 const countApologies = phraseCounter([...APOLOGIES.pt, ...APOLOGIES.en]);
 const countAffection = phraseCounter([...AFFECTION.pt, ...AFFECTION.en]);
 
@@ -36,7 +35,7 @@ const countAffection = phraseCounter([...AFFECTION.pt, ...AFFECTION.en]);
 function display(key: string): string {
   const cp = key.codePointAt(0) ?? 0;
   const single = [...key].length === 1;
-  return single && cp < 0x1f000 && !/\p{Emoji_Presentation}/u.test(key) ? key + '️' : key;
+  return single && cp < 0x1f000 && !/\p{Emoji_Presentation}/u.test(key) ? key + '\ufe0f' : key;
 }
 
 export function computeLanguage(conv: Conversation): LanguageMetrics {
@@ -56,7 +55,7 @@ export function computeLanguage(conv: Conversation): LanguageMetrics {
     for (const e of m.text.match(EMOJI) ?? []) {
       const cp = e.codePointAt(0);
       if (cp === 0xa9 || cp === 0xae) continue; // © e ® não são emoji de conversa
-      const key = e.replace(/️/g, '');
+      const key = e.replace(/\ufe0f/g, '');
       emojis[m.authorId].set(key, (emojis[m.authorId].get(key) ?? 0) + 1);
     }
     if (m.kind === 'text') {

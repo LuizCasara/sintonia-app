@@ -12,6 +12,13 @@
       "timeline": "História",
       "dashboard": "Painel",
       "actions": "Ações"
+    },
+    "errors": {
+      "zip": "Arquivos .zip ainda não são aceitos. Extraia o .txt de dentro e envie ele.",
+      "unknownFormat": "Formato não reconhecido. Envie o .txt do WhatsApp ou o result.json do Telegram.",
+      "noMessages": "Não encontramos mensagens nesses arquivos.",
+      "needTwoPeople": "Precisamos de pelo menos duas pessoas na conversa.",
+      "unknown": "Algo deu errado ao ler os arquivos. Tente de novo."
     }
   },
   "home": {
@@ -57,7 +64,8 @@
       "unknown": "Formato não reconhecido"
     },
     "continue": "Continuar",
-    "demo": "Ver uma demonstração com dados fictícios"
+    "demo": "Ver uma demonstração com dados fictícios",
+    "reading": "Lendo arquivos…"
   },
   "confirm": {
     "title": "Confirme quem é quem",
@@ -66,11 +74,13 @@
     "personB": "Pessoa B",
     "messages": "{count} mensagens",
     "similarity": "{pct}% parecido",
-    "swap": "Trocar",
     "ignore": "Não é do casal / ignorar",
     "others": "Outros nomes encontrados",
-    "demoNote": "Exemplo com nomes fictícios. A detecção real vem do Worker.",
-    "analyze": "Analisar"
+    "analyze": "Analisar",
+    "assignLabel": "Quem é {name}?",
+    "needOne": "Escolha pelo menos um nome para a {person}.",
+    "empty": "Envie os arquivos na tela inicial para ver quem é quem.",
+    "backHome": "Voltar ao início"
   },
   "processing": {
     "title": "Processando",
@@ -83,7 +93,13 @@
     "progressLabel": "Progresso da análise",
     "done": "Pronto! Sua sintonia está esperando.",
     "open": "Ver a linha do tempo",
-    "stepDone": "concluída"
+    "stepDone": "concluída",
+    "failed": "Não foi possível analisar",
+    "empty": {
+      "title": "Nenhum arquivo para processar",
+      "body": "Envie os arquivos na tela inicial para começar."
+    },
+    "backHome": "Voltar ao início"
   },
   "timeline": {
     "title": "A história de vocês",

@@ -1,24 +1,29 @@
 import * as Comlink from 'comlink';
+import type { PersonMapping } from '../lib/merge';
 import type { Report } from '../lib/metrics';
+import {
+  analyze,
+  inspect,
+  type InputFile,
+  type Inspection,
+  type OnProgress,
+} from '../lib/pipeline';
 
-export interface InputFile {
-  name: string;
-  data: ArrayBuffer;
-}
-
-/** Progresso real: etapa + fração de 0 a 1. */
-export type OnProgress = (step: 'read' | 'parse' | 'merge' | 'metrics', fraction: number) => void;
+export type { InputFile, Inspection, OnProgress };
 
 const api = {
+  /** Descobre os autores e sugere quem é quem. Não calcula métricas. */
+  inspect(files: InputFile[]): Inspection {
+    return inspect(files);
+  },
+
   /**
-   * Fluxo: arquivo → detect → parser → merge → metrics → Report.
-   * TODO(Luiz): ligar as etapas e chamar onProgress. Em .zip, ler o .txt de dentro (fflate, depois).
+   * Fluxo: arquivo → detect → parser → merge → metrics → Report (ver lib/pipeline.ts).
+   * Em .zip ainda devolve o erro 'zip' (a leitura do .zip depende do fflate, depois).
    * Tudo roda aqui no navegador: este arquivo NUNCA faz requisição de rede.
    */
-  async analyze(files: InputFile[], onProgress: OnProgress): Promise<Report> {
-    void files;
-    onProgress('read', 0);
-    throw new Error('TODO');
+  analyze(files: InputFile[], mapping: PersonMapping, onProgress: OnProgress): Report {
+    return analyze(files, mapping, onProgress);
   },
 };
 

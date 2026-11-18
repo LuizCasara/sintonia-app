@@ -45,9 +45,9 @@ export const WA_WARNINGS = {
 } as const;
 
 // Marcas invisíveis de direção que o WhatsApp põe no começo de linhas e mídias.
-const INVISIBLE = /[‎‏‪-‮⁦-⁩﻿]/g;
+const INVISIBLE = /[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g;
 // Separador opcional antes de AM/PM: espaço, espaço fino (iOS 17+) ou espaço não quebrável.
-const AMPM = String.raw`(?:[\s  ]?([AaPp])\.?\s?[Mm]\.?)?`;
+const AMPM = String.raw`(?:[\s\u202f\u00a0]?([AaPp])\.?\s?[Mm]\.?)?`;
 const STAMP = String.raw`(\d{1,2})\/(\d{1,2})\/(\d{2,4}),? (\d{1,2}):(\d{2})(?::(\d{2}))?${AMPM}`;
 // Android: "15/11/2026 22:10 - Nome: texto" | iOS: "[15/11/2026, 22:10:05] Nome: texto"
 const ANDROID_LINE = new RegExp(String.raw`^${STAMP} - ([\s\S]*)$`);
@@ -83,7 +83,7 @@ export function parseWhatsApp(text: string, opts?: WhatsAppOptions): ParsedChat 
   const entries: Entry[] = [];
 
   for (const rawLine of text.split(/\r?\n/)) {
-    const line = rawLine.replace(/^[‎‏﻿]+/, '');
+    const line = rawLine.replace(/^[\u200e\u200f\ufeff]+/, '');
     const ios = line.startsWith('[');
     const m = (ios ? IOS_LINE : ANDROID_LINE).exec(line);
     if (!m) {
@@ -145,7 +145,7 @@ export function parseWhatsApp(text: string, opts?: WhatsAppOptions): ParsedChat 
 /** Decide o tipo a partir do corpo da mensagem. */
 function classify(raw: string, ios: boolean): { kind: Kind; text?: string } {
   // No iOS, avisos do sistema e mídias começam com a marca invisível U+200E.
-  const marked = raw.startsWith('‎');
+  const marked = raw.startsWith('\u200e');
   const body = raw.replace(INVISIBLE, '').replace(EDITED, '').trim();
   const key = body
     .replace(/^<(.*)>$/, '$1')

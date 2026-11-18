@@ -3,23 +3,44 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Particles } from '@/components/fx/Particles';
+import { useReport } from '@/components/report/ReportProvider';
 import { Link, useRouter } from '@/i18n/navigation';
+import { STEPS as WORKER_STEPS, errorCode } from '@/lib/pipeline';
+import { analyzeFiles } from '@/lib/worker-client';
 
 const STEPS = ['read', 'understand', 'merge', 'compute'] as const;
 
-/** Tela de progresso. Hoje o progresso é simulado por timer. */
+/** Tela de progresso. O progresso vem do Worker (4 etapas de 25%); só chega a 100% com o relatório pronto. */
 export function ProcessingView() {
   const t = useTranslations('processing');
+  const tErr = useTranslations('common.errors');
   const router = useRouter();
-  const [pct, setPct] = useState(0);
+  const { files, mapping, setReport } = useReport();
+  const [working, setWorking] = useState(0); // 0 a 99
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const ready = files.length > 0 && mapping !== null;
 
-  // TODO(Luiz): trocar o timer pelo progresso real do Worker (onProgress de analyze).
   useEffect(() => {
-    const id = setInterval(() => setPct((p) => Math.min(100, p + 1.5)), 100);
-    return () => clearInterval(id);
-  }, []);
+    if (!ready) return;
+    const { result, cancel } = analyzeFiles(
+      files.map((f) => f.file),
+      mapping,
+      (step, fraction) => {
+        const i = WORKER_STEPS.indexOf(step);
+        setWorking(Math.min(99, ((i + fraction) / WORKER_STEPS.length) * 100));
+      },
+    );
+    result
+      .then((report) => {
+        setReport(report);
+        setDone(true);
+      })
+      .catch((err: unknown) => setError(tErr(errorCode(err) ?? 'unknown')));
+    return cancel; // sair da tela encerra o Worker
+  }, [ready, files, mapping, setReport, tErr]);
 
-  const done = pct >= 100;
+  const pct = done ? 100 : working;
   // ?auto=0 desliga o avanço automático (usado nos testes).
   useEffect(() => {
     if (!done || new URLSearchParams(window.location.search).get('auto') === '0') return;
@@ -29,6 +50,22 @@ export function ProcessingView() {
 
   const stepIndex = Math.min(STEPS.length - 1, Math.floor(pct / 25));
   const step = STEPS[stepIndex] as (typeof STEPS)[number];
+
+  if (!ready || error) {
+    return (
+      <main className="mx-auto flex min-h-[50dvh] max-w-3xl flex-col justify-center gap-4 px-4 sm:px-6">
+        <h1 className="font-display text-3xl font-bold sm:text-4xl">
+          {error ? t('failed') : t('empty.title')}
+        </h1>
+        <p role={error ? 'alert' : undefined} className={error ? 'text-danger' : 'text-muted'}>
+          {error ?? t('empty.body')}
+        </p>
+        <Link href="/" className="btn btn-primary self-start">
+          {t('backHome')}
+        </Link>
+      </main>
+    );
+  }
 
   return (
     <>

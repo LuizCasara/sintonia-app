@@ -48,3 +48,53 @@ test('apagar tudo volta ao início', async ({ page }) => {
   await page.getByRole('button', { name: 'Sim, apagar' }).click();
   await expect(page).toHaveURL(/\/pt\/?$/);
 });
+
+async function consentAndUpload(
+  page: import('@playwright/test').Page,
+  files: string[] | { name: string; mimeType: string; buffer: Buffer }[],
+) {
+  await page.goto('/pt/');
+  await page.getByRole('checkbox').check();
+  await page.getByTestId('file-input').setInputFiles(files);
+  await page.getByRole('button', { name: 'Continuar' }).click();
+}
+
+test('um app com 2 autores pula o Confirmar e abre o relatório real', async ({ page }) => {
+  await consentAndUpload(page, ['fixtures/whatsapp/android-pt.txt']);
+  await expect(page).toHaveURL(/\/pt\/processing\/?$/);
+  await expect(page).toHaveURL(/\/pt\/report\/timeline\/?$/);
+  await expect(page.getByText('Dados fictícios de demonstração')).toBeHidden();
+});
+
+test('WhatsApp + Telegram passam pelo Confirmar', async ({ page }) => {
+  await consentAndUpload(page, [
+    'fixtures/whatsapp/android-pt.txt',
+    'fixtures/telegram/result.json',
+  ]);
+  await expect(page).toHaveURL(/\/pt\/confirm\/?$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Confirme quem é quem');
+  // Ignorar os dois nomes da Pessoa B desabilita o "Analisar"; devolver um deles reabilita.
+  const bruno = page.getByRole('combobox', { name: 'Quem é Bruno Reis?' });
+  await bruno.first().selectOption('ignore');
+  await bruno.first().selectOption('ignore');
+  await expect(page.getByRole('button', { name: 'Analisar' })).toBeDisabled();
+  await bruno.first().selectOption('B');
+  await expect(page.getByRole('button', { name: 'Analisar' })).toBeEnabled();
+  await page.getByRole('button', { name: 'Analisar' }).click();
+  await expect(page).toHaveURL(/\/pt\/report\/timeline\/?$/);
+});
+
+test('arquivo .zip mostra o erro em vez de travar', async ({ page }) => {
+  await consentAndUpload(page, [
+    { name: 'conversa.zip', mimeType: 'application/zip', buffer: Buffer.from('PK') },
+  ]);
+  await expect(page.getByRole('alert').filter({ hasText: '.zip' })).toBeVisible();
+  await expect(page).toHaveURL(/\/pt\/?$/);
+});
+
+test('processando sem arquivos mostra o aviso e volta ao início', async ({ page }) => {
+  await page.goto('/pt/processing/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Nenhum arquivo para processar');
+  await page.getByRole('link', { name: 'Voltar ao início' }).click();
+  await expect(page).toHaveURL(/\/pt\/?$/);
+});

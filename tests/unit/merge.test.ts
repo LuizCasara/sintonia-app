@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { mappingKey, mergeChats, nameSimilarity, normalizeName, suggestPeople } from '../../lib/merge';
+import {
+  mappingKey,
+  mergeChats,
+  nameSimilarity,
+  normalizeName,
+  suggestPeople,
+} from '../../lib/merge';
 import type { ParsedChat, RawMessage } from '../../lib/model';
 
 const msg = (authorName: string, ts: number, extra: Partial<RawMessage> = {}): RawMessage => ({

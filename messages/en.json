@@ -12,6 +12,13 @@
       "timeline": "Story",
       "dashboard": "Dashboard",
       "actions": "Actions"
+    },
+    "errors": {
+      "zip": ".zip files are not supported yet. Extract the .txt inside and upload it.",
+      "unknownFormat": "Unrecognized format. Upload the WhatsApp .txt or the Telegram result.json.",
+      "noMessages": "We found no messages in these files.",
+      "needTwoPeople": "We need at least two people in the conversation.",
+      "unknown": "Something went wrong while reading the files. Please try again."
     }
   },
   "home": {
@@ -57,7 +64,8 @@
       "unknown": "Unrecognized format"
     },
     "continue": "Continue",
-    "demo": "See a demo with fictional data"
+    "demo": "See a demo with fictional data",
+    "reading": "Reading files…"
   },
   "confirm": {
     "title": "Confirm who is who",
@@ -66,11 +74,13 @@
     "personB": "Person B",
     "messages": "{count} messages",
     "similarity": "{pct}% similar",
-    "swap": "Swap",
     "ignore": "Not part of the couple / ignore",
     "others": "Other names found",
-    "demoNote": "Example with fictional names. Real detection will come from the Worker.",
-    "analyze": "Analyze"
+    "analyze": "Analyze",
+    "assignLabel": "Who is {name}?",
+    "needOne": "Pick at least one name for {person}.",
+    "empty": "Upload your files on the home screen to see who is who.",
+    "backHome": "Back to start"
   },
   "processing": {
     "title": "Processing",
@@ -83,7 +93,13 @@
     "progressLabel": "Analysis progress",
     "done": "Done! Your sync is waiting.",
     "open": "See the timeline",
-    "stepDone": "done"
+    "stepDone": "done",
+    "failed": "Could not analyze",
+    "empty": {
+      "title": "No files to process",
+      "body": "Upload your files on the home screen to start."
+    },
+    "backHome": "Back to start"
   },
   "timeline": {
     "title": "Your story",

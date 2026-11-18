@@ -59,7 +59,8 @@ function candidates(chats: ParsedChat[]): Candidate[] {
       if (m.kind === 'system' || !m.authorName) continue;
       counts.set(m.authorName, (counts.get(m.authorName) ?? 0) + 1);
     }
-    for (const [name, messageCount] of counts) out.push({ source: chat.source, name, messageCount });
+    for (const [name, messageCount] of counts)
+      out.push({ source: chat.source, name, messageCount });
   }
   return out;
 }
@@ -107,6 +108,20 @@ export function suggestPeople(chats: ParsedChat[]): PersonSuggestion[] {
 
 /** mapping: nome no app → 'A' | 'B'. Quem não está no mapa vira 'other'. */
 export type PersonMapping = Record<string, 'A' | 'B'>;
+
+const total = (s: PersonSuggestion) => s.names.reduce((n, x) => n + x.messageCount, 0);
+
+/** Sugestão inicial: as duas pessoas com mais mensagens viram A e B; o resto é ignorado. */
+export function defaultMapping(people: PersonSuggestion[]): PersonMapping {
+  const mapping: PersonMapping = {};
+  [...people]
+    .sort((a, b) => total(b) - total(a))
+    .slice(0, 2)
+    .forEach((p, i) => {
+      for (const n of p.names) mapping[mappingKey(n.source, n.name)] = i === 0 ? 'A' : 'B';
+    });
+  return mapping;
+}
 
 /** Chave do mapping: o nome do export pode repetir entre apps, então usamos "app:nome". */
 export const mappingKey = (source: Source, name: string) => `${source}:${name}`;
