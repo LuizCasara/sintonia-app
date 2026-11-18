@@ -98,3 +98,28 @@ test('processando sem arquivos mostra o aviso e volta ao início', async ({ page
   await page.getByRole('link', { name: 'Voltar ao início' }).click();
   await expect(page).toHaveURL(/\/pt\/?$/);
 });
+
+test('passar o mouse na linha do tempo mostra os números do mês', async ({ page }) => {
+  await page.goto('/pt/report/timeline/');
+  const track = page.locator('[role=group][tabindex="0"]');
+  const box = await track.boundingBox();
+  expect(box).not.toBeNull();
+  await expect(page.getByTestId('timeline-tooltip')).toBeHidden();
+  await page.mouse.move(box!.x + 220, box!.y + 90);
+  const tip = page.getByTestId('timeline-tooltip');
+  await expect(tip).toBeVisible();
+  await expect(tip).toContainText('Ana Lima');
+  await expect(tip).toContainText('no mês');
+  await page.mouse.move(box!.x + 220, box!.y - 60); // fora da linha do tempo
+  await expect(tip).toBeHidden();
+});
+
+test('a linha do tempo tem marcos da jornada além das primeiras vezes e fases', async ({
+  page,
+}) => {
+  await page.goto('/pt/report/timeline/');
+  const counter = await page.getByText(/Marco 1 de \d+/).textContent();
+  const total = Number(/de (\d+)/.exec(counter ?? '')?.[1]);
+  expect(total).toBeGreaterThan(8); // a demo tinha 4 primeiras vezes + 4 fases
+  await expect(page.getByRole('button', { name: /anos de conversa/ }).first()).toBeVisible();
+});

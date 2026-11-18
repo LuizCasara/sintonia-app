@@ -1,7 +1,7 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
 import { useReport } from '@/components/report/ReportProvider';
 import { fmtDate, fmtNum } from '@/lib/format';
 
@@ -10,32 +10,60 @@ const CHART_H = 120; // altura da sparkline
 const TOP = 44; // espaço acima do gráfico (rótulo do marco)
 const PAD_LEFT = 28; // padding pequeno à esquerda
 const AXIS_H = 68; // eixo com marcos e anos abaixo do gráfico
+const TIP_W = 176; // largura da dica ao passar o mouse (w-44)
 
-type Kind = 'first' | 'peak' | 'valley';
+// Totais redondos que viram marco ("vocês chegaram a 100 mil mensagens").
+const ROUND_TOTALS = [10_000, 50_000, 100_000, 250_000, 500_000, 1_000_000];
+const MAX_ANNIVERSARIES = 30;
+
+type Kind = 'first' | 'peak' | 'valley' | 'mark';
+type Params = Record<string, string | number>;
 
 interface Milestone {
   id: string;
   kind: Kind;
   titleKey: string;
-  date: string; // ISO
+  titleParams?: Params;
+  date: string; // ISO, dia ("2026-11-15") ou mês ("2026-11")
+  withDay: boolean;
   monthIndex: number;
   pct?: number;
+  /** Texto próprio do cartão (marcos da jornada); os outros usam description(). */
+  descKey?: string;
+  descParams?: Params;
 }
 
-/** Linha do tempo: trilho mensal com sparkline A/B e marcos navegáveis. */
+/** Linha do tempo: trilho mensal com sparkline A/B, marcos navegáveis e leitura ao passar o mouse. */
 export function TimelineView() {
   const t = useTranslations('timeline');
   const locale = useLocale();
   const { report } = useReport();
   const months = report.volume.perMonth;
   const [sel, setSel] = useState(0);
+  const [hover, setHover] = useState<{ i: number; flip: boolean } | null>(null);
   const markerRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const scrollerRef = useRef<HTMLDivElement>(null);
 
-  // Marcos = primeiras vezes + fases (pico/vale), em ordem de data.
+  const monthOf = (iso: string) =>
+    Math.max(
+      0,
+      months.findIndex((x) => x.month === iso.slice(0, 7)),
+    );
+
+  // Marcos = primeiras vezes + fases (pico/vale) + marcos da jornada, em ordem de data.
   const milestones: Milestone[] = [];
   for (const key of ['firstMessage', 'firstILoveYou', 'firstPhoto', 'firstAudio'] as const) {
     const date = report.firsts[key];
-    if (date) milestones.push({ id: key, kind: 'first', titleKey: key, date, monthIndex: 0 });
+    if (date) {
+      milestones.push({
+        id: key,
+        kind: 'first',
+        titleKey: key,
+        date,
+        withDay: true,
+        monthIndex: 0,
+      });
+    }
   }
   for (const p of report.phases.phases) {
     milestones.push({
@@ -43,17 +71,94 @@ export function TimelineView() {
       kind: p.kind,
       titleKey: p.kind,
       date: p.date,
+      withDay: false,
       monthIndex: 0,
       pct: p.changePct,
     });
   }
-  milestones.sort((a, b) => a.date.localeCompare(b.date));
-  for (const ms of milestones) {
-    ms.monthIndex = Math.max(
-      0,
-      months.findIndex((x) => x.month === ms.date.slice(0, 7)),
-    );
+
+  // Marcos da jornada: tudo sai do volume mensal e do período, sem nenhum dado novo.
+  const cumulative: number[] = [];
+  for (const x of months) cumulative.push((cumulative[cumulative.length - 1] ?? 0) + x.A + x.B);
+  const totalMessages = cumulative[cumulative.length - 1] ?? 0;
+
+  for (const n of ROUND_TOTALS) {
+    const i = cumulative.findIndex((c) => c >= n);
+    if (i >= 0 && n < totalMessages) {
+      milestones.push({
+        id: `total-${n}`,
+        kind: 'mark',
+        titleKey: 'messages',
+        titleParams: { count: fmtNum(locale, n) },
+        date: months[i]!.month,
+        withDay: false,
+        monthIndex: 0,
+        descKey: 'messages',
+      });
+    }
   }
+
+  const { start, end } = report.period;
+  if (start && end) {
+    const startYear = Number(start.slice(0, 4));
+    for (let years = 1; years <= MAX_ANNIVERSARIES; years++) {
+      const date = `${startYear + years}${start.slice(4)}`;
+      if (date > end) break;
+      const at = cumulative[monthOf(date)] ?? 0;
+      milestones.push({
+        id: `anniversary-${years}`,
+        kind: 'mark',
+        titleKey: 'anniversary',
+        titleParams: { years },
+        date,
+        withDay: true,
+        monthIndex: 0,
+        descKey: 'anniversary',
+        descParams: { count: fmtNum(locale, at) },
+      });
+    }
+  }
+
+  if (months.length >= 3) {
+    // Mês mais movimentado (some se já existe um pico de fase nesse mês).
+    let best = 0;
+    for (let i = 1; i < months.length; i++) {
+      if (months[i]!.A + months[i]!.B > months[best]!.A + months[best]!.B) best = i;
+    }
+    const bestMonth = months[best]!;
+    if (!report.phases.phases.some((p) => p.kind === 'peak' && p.date === bestMonth.month)) {
+      milestones.push({
+        id: 'record',
+        kind: 'mark',
+        titleKey: 'record',
+        date: bestMonth.month,
+        withDay: false,
+        monthIndex: 0,
+        descKey: 'record',
+        descParams: { count: fmtNum(locale, bestMonth.A + bestMonth.B) },
+      });
+    }
+
+    // Primeiro mês em que o Telegram passa o WhatsApp (e continua à frente no mês seguinte).
+    const lead = (i: number) => (months[i]?.telegram ?? 0) > (months[i]?.whatsapp ?? 0);
+    const cross = months.findIndex(
+      (_, i) => i > 0 && lead(i) && (i === months.length - 1 || lead(i + 1)),
+    );
+    if (cross > 0 && months.slice(0, cross).some((x) => x.whatsapp > x.telegram)) {
+      milestones.push({
+        id: 'telegram-lead',
+        kind: 'mark',
+        titleKey: 'telegram',
+        date: months[cross]!.month,
+        withDay: false,
+        monthIndex: 0,
+        descKey: 'telegram',
+      });
+    }
+  }
+
+  milestones.sort((a, b) => a.date.localeCompare(b.date));
+  for (const ms of milestones) ms.monthIndex = monthOf(ms.date);
 
   const current = milestones[sel];
   const go = (delta: number) =>
@@ -87,18 +192,30 @@ export function TimelineView() {
   // Escala entre o mínimo e o máximo (não parte de zero), para picos e vales aparecerem.
   const max = Math.max(1, ...months.map((x) => Math.max(x.A, x.B)));
   const min = Math.min(...months.map((x) => Math.min(x.A, x.B))) * 0.9;
+  const yOf = (value: number) => CHART_H - ((value - min) / (max - min || 1)) * (CHART_H - 10);
   const line = (who: 'A' | 'B') =>
-    months
-      .map(
-        (x, i) =>
-          `${i * STEP},${(CHART_H - ((x[who] - min) / (max - min)) * (CHART_H - 10)).toFixed(1)}`,
-      )
-      .join(' ');
+    months.map((x, i) => `${i * STEP},${yOf(x[who]).toFixed(1)}`).join(' ');
   const width = (months.length - 1) * STEP;
   const total = report.volume.perPerson.A.messages + report.volume.perPerson.B.messages;
   const firstDate = report.firsts.firstMessage;
 
+  // Passar o mouse (ou tocar) lê o mês sob o cursor. A caixa inclui o deslocamento do scroll.
+  function readMonth(e: PointerEvent<HTMLDivElement>) {
+    const box = e.currentTarget.getBoundingClientRect();
+    const i = Math.round((e.clientX - box.left - PAD_LEFT) / STEP);
+    if (i < 0 || i >= months.length) {
+      setHover(null);
+      return;
+    }
+    const sc = scrollerRef.current;
+    const flip = sc ? PAD_LEFT + i * STEP + TIP_W + 16 > sc.scrollLeft + sc.clientWidth : false;
+    setHover((h) => (h && h.i === i && h.flip === flip ? h : { i, flip }));
+  }
+
+  const title = (ms: Milestone) => t(`milestones.${ms.titleKey}`, ms.titleParams);
+
   function description(ms: Milestone): string {
+    if (ms.descKey) return t(`desc.${ms.descKey}`, ms.descParams);
     if (ms.kind === 'peak') return t('desc.peak', { pct: Math.abs(ms.pct ?? 0) });
     if (ms.kind === 'valley') return t('desc.valley', { pct: Math.abs(ms.pct ?? 0) });
     if (ms.id === 'firstMessage') return t('desc.start', { total: fmtNum(locale, total) });
@@ -109,10 +226,25 @@ export function TimelineView() {
   }
 
   const dotClass = (kind: Kind) =>
-    kind === 'first' ? 'rounded-full bg-ok' : 'rotate-45 rounded-[3px] bg-sync';
-  const glowColor = (kind: Kind) => (kind === 'first' ? 'var(--color-ok)' : 'var(--color-sync)');
+    kind === 'first'
+      ? 'rounded-full bg-ok'
+      : kind === 'mark'
+        ? 'rounded-full border-2 border-ink bg-panel'
+        : 'rotate-45 rounded-[3px] bg-sync';
+  const glowColor = (kind: Kind) =>
+    kind === 'first'
+      ? 'var(--color-ok)'
+      : kind === 'mark'
+        ? 'var(--color-ink)'
+        : 'var(--color-sync)';
   const chipClass = (kind: Kind) =>
-    kind === 'first' ? 'border-ok/60 text-ok' : 'border-sync/60 text-sync';
+    kind === 'first'
+      ? 'border-ok/60 text-ok'
+      : kind === 'mark'
+        ? 'border-ink/40 text-ink'
+        : 'border-sync/60 text-sync';
+
+  const hovered = hover ? months[hover.i] : undefined;
 
   return (
     <main className="mx-auto max-w-5xl space-y-6 px-4 pt-4 sm:px-6">
@@ -126,14 +258,20 @@ export function TimelineView() {
       </header>
 
       <div
+        ref={scrollerRef}
         role="group"
         tabIndex={0}
         aria-label={t('trackLabel')}
         onKeyDown={onKeyDown}
-        className="panel snap-x snap-proximity overflow-x-auto overscroll-x-contain"
+        className="timeline-scroll panel snap-x snap-proximity overflow-x-auto overscroll-x-contain"
       >
         <div
           className="relative"
+          onPointerMove={readMonth}
+          onPointerDown={readMonth}
+          onPointerLeave={(e) => {
+            if (e.pointerType === 'mouse') setHover(null);
+          }}
           style={{
             width: PAD_LEFT + width + 24,
             height: TOP + CHART_H + AXIS_H,
@@ -163,6 +301,35 @@ export function TimelineView() {
               strokeWidth={2}
               className="glow-b"
             />
+            {hover && hovered && (
+              <>
+                <line
+                  x1={hover.i * STEP}
+                  x2={hover.i * STEP}
+                  y1={0}
+                  y2={CHART_H}
+                  stroke="var(--color-ink)"
+                  strokeOpacity={0.25}
+                  strokeDasharray="3 4"
+                />
+                <circle
+                  cx={hover.i * STEP}
+                  cy={yOf(hovered.A)}
+                  r={4.5}
+                  fill="var(--color-a)"
+                  stroke="var(--color-panel)"
+                  strokeWidth={2}
+                />
+                <circle
+                  cx={hover.i * STEP}
+                  cy={yOf(hovered.B)}
+                  r={4.5}
+                  fill="var(--color-b)"
+                  stroke="var(--color-panel)"
+                  strokeWidth={2}
+                />
+              </>
+            )}
           </svg>
 
           {/* Eixo e anos (todo ano tem rótulo) */}
@@ -209,7 +376,7 @@ export function TimelineView() {
                   transform: current.monthIndex < 3 ? 'translateX(-12px)' : 'translateX(-50%)',
                 }}
               >
-                {t(`milestones.${current.titleKey}`)}
+                {title(current)}
               </span>
             </>
           )}
@@ -222,7 +389,7 @@ export function TimelineView() {
               }}
               type="button"
               aria-pressed={i === sel}
-              aria-label={`${t(`milestones.${ms.titleKey}`)} · ${fmtDate(locale, ms.date)}`}
+              aria-label={`${title(ms)} · ${fmtDate(locale, ms.date, ms.withDay)}`}
               onClick={() => setSel(i)}
               className="absolute flex size-11 -translate-x-1/2 snap-center items-center justify-center"
               style={{ left: PAD_LEFT + ms.monthIndex * STEP, top: TOP + CHART_H }}
@@ -237,6 +404,35 @@ export function TimelineView() {
               />
             </button>
           ))}
+
+          {/* Dica com os números do mês sob o cursor (decorativa: os marcos têm o texto acessível) */}
+          {hover && hovered && (
+            <div
+              data-testid="timeline-tooltip"
+              aria-hidden="true"
+              className="pointer-events-none absolute z-10 w-44 rounded-xl border border-line bg-panel/95 p-3 text-sm shadow-lg backdrop-blur"
+              style={{
+                left: PAD_LEFT + hover.i * STEP,
+                top: TOP + 4,
+                transform: hover.flip ? 'translateX(calc(-100% - 12px))' : 'translateX(12px)',
+              }}
+            >
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+                {fmtDate(locale, hovered.month, false)}
+              </p>
+              <p className="mt-1.5 flex items-baseline justify-between gap-2">
+                <span className="min-w-0 truncate text-a">{report.people.A}</span>
+                <span className="font-semibold tabular-nums">{fmtNum(locale, hovered.A)}</span>
+              </p>
+              <p className="flex items-baseline justify-between gap-2">
+                <span className="min-w-0 truncate text-b">{report.people.B}</span>
+                <span className="font-semibold tabular-nums">{fmtNum(locale, hovered.B)}</span>
+              </p>
+              <p className="mt-1.5 border-t border-line pt-1.5 text-xs text-muted">
+                {t('hover.total', { count: fmtNum(locale, hovered.A + hovered.B) })}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -249,6 +445,10 @@ export function TimelineView() {
         <span className="inline-flex items-center gap-2">
           <span className="size-2.5 rotate-45 rounded-[3px] bg-sync" aria-hidden="true" />
           {t('legend.phases')}
+        </span>
+        <span className="inline-flex items-center gap-2">
+          <span className="size-3 rounded-full border-2 border-ink bg-panel" aria-hidden="true" />
+          {t('legend.marks')}
         </span>
       </p>
 
@@ -264,12 +464,8 @@ export function TimelineView() {
               {t('counter', { current: sel + 1, total: milestones.length })}
             </span>
           </div>
-          <h2 className="mt-3 font-display text-2xl font-bold sm:text-3xl">
-            {t(`milestones.${current.titleKey}`)}
-          </h2>
-          <p className="mt-1 text-lg text-sync">
-            {fmtDate(locale, current.date, current.kind === 'first')}
-          </p>
+          <h2 className="mt-3 font-display text-2xl font-bold sm:text-3xl">{title(current)}</h2>
+          <p className="mt-1 text-lg text-sync">{fmtDate(locale, current.date, current.withDay)}</p>
           <p className="mt-2 text-muted">{description(current)}</p>
         </article>
       )}

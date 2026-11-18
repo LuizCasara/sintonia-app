@@ -113,23 +113,36 @@
       "firstPhoto": "First photo",
       "firstAudio": "First voice note",
       "peak": "Chat peak",
-      "valley": "Chat valley"
+      "valley": "Chat valley",
+      "anniversary": "{years, plural, one {# year of chatting} other {# years of chatting}}",
+      "messages": "{count} messages",
+      "record": "Busiest month",
+      "telegram": "Telegram overtook WhatsApp"
     },
     "counter": "Milestone {current} of {total}",
     "chip": {
       "first": "First time",
       "peak": "Peak",
-      "valley": "Valley"
+      "valley": "Valley",
+      "mark": "Milestone"
     },
     "legend": {
       "firsts": "First times",
-      "phases": "Phases (peak/valley)"
+      "phases": "Phases (peak/valley)",
+      "marks": "Journey marks"
     },
     "desc": {
       "start": "Where it all began. Since then, {total} messages.",
       "after": "{days} days after the first message.",
       "peak": "Peak: +{pct}% messages above average",
-      "valley": "Valley: {pct}% messages below average"
+      "valley": "Valley: {pct}% messages below average",
+      "anniversary": "{count} messages so far.",
+      "messages": "You reached this number this month.",
+      "record": "{count} messages in a single month.",
+      "telegram": "This month Telegram had more messages than WhatsApp."
+    },
+    "hover": {
+      "total": "{count} this month"
     }
   },
   "dashboard": {

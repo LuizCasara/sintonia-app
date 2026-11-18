@@ -152,3 +152,36 @@
     animation: none;
   }
 }
+
+/* Barra de rolagem da linha do tempo: fina, sem trilho, com degradê A -> B.
+   Chrome/Safari usam ::-webkit-scrollbar; Firefox cai no scrollbar-width (cor sólida).
+   Os dois ficam em @supports separados porque, no Chrome, scrollbar-width anula o ::-webkit-scrollbar. */
+@supports selector(::-webkit-scrollbar) {
+  .timeline-scroll::-webkit-scrollbar {
+    height: 12px;
+  }
+  .timeline-scroll::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 0 20px;
+  }
+  .timeline-scroll::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 4px solid transparent;
+    background-clip: padding-box;
+    background-image: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-a) 50%, transparent),
+      color-mix(in srgb, var(--color-b) 50%, transparent)
+    );
+  }
+  .timeline-scroll::-webkit-scrollbar-thumb:hover {
+    border-width: 3px;
+    background-image: linear-gradient(90deg, var(--color-a), var(--color-b));
+  }
+}
+@supports not selector(::-webkit-scrollbar) {
+  .timeline-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--color-sync) 55%, transparent) transparent;
+  }
+}

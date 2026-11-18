@@ -113,23 +113,36 @@
       "firstPhoto": "Primeira foto",
       "firstAudio": "Primeiro áudio",
       "peak": "Pico de conversa",
-      "valley": "Vale de conversa"
+      "valley": "Vale de conversa",
+      "anniversary": "{years, plural, one {# ano de conversa} other {# anos de conversa}}",
+      "messages": "{count} mensagens",
+      "record": "Mês mais movimentado",
+      "telegram": "Telegram passou o WhatsApp"
     },
     "counter": "Marco {current} de {total}",
     "chip": {
       "first": "Primeira vez",
       "peak": "Pico",
-      "valley": "Vale"
+      "valley": "Vale",
+      "mark": "Marco"
     },
     "legend": {
       "firsts": "Primeiras vezes",
-      "phases": "Fases (pico/vale)"
+      "phases": "Fases (pico/vale)",
+      "marks": "Marcos da jornada"
     },
     "desc": {
       "start": "Onde tudo começou. Desde então, {total} mensagens.",
       "after": "{days} dias depois da primeira mensagem.",
       "peak": "Pico: +{pct}% de mensagens acima da média",
-      "valley": "Vale: {pct}% de mensagens abaixo da média"
+      "valley": "Vale: {pct}% de mensagens abaixo da média",
+      "anniversary": "{count} mensagens até aqui.",
+      "messages": "Vocês chegaram a esse número neste mês.",
+      "record": "{count} mensagens em um único mês.",
+      "telegram": "Neste mês o Telegram teve mais mensagens que o WhatsApp."
+    },
+    "hover": {
+      "total": "{count} no mês"
     }
   },
   "dashboard": {
