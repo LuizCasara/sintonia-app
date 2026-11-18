@@ -143,6 +143,13 @@
     },
     "hover": {
       "total": "{count} no mês"
+    },
+    "pace": {
+      "label": "Ritmo de resposta por ano",
+      "faster": "{pct}% mais rápido",
+      "slower": "{pct}% mais lento",
+      "usual": "no ritmo de sempre",
+      "note": "Faixa de baixo: a mediana de resposta de cada ano contra o ritmo habitual do casal ({time}). Não é uma nota, só mostra mudanças."
     }
   },
   "dashboard": {
@@ -150,7 +157,6 @@
     "subtitle": "Toque em um card para ver o detalhe.",
     "open": "Ver detalhe",
     "close": "Fechar",
-    "balancePending": "Fórmula em definição",
     "cards": {
       "volume": "Mensagens no total",
       "perPerson": "Mensagens por pessoa",
@@ -161,7 +167,8 @@
       "media": "Áudio × texto",
       "streaks": "Sequências",
       "apps": "WhatsApp × Telegram",
-      "balance": "Equilíbrio"
+      "balance": "Equilíbrio",
+      "sintonia": "Sintonia"
     },
     "m": {
       "messages": "Mensagens",
@@ -196,6 +203,38 @@
       "textLegend": "Texto",
       "morning": "Bom dia",
       "night": "Boa noite"
+    },
+    "score": {
+      "outOf": "de 10",
+      "weight": "peso {pct}%"
+    },
+    "sintonia": {
+      "tagline": "Se a conversa flui",
+      "explain": "A Sintonia mede se a conversa flui: se as mensagens recebem resposta, quão rápido e com que tom. Ela não mede o quanto vocês se querem bem, só o que aparece neste histórico.",
+      "short": "Histórico curto demais para uma nota confiável (mínimo de 3 meses e 500 mensagens).",
+      "parts": {
+        "reciprocity": "Reciprocidade",
+        "responseTime": "Tempo de resposta",
+        "tone": "Tom"
+      },
+      "detail": {
+        "reciprocity": "{pct} das conversas tiveram resposta dos dois lados",
+        "responseTime": "Mediana de {time} para responder",
+        "tone": "{pct} das mensagens com carinho ou risada"
+      },
+      "toneNote": "O tom conta palavras de uma lista (carinho e risada). É uma medida simples: não entende ironia nem contexto. Pedidos de desculpa não entram na nota."
+    },
+    "balance": {
+      "explain": "O Equilíbrio mede se o esforço da conversa é dividido: quem abre as conversas, quem manda mais mensagens e palavras e quem fecha. 10 é divisão igual. Um casal pode ter sintonia alta e equilíbrio baixo: uma pessoa puxa e a outra responde bem.",
+      "even": "O esforço está bem dividido",
+      "leans": "{name} puxa {pct}% do esforço",
+      "items": {
+        "opens": "Quem abre as conversas",
+        "messages": "Mensagens",
+        "words": "Palavras",
+        "closes": "Quem fecha as conversas"
+      },
+      "note": "Nota alta não quer dizer relação melhor: só mostra o quanto o esforço está dividido."
     }
   },
   "actions": {

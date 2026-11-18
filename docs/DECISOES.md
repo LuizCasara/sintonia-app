@@ -130,6 +130,57 @@ Na tela Confirmar, cada nome tem um seletor (Pessoa A, Pessoa B ou ignorar). Iss
 
 ## Já pendentes (sem mudança)
 
-- **Fórmulas de Sintonia e de Equilíbrio:** fim da V1. `balance.points` continua `null` e o prompt não pede nota.
+- **Fórmulas de Sintonia e de Equilíbrio:** decididas e implementadas em 18/11/2026 (seção abaixo). Falta só calibrar `RECIPROCITY_CEIL` e `TONE_CAP` com exports reais.
 - **CI:** mover `ci/ci.yml` para `.github/workflows/` (falta a permissão `workflow`).
 - **Listas de palavras:** o Luiz valida no final.
+
+# Fórmulas das notas (decidido em 18/11/2026)
+
+Duas notas de 0 a 10, com uma casa decimal, sempre do casal (não uma por pessoa). Cada nota aparece no painel com as partes dela, o peso de cada parte e uma explicação em linguagem simples. O código está em `lib/metrics/balance.ts` e `lib/metrics/sintonia.ts`; as constantes ficam no topo de cada arquivo.
+
+## Equilíbrio: a divisão do esforço
+
+Para cada item, p é a parte da Pessoa A (de 0 a 1). Nota do item: `e = 1 − 2·|p − 0,5|`. Dividir 50/50 vale 1; uma pessoa fazendo tudo vale 0. Nota final = média ponderada × 10.
+
+| Item                    | Peso |
+| ----------------------- | ---- |
+| Quem abre as conversas  | 40%  |
+| Mensagens               | 30%  |
+| Palavras                | 20%  |
+| Quem fecha as conversas | 10%  |
+
+- Item sem dados (total zero) sai da conta e os pesos se redistribuem.
+- O app mostra para que lado pende (média ponderada das partes; sem destaque se a diferença for menor que 5 pontos percentuais): "Ana puxa 58% do esforço".
+- Nota alta não quer dizer relação melhor. O texto do app diz isso.
+
+## Sintonia: se a conversa flui
+
+| Parte             | Peso | Como mede                                                                                                                                                            |
+| ----------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Reciprocidade     | 40%  | Conversas em que as duas pessoas falaram. A nota da parte cai linearmente de 1 (nenhuma conversa sem resposta) a 0 (25% ou mais sem resposta).                       |
+| Tempo de resposta | 40%  | **Mediana** do tempo de resposta (as duas pessoas juntas), em escala logarítmica: até 10 min vale 1, a partir de 3 h vale 0.                                         |
+| Tom               | 20%  | Parte das mensagens de texto com carinho ou risada. Teto de 20% das mensagens (acima disso a parte já vale 1). **Desculpa não entra**: sinaliza conflito, não calor. |
+
+- Nota final = média ponderada × 10. Parte sem dados sai da conta.
+- **Histórico curto** (menos de 500 mensagens ou 3 meses): sem nota. O painel diz o motivo.
+- O app diz com honestidade que o tom conta palavras de uma lista e não entende ironia nem contexto.
+- A nota fica **fora do prompt da IA** na V1 (o JSON do prompt não leva `sintonia` nem `balance`).
+
+### Correção em relação à discussão
+
+A reciprocidade "por bloco, sem o último de cada conversa" foi recomendada e aprovada, mas não funciona: todo bloco que não é o último de uma conversa tem resposta por construção, então a medida daria sempre 100%. O que foi implementado: **por conversa** (as duas pessoas falaram), com a escala acima para dar diferença entre casais. Se quiser outra definição, o ponto de troca é a parte `reciprocity` em `computeSintonia`.
+
+## Evolução por ano (linha do tempo)
+
+Uma faixa embaixo da linha do tempo mostra, para cada ano, a mediana de resposta contra a mediana do **próprio casal**: "25% mais rápido", "no ritmo de sempre" (menos de 10% de diferença) ou "17% mais lento". Não é uma nota, só mostra mudanças. Anos com menos de 30 respostas ficam sem faixa.
+
+## Constantes para calibrar com exports reais
+
+| Constante                                 | Valor inicial | O que controla                                                        |
+| ----------------------------------------- | ------------- | --------------------------------------------------------------------- |
+| `RECIPROCITY_CEIL`                        | 25%           | Proporção de conversas sem resposta em que a reciprocidade chega a 0. |
+| `TONE_CAP`                                | 20%           | Proporção de mensagens com carinho ou risada em que o tom chega a 1.  |
+| `RESPONSE_FAST_SEC` / `RESPONSE_SLOW_SEC` | 10 min / 3 h  | Âncoras da escala de resposta.                                        |
+| `MIN_MESSAGES` / `MIN_MONTHS`             | 500 / 3       | Mínimo para dar nota de Sintonia.                                     |
+
+As duas primeiras são palpites meus: o valor real depende de como os casais conversam. As listas de carinho e risada ainda são rascunho e mudam o tom.

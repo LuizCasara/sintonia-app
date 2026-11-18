@@ -123,3 +123,36 @@ test('a linha do tempo tem marcos da jornada além das primeiras vezes e fases',
   expect(total).toBeGreaterThan(8); // a demo tinha 4 primeiras vezes + 4 fases
   await expect(page.getByRole('button', { name: /anos de conversa/ }).first()).toBeVisible();
 });
+
+test('painel mostra Sintonia e Equilíbrio com as partes de cada nota', async ({ page }) => {
+  await page.goto('/pt/report/dashboard/');
+  await page.getByRole('button', { name: /Sintonia/ }).click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toContainText('Reciprocidade');
+  await expect(dialog).toContainText('Tempo de resposta');
+  await expect(dialog).toContainText('peso 40%');
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: /Equilíbrio/ }).click();
+  await expect(dialog).toContainText('Quem abre as conversas');
+  await expect(dialog).toContainText('Nota alta não quer dizer relação melhor');
+});
+
+test('histórico curto de verdade: a Sintonia explica por que não tem nota', async ({ page }) => {
+  await consentAndUpload(page, ['fixtures/whatsapp/android-pt.txt']);
+  await expect(page).toHaveURL(/report\/timeline/);
+  await page
+    .getByRole('link', { name: /Painel/ })
+    .first()
+    .click();
+  await expect(page.getByRole('button', { name: /Sintonia/ })).toContainText(
+    'Histórico curto demais',
+  );
+  await expect(page.getByRole('button', { name: /Equilíbrio/ })).toContainText('de 10');
+});
+
+test('linha do tempo mostra o ritmo de resposta por ano', async ({ page }) => {
+  await page.goto('/pt/report/timeline/');
+  const strip = page.getByRole('list', { name: 'Ritmo de resposta por ano' });
+  await expect(strip.getByRole('listitem').first()).toBeVisible();
+  await expect(page.getByText(/Não é uma nota/)).toBeVisible();
+});

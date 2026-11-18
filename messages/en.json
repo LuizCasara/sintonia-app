@@ -143,6 +143,13 @@
     },
     "hover": {
       "total": "{count} this month"
+    },
+    "pace": {
+      "label": "Response pace by year",
+      "faster": "{pct}% faster",
+      "slower": "{pct}% slower",
+      "usual": "at the usual pace",
+      "note": "Bottom strip: the median response time of each year against the usual pace of the couple ({time}). It is not a score, it only shows changes."
     }
   },
   "dashboard": {
@@ -150,7 +157,6 @@
     "subtitle": "Tap a card to see the details.",
     "open": "See details",
     "close": "Close",
-    "balancePending": "Formula being defined",
     "cards": {
       "volume": "Total messages",
       "perPerson": "Messages per person",
@@ -161,7 +167,8 @@
       "media": "Voice × text",
       "streaks": "Streaks",
       "apps": "WhatsApp × Telegram",
-      "balance": "Balance"
+      "balance": "Balance",
+      "sintonia": "Sync"
     },
     "m": {
       "messages": "Messages",
@@ -196,6 +203,38 @@
       "textLegend": "Text",
       "morning": "Good morning",
       "night": "Good night"
+    },
+    "score": {
+      "outOf": "out of 10",
+      "weight": "weight {pct}%"
+    },
+    "sintonia": {
+      "tagline": "Whether the conversation flows",
+      "explain": "Sync measures whether the conversation flows: whether messages get answered, how fast, and in what tone. It does not measure how much you care for each other, only what shows up in this history.",
+      "short": "History too short for a reliable score (at least 3 months and 500 messages).",
+      "parts": {
+        "reciprocity": "Reciprocity",
+        "responseTime": "Response time",
+        "tone": "Tone"
+      },
+      "detail": {
+        "reciprocity": "{pct} of conversations were answered by both sides",
+        "responseTime": "Median of {time} to reply",
+        "tone": "{pct} of messages with affection or laughter"
+      },
+      "toneNote": "Tone counts words from a list (affection and laughter). It is a simple measure: it does not understand irony or context. Apologies are not part of the score."
+    },
+    "balance": {
+      "explain": "Balance measures whether the effort of the conversation is shared: who opens conversations, who sends more messages and words, and who closes. 10 is an even split. A couple can have high sync and low balance: one person leads and the other answers well.",
+      "even": "The effort is evenly shared",
+      "leans": "{name} carries {pct}% of the effort",
+      "items": {
+        "opens": "Who opens conversations",
+        "messages": "Messages",
+        "words": "Words",
+        "closes": "Who closes conversations"
+      },
+      "note": "A high score does not mean a better relationship: it only shows how evenly the effort is shared."
     }
   },
   "actions": {

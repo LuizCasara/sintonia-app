@@ -125,8 +125,10 @@ describe('métricas (conversa montada à mão)', () => {
     expect(r.apps.perYear).toEqual([{ year: 2026, whatsappPct: 100, telegramPct: 0 }]);
   });
 
-  it('balance continua sem nota (fórmula em aberto)', () => {
-    expect(r.balance.points).toBeNull();
+  it('conversa curta: sem nota de Sintonia, mas com o Equilíbrio', () => {
+    expect(r.sintonia.score).toBeNull();
+    expect(r.sintonia.reason).toBe('short');
+    expect(r.balance.score).not.toBeNull();
   });
 });
 

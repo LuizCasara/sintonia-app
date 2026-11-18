@@ -7,8 +7,9 @@ import { computeHours, type HoursMetrics } from './hours';
 import { computeLanguage, type LanguageMetrics } from './language';
 import { computeMedia, type MediaMetrics } from './media';
 import { computePhases, type PhasesMetrics } from './phases';
-import { computeResponse, type ResponseMetrics } from './response';
+import { collectReplies, computeResponse, type ResponseMetrics } from './response';
 import { computeSessions, type SessionsMetrics } from './sessions';
+import { computeSintonia, summarizeReplies, type SintoniaMetrics } from './sintonia';
 import { computeStreaks, type StreaksMetrics } from './streaks';
 import { isoDay, talk } from './util';
 import { computeVolume, type VolumeMetrics } from './volume';
@@ -19,7 +20,10 @@ export interface Report {
   period: { start: string; end: string; days: number };
   people: { A: string; B: string };
   volume: VolumeMetrics;
+  /** Divisão do esforço (nota 0 a 10 do casal). */
   balance: BalanceMetrics;
+  /** Fluidez da conversa (nota 0 a 10 do casal). Fora do prompt da IA na V1. */
+  sintonia: SintoniaMetrics;
   sessions: SessionsMetrics;
   response: ResponseMetrics;
   language: LanguageMetrics;
@@ -43,21 +47,26 @@ export function computePeriod(conv: Conversation): Report['period'] {
   return { start: isoDay(first.ts), end: isoDay(last.ts), days };
 }
 
-/** Roda todos os grupos de métricas. */
+/** Roda todos os grupos de métricas. Volume, sessões, linguagem e respostas são calculados uma vez só. */
 export function computeReport(conv: Conversation): Report {
+  const volume = computeVolume(conv);
+  const sessions = computeSessions(conv);
+  const language = computeLanguage(conv);
+  const replies = collectReplies(conv);
   return {
     period: computePeriod(conv),
     people: { A: conv.people[0].displayName, B: conv.people[1].displayName },
-    volume: computeVolume(conv),
-    balance: computeBalance(conv),
-    sessions: computeSessions(conv),
-    response: computeResponse(conv),
-    language: computeLanguage(conv),
+    volume,
+    balance: computeBalance(volume, sessions),
+    sintonia: computeSintonia({ volume, sessions, language, replies: summarizeReplies(replies) }),
+    sessions,
+    response: computeResponse(replies),
+    language,
     hours: computeHours(conv),
     streaks: computeStreaks(conv),
     media: computeMedia(conv),
     firsts: computeFirsts(conv),
-    phases: computePhases(conv),
+    phases: computePhases(conv, volume),
     dictionary: computeDictionary(conv),
     apps: computeApps(conv),
   };

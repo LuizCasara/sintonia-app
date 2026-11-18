@@ -14,6 +14,10 @@ export interface PersonLanguage {
   questions: number;
   apologies: number;
   affection: number;
+  /** Mensagens de texto com carinho ou risada (base do "tom" da Sintonia; desculpa não entra). */
+  warmMessages: number;
+  /** Mensagens de texto (denominador do tom). */
+  textMessages: number;
 }
 
 export interface LanguageMetrics {
@@ -46,6 +50,8 @@ export function computeLanguage(conv: Conversation): LanguageMetrics {
     questions: 0,
     apologies: 0,
     affection: 0,
+    warmMessages: 0,
+    textMessages: 0,
   }));
 
   for (const m of talk(conv)) {
@@ -60,9 +66,13 @@ export function computeLanguage(conv: Conversation): LanguageMetrics {
     }
     if (m.kind === 'text') {
       const folded = foldLexeme(m.text);
-      p.laughs += countLaughs(folded);
+      const laughs = countLaughs(folded);
+      const affection = countAffection(folded);
+      p.laughs += laughs;
       p.apologies += countApologies(folded);
-      p.affection += countAffection(folded);
+      p.affection += affection;
+      p.textMessages++;
+      if (laughs > 0 || affection > 0) p.warmMessages++;
     }
   }
   for (const w of ['A', 'B'] as const) {

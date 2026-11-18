@@ -1,5 +1,5 @@
 import type { Conversation } from '../model';
-import { computeVolume } from './volume';
+import { computeVolume, type VolumeMetrics } from './volume';
 
 // Fases: picos e vales do volume mensal (média móvel + desvio).
 //
@@ -30,8 +30,11 @@ export const PHASE_MIN_GAP = 3;
 export const PHASE_MAX = 8;
 const MIN_MONTHS = 12;
 
-export function computePhases(conv: Conversation): PhasesMetrics {
-  const all = computeVolume(conv).perMonth;
+export function computePhases(
+  conv: Conversation,
+  volume: VolumeMetrics = computeVolume(conv),
+): PhasesMetrics {
+  const all = volume.perMonth;
   const series = all.slice(1, -1).map((m) => ({ month: m.month, v: m.A + m.B }));
   if (series.length < MIN_MONTHS) return { phases: [] };
 

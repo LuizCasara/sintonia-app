@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useState, type ReactNode } from 'react';
 import { useReport } from '@/components/report/ReportProvider';
-import { fmtDuration, fmtNum, fmtPct, weekdayName } from '@/lib/format';
+import { fmtDuration, fmtNum, fmtPct, fmtScore, weekdayName } from '@/lib/format';
 import {
   DualBar,
   Heatmap,
@@ -15,6 +15,7 @@ import {
   StackedBars,
 } from './charts';
 import { DetailPanel } from './DetailPanel';
+import { ScoreBadge, ScoreBreakdown, type ScoreRow } from './ScorePanel';
 
 type CardId =
   | 'volume'
@@ -25,7 +26,9 @@ type CardId =
   | 'emojis'
   | 'media'
   | 'streaks'
-  | 'apps';
+  | 'apps'
+  | 'sintonia'
+  | 'balance';
 
 const BANDS = ['00', '04', '08', '12', '16', '20']; // faixas de 4 h
 const firstName = (full: string) => full.split(' ')[0] ?? full;
@@ -71,6 +74,38 @@ export function DashboardView() {
       .slice(0, count)
       .map((e) => e.emoji)
       .join(' ');
+
+  const pct = (v: number) => Math.round(v * 100);
+  const sintonia = r.sintonia;
+  const balance = r.balance;
+  const sintoniaRows: ScoreRow[] = sintonia.parts.map((p) => ({
+    id: p.id,
+    label: t(`sintonia.parts.${p.id}`),
+    detail:
+      p.id === 'responseTime'
+        ? t('sintonia.detail.responseTime', { time: fmtDuration(p.value) })
+        : t(`sintonia.detail.${p.id}`, { pct: fmtPct(p.value) }),
+    weight: t('score.weight', { pct: pct(p.weight) }),
+    score: p.score,
+    scoreText: fmtScore(locale, p.score * 10),
+  }));
+  const balanceRows: ScoreRow[] = balance.items.map((i) => ({
+    id: i.id,
+    label: t(`balance.items.${i.id}`),
+    detail: `${nameA} ${pct(i.shareA)}% · ${nameB} ${pct(1 - i.shareA)}%`,
+    weight: t('score.weight', { pct: pct(i.weight) }),
+    score: i.score,
+    scoreText: fmtScore(locale, i.score * 10),
+  }));
+  // Parte do esforço de quem puxa mais (média ponderada dos itens).
+  const effortA = balance.items.reduce((sum, i) => sum + i.weight * i.shareA, 0);
+  const balanceHint =
+    balance.leaning === null
+      ? t('balance.even')
+      : t('balance.leans', {
+          name: balance.leaning === 'A' ? nameA : nameB,
+          pct: pct(balance.leaning === 'A' ? effortA : 1 - effortA),
+        });
 
   const cards: { id: CardId; span?: string; summary: ReactNode; detail: ReactNode }[] = [
     {
@@ -276,6 +311,68 @@ export function DashboardView() {
         </table>
       ),
     },
+    {
+      id: 'sintonia',
+      summary:
+        sintonia.score === null ? (
+          <p className="text-sm text-muted">{t('sintonia.short')}</p>
+        ) : (
+          <ScoreBadge
+            value={fmtScore(locale, sintonia.score)}
+            outOf={t('score.outOf')}
+            hint={t('sintonia.tagline')}
+          />
+        ),
+      detail: (
+        <div className="space-y-5">
+          {sintonia.score !== null && (
+            <ScoreBadge
+              value={fmtScore(locale, sintonia.score)}
+              outOf={t('score.outOf')}
+              hint={t('sintonia.tagline')}
+            />
+          )}
+          <p className="text-muted">{t('sintonia.explain')}</p>
+          {sintonia.score === null ? (
+            <p className="text-sm text-sync">{t('sintonia.short')}</p>
+          ) : (
+            <>
+              <ScoreBreakdown rows={sintoniaRows} />
+              <p className="text-sm text-muted">{t('sintonia.toneNote')}</p>
+            </>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: 'balance',
+      summary:
+        balance.score === null ? (
+          <p className="text-sm text-muted">—</p>
+        ) : (
+          <ScoreBadge
+            value={fmtScore(locale, balance.score)}
+            outOf={t('score.outOf')}
+            hint={balanceHint}
+            tone={balance.leaning === 'A' ? 'a' : balance.leaning === 'B' ? 'b' : 'sync'}
+          />
+        ),
+      detail: (
+        <div className="space-y-5">
+          {balance.score !== null && (
+            <ScoreBadge
+              value={fmtScore(locale, balance.score)}
+              outOf={t('score.outOf')}
+              hint={balanceHint}
+              tone={balance.leaning === 'A' ? 'a' : balance.leaning === 'B' ? 'b' : 'sync'}
+            />
+          )}
+          <p className="text-muted">{t('balance.explain')}</p>
+          <ScoreBreakdown rows={balanceRows} />
+          <p className="text-sm text-muted">{t('balance.note')}</p>
+        </div>
+      ),
+    },
   ];
 
   const active = cards.find((c) => c.id === open);
@@ -316,11 +413,8 @@ export function DashboardView() {
 
         {renderCard('apps')}
 
-        {/* Equilíbrio: a fórmula ainda não foi decidida, então nada de número ou nota */}
-        <section className="panel flex flex-col gap-3 p-5 lg:col-span-2">
-          <h2 className="text-sm font-semibold text-muted">{t('cards.balance')}</h2>
-          <p className="font-display text-xl font-bold text-sync">{t('balancePending')}</p>
-        </section>
+        {renderCard('sintonia')}
+        {renderCard('balance')}
       </div>
 
       {active && (

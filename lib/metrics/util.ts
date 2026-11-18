@@ -71,3 +71,16 @@ export function phraseTester(phrases: string[]): (folded: string) => boolean {
 }
 
 export { foldLexeme };
+
+export const clamp01 = (n: number): number => Math.min(1, Math.max(0, n));
+
+/** Mediana; lista vazia vale 0. */
+export function median(values: number[]): number {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = sorted.length >> 1;
+  return sorted.length % 2 ? sorted[mid]! : (sorted[mid - 1]! + sorted[mid]!) / 2;
+}
+
+/** Uma casa decimal (para as notas de 0 a 10). */
+export const round1 = (n: number): number => Math.round(n * 10) / 10;

@@ -3,13 +3,14 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
 import { useReport } from '@/components/report/ReportProvider';
-import { fmtDate, fmtNum } from '@/lib/format';
+import { fmtDate, fmtDuration, fmtNum } from '@/lib/format';
 
 const STEP = 24; // px por mês
 const CHART_H = 120; // altura da sparkline
 const TOP = 44; // espaço acima do gráfico (rótulo do marco)
 const PAD_LEFT = 28; // padding pequeno à esquerda
-const AXIS_H = 68; // eixo com marcos e anos abaixo do gráfico
+const AXIS_H = 100; // eixo com marcos, anos e a faixa de ritmo de resposta abaixo do gráfico
+const PACE_TOP = 70; // início da faixa de ritmo, abaixo do eixo
 const TIP_W = 176; // largura da dica ao passar o mouse (w-44)
 
 // Totais redondos que viram marco ("vocês chegaram a 100 mil mensagens").
@@ -246,6 +247,19 @@ export function TimelineView() {
 
   const hovered = hover ? months[hover.i] : undefined;
 
+  // Faixa de ritmo de resposta: um bloco por ano, com a mediana do ano contra o habitual do casal.
+  const paceByYear = new Map(report.sintonia.perYear.map((y) => [y.year, y]));
+  const paceBlocks: { year: number; start: number; count: number; pct: number }[] = [];
+  for (let i = 0; i < months.length; i++) {
+    const year = Number(months[i]!.month.slice(0, 4));
+    const pct = paceByYear.get(year)?.vsUsualPct;
+    if (pct === null || pct === undefined) continue;
+    const last = paceBlocks[paceBlocks.length - 1];
+    if (last && last.year === year) last.count++;
+    else paceBlocks.push({ year, start: i, count: 1, pct });
+  }
+  const usualSec = report.sintonia.parts.find((p) => p.id === 'responseTime')?.value;
+
   return (
     <main className="mx-auto max-w-5xl space-y-6 px-4 pt-4 sm:px-6">
       <header>
@@ -353,6 +367,41 @@ export function TimelineView() {
             ) : null,
           )}
 
+          {/* Ritmo de resposta por ano contra o habitual do casal (não é nota) */}
+          {paceBlocks.length > 0 && (
+            <div role="list" aria-label={t('pace.label')}>
+              {paceBlocks.map((b) => {
+                const usual = Math.abs(b.pct) < 10;
+                const text = usual
+                  ? t('pace.usual')
+                  : b.pct < 0
+                    ? t('pace.faster', { pct: Math.abs(b.pct) })
+                    : t('pace.slower', { pct: b.pct });
+                const tone = usual
+                  ? 'border-line bg-line/40 text-muted'
+                  : b.pct < 0
+                    ? 'border-ok/40 bg-ok/10 text-ok'
+                    : 'border-sync/40 bg-sync/10 text-sync';
+                return (
+                  <div
+                    key={b.year}
+                    role="listitem"
+                    title={`${b.year}: ${text}`}
+                    className={`absolute flex h-6 items-center justify-center overflow-hidden rounded-md border px-1 text-[11px] font-semibold ${tone}`}
+                    style={{
+                      left: PAD_LEFT + (b.start - 0.5) * STEP + 1.5,
+                      width: b.count * STEP - 3,
+                      top: TOP + CHART_H + PACE_TOP,
+                    }}
+                  >
+                    <span className="sr-only">{b.year}: </span>
+                    <span className="truncate">{text}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
           {/* Linha vertical + rótulo curto do marco selecionado */}
           {current && (
             <>
@@ -451,6 +500,10 @@ export function TimelineView() {
           {t('legend.marks')}
         </span>
       </p>
+
+      {paceBlocks.length > 0 && usualSec !== undefined && (
+        <p className="text-sm text-muted">{t('pace.note', { time: fmtDuration(usualSec) })}</p>
+      )}
 
       {current && (
         <article aria-live="polite" className="panel p-6">

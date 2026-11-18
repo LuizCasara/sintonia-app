@@ -22,6 +22,9 @@ export function buildPrompt(report: Report, opts: PromptOptions): string {
     dictionary: opts.includeDictionary ? report.dictionary : null,
   };
   if (!opts.includeDictionary) delete (data as Partial<Report>).dictionary;
+  // As notas do app (Sintonia e Equilíbrio) não vão no prompt na V1: a IA não deve dar nota própria.
+  delete (data as Partial<Report>).sintonia;
+  delete (data as Partial<Report>).balance;
 
   const years = Math.max(1, Math.round(report.period.days / 365));
   const values: Record<string, string> = {
