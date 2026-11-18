@@ -1,16 +1,16 @@
 {
-  "ranAt": "2026-11-16T20:44:34.580000-03:00",
+  "ranAt": "2026-11-18T20:50:34.286Z",
   "messages": 150000,
   "timingsMs": {
-    "loadConversation": 75.6,
-    "parseWhatsApp": 0.2,
-    "parseTelegram": 0,
-    "computeReport": 0.4,
-    "parseAndMetrics": 0.7
+    "loadConversation": 118,
+    "parseWhatsApp": 370.5,
+    "parseTelegram": 29.2,
+    "computeReport": 1556.7,
+    "parseAndMetrics": 1956.3
   },
-  "stubs": ["parseWhatsApp", "parseTelegram", "computeReport"],
+  "stubs": [],
   "targetMs": 5000,
-  "targetApplied": false,
-  "underTarget": null,
-  "note": "Referência da primeira corrida (box de desenvolvimento). Tempos variam por máquina. Não é trava de CI. A meta de 5 s ainda não vale: parsers e métricas são stubs."
+  "targetApplied": true,
+  "underTarget": true,
+  "note": "Referência com parsers e métricas reais (Windows, 18/11/2026). Tempos variam por máquina. Não é trava de CI. A meta é 150 mil mensagens em menos de 5 s."
 }

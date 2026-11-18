@@ -14,12 +14,7 @@ export interface TelegramMessage {
   photo?: string;
   file?: string;
   media_type?:
-    | 'voice_message'
-    | 'video_message'
-    | 'video_file'
-    | 'sticker'
-    | 'animation'
-    | 'audio_file';
+    'voice_message' | 'video_message' | 'video_file' | 'sticker' | 'animation' | 'audio_file';
   duration_seconds?: number;
   poll?: unknown;
   location_information?: unknown;

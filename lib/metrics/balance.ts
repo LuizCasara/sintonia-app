@@ -2,7 +2,7 @@ import type { Conversation } from '../model';
 import type { PerPerson } from './types';
 
 // Equilíbrio: pontos por pessoa.
-// TODO(Luiz): implementar. Hoje devolve valores vazios.
+// Pendente de decisão: a fórmula fica para o fim da V1 (docs/DECISOES.md). Hoje devolve points: null.
 
 // DECISÃO EM ABERTO (Luiz): fórmula dos pontos de equilíbrio (docs/DECISOES.md).
 // Equilíbrio fica separado da nota de Sintonia; as duas fórmulas vão no fim da V1.

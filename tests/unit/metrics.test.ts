@@ -117,9 +117,7 @@ describe('métricas (conversa montada à mão)', () => {
   it('streaks: sequência de dias seguidos com o cumprimento', () => {
     expect(r.streaks.goodMorningDays).toBe(1);
     expect(r.streaks.goodNightDays).toBe(1);
-    const days = conv(
-      [5, 6, 7, 9].map((d) => ({ ts: Date.UTC(2026, 0, d, 8), text: 'bom dia' })),
-    );
+    const days = conv([5, 6, 7, 9].map((d) => ({ ts: Date.UTC(2026, 0, d, 8), text: 'bom dia' })));
     expect(computeReport(days).streaks.goodMorningDays).toBe(3);
   });
 
@@ -168,8 +166,14 @@ describe('fases', () => {
 describe('dicionário do casal', () => {
   it('só palavras raras no corpus e usadas várias vezes', () => {
     const msgs = [
-      ...Array.from({ length: 6 }, (_, i) => ({ ts: t0 + i * MIN, text: 'oi jujuba, o tempo hoje' })),
-      ...Array.from({ length: 6 }, (_, i) => ({ ts: t0 + (10 + i) * MIN, text: 'kkkkkkkk bolinho' })),
+      ...Array.from({ length: 6 }, (_, i) => ({
+        ts: t0 + i * MIN,
+        text: 'oi jujuba, o tempo hoje',
+      })),
+      ...Array.from({ length: 6 }, (_, i) => ({
+        ts: t0 + (10 + i) * MIN,
+        text: 'kkkkkkkk bolinho',
+      })),
       { ts: t0 + 60 * MIN, text: 'raridade' },
     ];
     const r = computeReport(conv(msgs));

@@ -109,7 +109,7 @@ console.log(
 console.log(`  parser + métricas: ${result.timingsMs.parseAndMetrics} ms`);
 if (stubs.length > 0) {
   console.log(`Meta de ${TARGET_MS} ms: ainda não vale. Falta implementar: ${stubs.join(', ')}.`);
-  console.log('TODO: quando parser e métricas existirem, falhar se parser+métricas >= 5000 ms.');
+  console.log('A meta de 5 s só vale quando parser e métricas existirem.');
 } else if (parseMetricsMs >= TARGET_MS) {
   console.error(`Meta falhou: ${round(parseMetricsMs)} ms (limite ${TARGET_MS} ms).`);
   process.exit(2);
