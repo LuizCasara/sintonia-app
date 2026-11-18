@@ -22,8 +22,6 @@
     }
   },
   "home": {
-    "title": "Veja o quanto vocês estão em sintonia",
-    "subtitle": "Envie o histórico de conversa do casal e descubra a história, os ritmos e os números de vocês dois.",
     "privacy": {
       "title": "Privacidade em primeiro lugar",
       "p1": "Tudo acontece no seu navegador.",
@@ -267,6 +265,67 @@
       "confirmBody": "Você volta ao início e precisará enviar os arquivos de novo.",
       "confirm": "Sim, apagar",
       "cancel": "Cancelar"
+    }
+  },
+  "start": {
+    "title": "Vamos começar",
+    "subtitle": "Três passos rápidos: entenda a privacidade, exporte a conversa e envie o arquivo.",
+    "back": "← Voltar"
+  },
+  "landing": {
+    "title": "Veja o quanto vocês estão em sintonia",
+    "subtitle": "Envie o histórico de conversa do casal e descubra a história, os ritmos e os números de vocês dois.",
+    "cta": "Descobrir nossa sintonia",
+    "demo": "Ver uma demonstração",
+    "trust": "100% no seu navegador · sem cadastro · nada é enviado",
+    "peek": {
+      "kicker": "Uma espiada no que vem por aí",
+      "title": "Sua história, em números e momentos",
+      "note": "Exemplo com dados fictícios."
+    },
+    "score": {
+      "title": "Nota de Sintonia",
+      "body": "Uma nota de 0 a 10 que mostra como vocês se encaixam.",
+      "out": "de 10",
+      "p1": "Equilíbrio",
+      "p2": "Resposta",
+      "p3": "Constância"
+    },
+    "timeline": {
+      "title": "Linha do tempo",
+      "body": "Os marcos da jornada: primeira conversa, recordes e fases.",
+      "m1": "Primeira mensagem",
+      "m2": "Dia mais animado",
+      "m3": "1.000 mensagens"
+    },
+    "rhythm": {
+      "title": "Ritmo do dia",
+      "body": "Em que horas cada um de vocês mais fala.",
+      "a": "Pessoa A",
+      "b": "Pessoa B"
+    },
+    "balance": {
+      "title": "Quem fala mais?",
+      "body": "O equilíbrio da conversa, sem julgamentos."
+    },
+    "words": {
+      "title": "Palavras de vocês",
+      "body": "Os termos e apelidos que só vocês dois usam.",
+      "list": [
+        "amor",
+        "saudade",
+        "kkkk",
+        "bom dia",
+        "te amo",
+        "vem",
+        "café",
+        "dorme bem",
+        "meu bem"
+      ]
+    },
+    "final": {
+      "title": "Pronto para ouvir a frequência de vocês?",
+      "body": "Leva poucos minutos e fica tudo no seu aparelho."
     }
   }
 }

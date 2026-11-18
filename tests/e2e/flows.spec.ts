@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('dropzone fica desabilitada sem o consentimento', async ({ page }) => {
-  await page.goto('/pt/');
+  await page.goto('/pt/start/');
   const input = page.getByTestId('file-input');
   await expect(input).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Continuar' })).toBeDisabled();
@@ -53,7 +53,7 @@ async function consentAndUpload(
   page: import('@playwright/test').Page,
   files: string[] | { name: string; mimeType: string; buffer: Buffer }[],
 ) {
-  await page.goto('/pt/');
+  await page.goto('/pt/start/');
   await page.getByRole('checkbox').check();
   await page.getByTestId('file-input').setInputFiles(files);
   await page.getByRole('button', { name: 'Continuar' }).click();
@@ -89,7 +89,7 @@ test('arquivo .zip mostra o erro em vez de travar', async ({ page }) => {
     { name: 'conversa.zip', mimeType: 'application/zip', buffer: Buffer.from('PK') },
   ]);
   await expect(page.getByRole('alert').filter({ hasText: '.zip' })).toBeVisible();
-  await expect(page).toHaveURL(/\/pt\/?$/);
+  await expect(page).toHaveURL(/\/pt\/start\/?$/);
 });
 
 test('processando sem arquivos mostra o aviso e volta ao início', async ({ page }) => {
@@ -155,4 +155,11 @@ test('linha do tempo mostra o ritmo de resposta por ano', async ({ page }) => {
   const strip = page.getByRole('list', { name: 'Ritmo de resposta por ano' });
   await expect(strip.getByRole('listitem').first()).toBeVisible();
   await expect(page.getByText(/Não é uma nota/)).toBeVisible();
+});
+
+test('a home leva ao /start pelo CTA', async ({ page }) => {
+  await page.goto('/pt/');
+  await page.getByRole('link', { name: 'Descobrir nossa sintonia' }).first().click();
+  await expect(page).toHaveURL(/\/pt\/start\/?$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Vamos começar' })).toBeVisible();
 });

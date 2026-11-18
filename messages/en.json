@@ -22,8 +22,6 @@
     }
   },
   "home": {
-    "title": "See how in sync you are",
-    "subtitle": "Upload your couple chat history and discover the story, rhythms and numbers of the two of you.",
     "privacy": {
       "title": "Privacy comes first",
       "p1": "Everything happens in your browser.",
@@ -267,6 +265,67 @@
       "confirmBody": "You go back to the start and will need to upload the files again.",
       "confirm": "Yes, delete",
       "cancel": "Cancel"
+    }
+  },
+  "start": {
+    "title": "Let's get started",
+    "subtitle": "Three quick steps: understand the privacy, export the chat and upload the file.",
+    "back": "← Back"
+  },
+  "landing": {
+    "title": "See how in sync you are",
+    "subtitle": "Upload your couple chat history and discover the story, rhythms and numbers of the two of you.",
+    "cta": "Discover our sync",
+    "demo": "See a demo",
+    "trust": "100% in your browser · no sign-up · nothing is uploaded",
+    "peek": {
+      "kicker": "A peek at what's coming",
+      "title": "Your story, in numbers and moments",
+      "note": "Example with fictional data."
+    },
+    "score": {
+      "title": "Sync score",
+      "body": "A 0 to 10 score showing how well you two fit together.",
+      "out": "out of 10",
+      "p1": "Balance",
+      "p2": "Response",
+      "p3": "Consistency"
+    },
+    "timeline": {
+      "title": "Timeline",
+      "body": "Milestones of your journey: first chat, records and phases.",
+      "m1": "First message",
+      "m2": "Liveliest day",
+      "m3": "1,000 messages"
+    },
+    "rhythm": {
+      "title": "Daily rhythm",
+      "body": "The hours when each of you talks the most.",
+      "a": "Person A",
+      "b": "Person B"
+    },
+    "balance": {
+      "title": "Who talks more?",
+      "body": "The balance of the conversation, no judgment."
+    },
+    "words": {
+      "title": "Your words",
+      "body": "The terms and nicknames only the two of you use.",
+      "list": [
+        "love",
+        "miss you",
+        "lol",
+        "good morning",
+        "love you",
+        "come over",
+        "coffee",
+        "sleep well",
+        "babe"
+      ]
+    },
+    "final": {
+      "title": "Ready to hear your frequency?",
+      "body": "It takes a few minutes and everything stays on your device."
     }
   }
 }

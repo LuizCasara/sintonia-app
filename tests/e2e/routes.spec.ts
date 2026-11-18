@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const routes = [
   '',
+  'start/',
   'confirm/',
   'processing/?auto=0', // ?auto=0 = não avança sozinho
   'report/timeline/',
