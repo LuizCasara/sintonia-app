@@ -1,0 +1,27 @@
+{
+  "seed": 20261116,
+  "count": 150000,
+  "people": ["Ana Lima", "Bruno Reis"],
+  "startIso": "2016-01-01T00:00:00.000Z",
+  "endIso": "2025-10-05T00:03:49.000Z",
+  "sha256": {
+    "conversation": "c315b205972b644ce31e1e26f1f9eed000e758ba66e50546897e75f15daf50ba",
+    "whatsapp": "246de50b763059e15e10fb2d99d52ae6980650f614cf80762dd059ea44551900",
+    "telegram": "ed1960a2feb74d02ce00db4fd97d8007fd47a5cf0a26f6ee60cd30d5227ccaeb"
+  },
+  "sizes": {
+    "conversation.json.gz": {
+      "bytes": 14403833,
+      "gzipBytes": 888058
+    },
+    "whatsapp-android-pt.txt.gz": {
+      "bytes": 6345030,
+      "gzipBytes": 564701
+    },
+    "telegram.json.gz": {
+      "bytes": 3994127,
+      "gzipBytes": 251039
+    }
+  },
+  "note": "Dados fictícios. Regenerar com pnpm bench:generate (mesma seed, mesma saída). Se um gzip passar de 50 MB, não commitar e documentar neste meta.json."
+}

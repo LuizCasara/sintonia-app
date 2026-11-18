@@ -1,0 +1,204 @@
+{
+  "common": {
+    "language": "Idioma",
+    "demoBanner": "Dados fictícios de demonstração",
+    "reportNav": "Relatório",
+    "nav": {
+      "timeline": "Linha do tempo",
+      "dashboard": "Painel",
+      "actions": "Ações"
+    },
+    "navShort": {
+      "timeline": "História",
+      "dashboard": "Painel",
+      "actions": "Ações"
+    }
+  },
+  "home": {
+    "title": "Veja o quanto vocês estão em sintonia",
+    "subtitle": "Envie o histórico de conversa do casal e descubra a história, os ritmos e os números de vocês dois.",
+    "privacy": {
+      "title": "Privacidade em primeiro lugar",
+      "p1": "Tudo acontece no seu navegador.",
+      "p2": "Nenhuma mensagem sai do seu aparelho.",
+      "p3": "Fechar a aba apaga tudo."
+    },
+    "how": {
+      "title": "Como exportar a conversa",
+      "whatsapp": {
+        "title": "WhatsApp",
+        "body": "Na conversa: menu ⋮ → Mais → Exportar conversa → Sem mídia. Envie o arquivo .txt ou .zip."
+      },
+      "telegram": {
+        "title": "Telegram Desktop",
+        "body": "No computador: menu ⋮ → Exportar histórico → formato JSON. Envie o arquivo result.json."
+      }
+    },
+    "consent": {
+      "draft": "Rascunho para revisão",
+      "body": "O Sintonia roda só no seu navegador. Não há cadastro. Nenhuma mensagem, nome ou arquivo é enviado a um servidor. Fechar ou recarregar a aba apaga tudo.",
+      "label": "Li o aviso e declaro que tenho o direito de analisar esta conversa, com o acordo da outra pessoa.",
+      "hint": "Marque para liberar o envio dos arquivos. Não use uma conversa de terceiros, nem de um grupo em que as outras pessoas não concordaram."
+    },
+    "drop": {
+      "idle": "Arraste os arquivos aqui ou toque para escolher",
+      "disabled": "Marque o consentimento acima para enviar arquivos",
+      "formats": "Aceita .txt, .zip e .json"
+    },
+    "files": {
+      "title": "Arquivos escolhidos",
+      "remove": "Remover {name}"
+    },
+    "formats": {
+      "whatsapp-android": "WhatsApp (Android)",
+      "whatsapp-ios": "WhatsApp (iPhone)",
+      "telegram-json": "Telegram (JSON)",
+      "zip": "WhatsApp (.zip)",
+      "unknown": "Formato não reconhecido"
+    },
+    "continue": "Continuar",
+    "demo": "Ver uma demonstração com dados fictícios"
+  },
+  "confirm": {
+    "title": "Confirme quem é quem",
+    "why": "Cada app guarda o nome de um jeito. Confirmar os pares evita contar a mesma pessoa duas vezes.",
+    "personA": "Pessoa A",
+    "personB": "Pessoa B",
+    "messages": "{count} mensagens",
+    "similarity": "{pct}% parecido",
+    "swap": "Trocar",
+    "ignore": "Não é do casal / ignorar",
+    "others": "Outros nomes encontrados",
+    "demoNote": "Exemplo com nomes fictícios. A detecção real vem do Worker.",
+    "analyze": "Analisar"
+  },
+  "processing": {
+    "title": "Processando",
+    "steps": {
+      "read": "Lendo arquivos",
+      "understand": "Entendendo mensagens",
+      "merge": "Juntando apps",
+      "compute": "Calculando"
+    },
+    "progressLabel": "Progresso da análise",
+    "done": "Pronto! Sua sintonia está esperando.",
+    "open": "Ver a linha do tempo",
+    "stepDone": "concluída"
+  },
+  "timeline": {
+    "title": "A história de vocês",
+    "subtitle": "Use as setas do teclado ou arraste para navegar pelos marcos.",
+    "trackLabel": "Linha do tempo de mensagens por mês",
+    "prev": "Marco anterior",
+    "next": "Próximo marco",
+    "milestones": {
+      "firstMessage": "Primeira mensagem",
+      "firstILoveYou": "Primeiro “te amo”",
+      "firstPhoto": "Primeira foto",
+      "firstAudio": "Primeiro áudio",
+      "peak": "Pico de conversa",
+      "valley": "Vale de conversa"
+    },
+    "counter": "Marco {current} de {total}",
+    "chip": {
+      "first": "Primeira vez",
+      "peak": "Pico",
+      "valley": "Vale"
+    },
+    "legend": {
+      "firsts": "Primeiras vezes",
+      "phases": "Fases (pico/vale)"
+    },
+    "desc": {
+      "start": "Onde tudo começou. Desde então, {total} mensagens.",
+      "after": "{days} dias depois da primeira mensagem.",
+      "peak": "Pico: +{pct}% de mensagens acima da média",
+      "valley": "Vale: {pct}% de mensagens abaixo da média"
+    }
+  },
+  "dashboard": {
+    "title": "Painel",
+    "subtitle": "Toque em um card para ver o detalhe.",
+    "open": "Ver detalhe",
+    "close": "Fechar",
+    "balancePending": "Fórmula em definição",
+    "cards": {
+      "volume": "Mensagens no total",
+      "perPerson": "Mensagens por pessoa",
+      "response": "Tempo de resposta",
+      "started": "Quem inicia conversas",
+      "heatmap": "Horários",
+      "emojis": "Top emojis",
+      "media": "Áudio × texto",
+      "streaks": "Sequências",
+      "apps": "WhatsApp × Telegram",
+      "balance": "Equilíbrio"
+    },
+    "m": {
+      "messages": "Mensagens",
+      "words": "Palavras",
+      "characters": "Caracteres",
+      "uniqueWords": "Palavras únicas",
+      "avgResponse": "Tempo médio da 1ª resposta",
+      "within10": "Respostas em até 10 min",
+      "started": "Conversas iniciadas",
+      "ended": "Conversas encerradas",
+      "doubleMessages": "Mensagens duplas",
+      "unanswered": "Sem resposta",
+      "earliest": "Mais cedo",
+      "latest": "Mais tarde",
+      "laughs": "Risadas",
+      "questions": "Perguntas",
+      "apologies": "Desculpas",
+      "affection": "Carinho",
+      "audios": "Áudios",
+      "images": "Fotos",
+      "videos": "Vídeos",
+      "links": "Links",
+      "texts": "Textos",
+      "goodMorning": "Dias seguidos de bom dia",
+      "goodNight": "Dias seguidos de boa noite",
+      "days": "{count} dias",
+      "lateNight": "Madrugada por ano",
+      "lastMonths": "Últimos 12 meses",
+      "inYears": "em {years} anos",
+      "perMonth": "por mês",
+      "audioLegend": "Áudio",
+      "textLegend": "Texto",
+      "morning": "Bom dia",
+      "night": "Boa noite"
+    }
+  },
+  "actions": {
+    "title": "Ações",
+    "pdf": {
+      "title": "Relatório em PDF",
+      "body": "Um relatório bonito para guardar.",
+      "button": "Baixar PDF (em breve)"
+    },
+    "stories": {
+      "title": "Cards para stories",
+      "body": "Imagens 9:16 só com números, sem nenhuma mensagem.",
+      "button": "Gerar cards (em breve)",
+      "messagesIn": "mensagens em {years} anos",
+      "split": "Quem fala mais"
+    },
+    "prompt": {
+      "title": "Copiar prompt para IA",
+      "body": "O texto leva só números e datas, nunca mensagens. Cole em qualquer chat de IA.",
+      "dictionary": "Incluir dicionário do casal (apelidos e palavras só de vocês)",
+      "copy": "Copiar prompt",
+      "copied": "Copiado!",
+      "error": "Não foi possível copiar. Tente de novo."
+    },
+    "delete": {
+      "title": "Apagar tudo",
+      "body": "Remove arquivos e resultados da memória desta aba.",
+      "button": "Apagar tudo",
+      "confirmTitle": "Apagar tudo agora?",
+      "confirmBody": "Você volta ao início e precisará enviar os arquivos de novo.",
+      "confirm": "Sim, apagar",
+      "cancel": "Cancelar"
+    }
+  }
+}

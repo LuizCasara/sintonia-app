@@ -1,0 +1,574 @@
+{
+ "name": "Bruno Reis",
+ "type": "personal_chat",
+ "id": 1,
+ "messages": [
+  {
+   "id": 1,
+   "type": "message",
+   "date": "2026-02-07T19:49:09",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "me liga quando puder"
+  },
+  {
+   "id": 2,
+   "type": "message",
+   "date": "2026-02-07T19:54:49",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "",
+   "media_type": "voice_message",
+   "duration_seconds": 65
+  },
+  {
+   "id": 3,
+   "type": "message",
+   "date": "2026-02-07T19:57:36",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "amanhã a gente se fala"
+  },
+  {
+   "id": 4,
+   "type": "message",
+   "date": "2026-02-07T22:00:36",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "chego em 10 minutos"
+  },
+  {
+   "id": 5,
+   "type": "message",
+   "date": "2026-02-07T22:07:59",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "tá bom, combinado"
+  },
+  {
+   "id": 6,
+   "type": "message",
+   "date": "2026-02-07T22:12:15",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "bom dia!"
+  },
+  {
+   "id": 7,
+   "type": "message",
+   "date": "2026-02-09T00:59:31",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "me liga quando puder"
+  },
+  {
+   "id": 8,
+   "type": "message",
+   "date": "2026-02-09T01:03:31",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "viu o jogo ontem?"
+  },
+  {
+   "id": 9,
+   "type": "message",
+   "date": "2026-02-10T20:45:52",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "boa noite, até amanhã"
+  },
+  {
+   "id": 10,
+   "type": "message",
+   "date": "2026-02-10T20:54:20",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "",
+   "file": "files/doc_10.pdf"
+  },
+  {
+   "id": 11,
+   "type": "message",
+   "date": "2026-02-10T20:57:03",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "kkkkk essa foi boa"
+  },
+  {
+   "id": 12,
+   "type": "message",
+   "date": "2026-02-10T20:58:31",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "primeira linha\nsegunda linha da mesma mensagem"
+  },
+  {
+   "id": 13,
+   "type": "message",
+   "date": "2026-02-10T21:00:55",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "primeira linha\nsegunda linha da mesma mensagem"
+  },
+  {
+   "id": 14,
+   "type": "message",
+   "date": "2026-02-10T22:34:02",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "que saudade"
+  },
+  {
+   "id": 15,
+   "type": "message",
+   "date": "2026-02-11T01:03:12",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://exemplo.com/video/456"
+    }
+   ]
+  },
+  {
+   "id": 16,
+   "type": "message",
+   "date": "2026-02-11T01:04:11",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "boa noite, até amanhã"
+  },
+  {
+   "id": 17,
+   "type": "message",
+   "date": "2026-02-11T01:09:10",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "bom dia!"
+  },
+  {
+   "id": 18,
+   "type": "message",
+   "date": "2026-02-11T01:10:13",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "",
+   "media_type": "sticker"
+  },
+  {
+   "id": 19,
+   "type": "message",
+   "date": "2026-02-11T01:15:23",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "",
+   "photo": "photos/photo_19.jpg"
+  },
+  {
+   "id": 20,
+   "type": "message",
+   "date": "2026-02-11T22:11:40",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "kkkkk essa foi boa"
+  },
+  {
+   "id": 21,
+   "type": "message",
+   "date": "2026-02-12T13:32:03",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "bom dia!"
+  },
+  {
+   "id": 22,
+   "type": "message",
+   "date": "2026-02-15T00:53:07",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "kkkkk essa foi boa"
+  },
+  {
+   "id": 23,
+   "type": "message",
+   "date": "2026-02-16T18:21:37",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "",
+   "photo": "photos/photo_23.jpg"
+  },
+  {
+   "id": 24,
+   "type": "message",
+   "date": "2026-02-16T18:25:16",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://exemplo.com/video/456"
+    }
+   ]
+  },
+  {
+   "id": 25,
+   "type": "message",
+   "date": "2026-02-16T18:28:05",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "tá bom, combinado"
+  },
+  {
+   "id": 26,
+   "type": "message",
+   "date": "2026-02-16T18:29:40",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "bom dia!"
+  },
+  {
+   "id": 27,
+   "type": "message",
+   "date": "2026-02-16T18:33:44",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "oi, tudo bem?"
+  },
+  {
+   "id": 28,
+   "type": "message",
+   "date": "2026-02-16T18:38:23",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "chego em 10 minutos"
+  },
+  {
+   "id": 29,
+   "type": "message",
+   "date": "2026-02-16T22:51:39",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "",
+   "media_type": "voice_message",
+   "duration_seconds": 90
+  },
+  {
+   "id": 30,
+   "type": "message",
+   "date": "2026-02-16T22:59:21",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "que saudade"
+  },
+  {
+   "id": 31,
+   "type": "message",
+   "date": "2026-02-17T00:38:53",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "vamos jantar fora hoje?"
+  },
+  {
+   "id": 32,
+   "type": "message",
+   "date": "2026-02-17T00:39:18",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "bom dia!"
+  },
+  {
+   "id": 33,
+   "type": "message",
+   "date": "2026-02-17T00:42:35",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "preciso comprar pão"
+  },
+  {
+   "id": 34,
+   "type": "message",
+   "date": "2026-02-17T00:46:13",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "tá bom, combinado"
+  },
+  {
+   "id": 35,
+   "type": "message",
+   "date": "2026-02-17T00:50:12",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "vamos jantar fora hoje?"
+  },
+  {
+   "id": 36,
+   "type": "message",
+   "date": "2026-02-17T00:51:51",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "kkkkk essa foi boa"
+  },
+  {
+   "id": 37,
+   "type": "message",
+   "date": "2026-02-18T01:39:10",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "",
+   "photo": "photos/photo_37.jpg"
+  },
+  {
+   "id": 38,
+   "type": "message",
+   "date": "2026-02-18T01:39:25",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "",
+   "media_type": "voice_message",
+   "duration_seconds": 41
+  },
+  {
+   "id": 39,
+   "type": "message",
+   "date": "2026-02-18T01:41:44",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "vamos jantar fora hoje?"
+  },
+  {
+   "id": 40,
+   "type": "message",
+   "date": "2026-02-18T01:43:10",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://exemplo.com/video/456"
+    }
+   ]
+  },
+  {
+   "id": 41,
+   "type": "message",
+   "date": "2026-02-18T01:46:46",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "me liga quando puder"
+  },
+  {
+   "id": 42,
+   "type": "message",
+   "date": "2026-02-18T01:48:54",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "vamos jantar fora hoje?"
+  },
+  {
+   "id": 43,
+   "type": "message",
+   "date": "2026-02-19T23:11:49",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "",
+   "media_type": "voice_message",
+   "duration_seconds": 90
+  },
+  {
+   "id": 44,
+   "type": "message",
+   "date": "2026-02-19T23:15:55",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "",
+   "photo": "photos/photo_44.jpg"
+  },
+  {
+   "id": 45,
+   "type": "message",
+   "date": "2026-02-19T23:19:10",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "",
+   "media_type": "sticker"
+  },
+  {
+   "id": 46,
+   "type": "message",
+   "date": "2026-02-19T23:19:32",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "primeira linha\nsegunda linha da mesma mensagem"
+  },
+  {
+   "id": 47,
+   "type": "message",
+   "date": "2026-02-19T23:20:51",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "primeira linha\nsegunda linha da mesma mensagem"
+  },
+  {
+   "id": 48,
+   "type": "message",
+   "date": "2026-02-21T22:06:46",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "boa noite, até amanhã"
+  },
+  {
+   "id": 49,
+   "type": "message",
+   "date": "2026-02-21T22:15:21",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "bom dia!"
+  },
+  {
+   "id": 50,
+   "type": "message",
+   "date": "2026-02-21T22:21:45",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "",
+   "media_type": "voice_message",
+   "duration_seconds": 86
+  },
+  {
+   "id": 51,
+   "type": "message",
+   "date": "2026-02-23T13:32:22",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "bom dia!"
+  },
+  {
+   "id": 52,
+   "type": "message",
+   "date": "2026-02-23T13:35:22",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "me liga quando puder"
+  },
+  {
+   "id": 53,
+   "type": "message",
+   "date": "2026-02-23T13:37:12",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "bom dia!"
+  },
+  {
+   "id": 54,
+   "type": "message",
+   "date": "2026-02-23T13:38:24",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "chego em 10 minutos"
+  },
+  {
+   "id": 55,
+   "type": "message",
+   "date": "2026-02-24T22:17:34",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "boa noite, até amanhã"
+  },
+  {
+   "id": 56,
+   "type": "message",
+   "date": "2026-02-24T22:21:22",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "",
+   "media_type": "video_file"
+  },
+  {
+   "id": 57,
+   "type": "message",
+   "date": "2026-02-24T22:28:08",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "preciso comprar pão"
+  },
+  {
+   "id": 58,
+   "type": "message",
+   "date": "2026-02-24T23:03:54",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "boa noite, até amanhã"
+  },
+  {
+   "id": 59,
+   "type": "message",
+   "date": "2026-02-24T23:16:05",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "chego em 10 minutos"
+  },
+  {
+   "id": 60,
+   "type": "message",
+   "date": "2026-02-25T19:44:47",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "bom dia!"
+  },
+  {
+   "id": 61,
+   "type": "message",
+   "date": "2026-02-28T07:45:15",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "oi, tudo bem?"
+  },
+  {
+   "id": 62,
+   "type": "message",
+   "date": "2026-02-28T07:46:48",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "preciso comprar pão"
+  },
+  {
+   "id": 63,
+   "type": "message",
+   "date": "2026-02-28T09:54:48",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "viu o jogo ontem?"
+  },
+  {
+   "id": 64,
+   "type": "message",
+   "date": "2026-02-28T10:00:15",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": "amanhã a gente se fala"
+  },
+  {
+   "id": 65,
+   "type": "message",
+   "date": "2026-02-28T10:04:44",
+   "from": "Ana Lima",
+   "from_id": "user1",
+   "text": "tá bom, combinado"
+  },
+  {
+   "id": 66,
+   "type": "message",
+   "date": "2026-02-28T10:06:58",
+   "from": "Bruno Reis",
+   "from_id": "user2",
+   "text": [
+    "olha isso: ",
+    {
+     "type": "link",
+     "text": "https://exemplo.com/post/123"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,204 @@
+{
+  "common": {
+    "language": "Language",
+    "demoBanner": "Fictional demo data",
+    "reportNav": "Report",
+    "nav": {
+      "timeline": "Timeline",
+      "dashboard": "Dashboard",
+      "actions": "Actions"
+    },
+    "navShort": {
+      "timeline": "Story",
+      "dashboard": "Dashboard",
+      "actions": "Actions"
+    }
+  },
+  "home": {
+    "title": "See how in sync you are",
+    "subtitle": "Upload your couple chat history and discover the story, rhythms and numbers of the two of you.",
+    "privacy": {
+      "title": "Privacy comes first",
+      "p1": "Everything happens in your browser.",
+      "p2": "No message ever leaves your device.",
+      "p3": "Closing the tab erases everything."
+    },
+    "how": {
+      "title": "How to export the chat",
+      "whatsapp": {
+        "title": "WhatsApp",
+        "body": "In the chat: ⋮ menu → More → Export chat → Without media. Upload the .txt or .zip file."
+      },
+      "telegram": {
+        "title": "Telegram Desktop",
+        "body": "On desktop: ⋮ menu → Export chat history → JSON format. Upload the result.json file."
+      }
+    },
+    "consent": {
+      "draft": "Draft for review",
+      "body": "Sintonia runs only in your browser. There is no account. No message, name, or file is sent to a server. Closing or reloading the tab erases everything.",
+      "label": "I have read the notice and I declare that I have the right to analyze this chat, with the other person's agreement.",
+      "hint": "Check this to enable file upload. Do not use a chat you are not part of, or a group chat unless the other people have agreed."
+    },
+    "drop": {
+      "idle": "Drag files here or tap to choose",
+      "disabled": "Check the consent above to upload files",
+      "formats": "Accepts .txt, .zip and .json"
+    },
+    "files": {
+      "title": "Chosen files",
+      "remove": "Remove {name}"
+    },
+    "formats": {
+      "whatsapp-android": "WhatsApp (Android)",
+      "whatsapp-ios": "WhatsApp (iPhone)",
+      "telegram-json": "Telegram (JSON)",
+      "zip": "WhatsApp (.zip)",
+      "unknown": "Unrecognized format"
+    },
+    "continue": "Continue",
+    "demo": "See a demo with fictional data"
+  },
+  "confirm": {
+    "title": "Confirm who is who",
+    "why": "Each app stores names differently. Confirming the pairs avoids counting the same person twice.",
+    "personA": "Person A",
+    "personB": "Person B",
+    "messages": "{count} messages",
+    "similarity": "{pct}% similar",
+    "swap": "Swap",
+    "ignore": "Not part of the couple / ignore",
+    "others": "Other names found",
+    "demoNote": "Example with fictional names. Real detection will come from the Worker.",
+    "analyze": "Analyze"
+  },
+  "processing": {
+    "title": "Processing",
+    "steps": {
+      "read": "Reading files",
+      "understand": "Understanding messages",
+      "merge": "Merging apps",
+      "compute": "Calculating"
+    },
+    "progressLabel": "Analysis progress",
+    "done": "Done! Your sync is waiting.",
+    "open": "See the timeline",
+    "stepDone": "done"
+  },
+  "timeline": {
+    "title": "Your story",
+    "subtitle": "Use the arrow keys or drag to browse the milestones.",
+    "trackLabel": "Timeline of messages per month",
+    "prev": "Previous milestone",
+    "next": "Next milestone",
+    "milestones": {
+      "firstMessage": "First message",
+      "firstILoveYou": "First “I love you”",
+      "firstPhoto": "First photo",
+      "firstAudio": "First voice note",
+      "peak": "Chat peak",
+      "valley": "Chat valley"
+    },
+    "counter": "Milestone {current} of {total}",
+    "chip": {
+      "first": "First time",
+      "peak": "Peak",
+      "valley": "Valley"
+    },
+    "legend": {
+      "firsts": "First times",
+      "phases": "Phases (peak/valley)"
+    },
+    "desc": {
+      "start": "Where it all began. Since then, {total} messages.",
+      "after": "{days} days after the first message.",
+      "peak": "Peak: +{pct}% messages above average",
+      "valley": "Valley: {pct}% messages below average"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Tap a card to see the details.",
+    "open": "See details",
+    "close": "Close",
+    "balancePending": "Formula being defined",
+    "cards": {
+      "volume": "Total messages",
+      "perPerson": "Messages per person",
+      "response": "Response time",
+      "started": "Who starts chats",
+      "heatmap": "Hours",
+      "emojis": "Top emojis",
+      "media": "Voice × text",
+      "streaks": "Streaks",
+      "apps": "WhatsApp × Telegram",
+      "balance": "Balance"
+    },
+    "m": {
+      "messages": "Messages",
+      "words": "Words",
+      "characters": "Characters",
+      "uniqueWords": "Unique words",
+      "avgResponse": "Average 1st response time",
+      "within10": "Replies within 10 min",
+      "started": "Chats started",
+      "ended": "Chats ended",
+      "doubleMessages": "Double messages",
+      "unanswered": "Unanswered",
+      "earliest": "Earliest",
+      "latest": "Latest",
+      "laughs": "Laughs",
+      "questions": "Questions",
+      "apologies": "Apologies",
+      "affection": "Affection",
+      "audios": "Voice notes",
+      "images": "Photos",
+      "videos": "Videos",
+      "links": "Links",
+      "texts": "Texts",
+      "goodMorning": "Good-morning streak",
+      "goodNight": "Good-night streak",
+      "days": "{count} days",
+      "lateNight": "Late night per year",
+      "lastMonths": "Last 12 months",
+      "inYears": "in {years} years",
+      "perMonth": "per month",
+      "audioLegend": "Voice",
+      "textLegend": "Text",
+      "morning": "Good morning",
+      "night": "Good night"
+    }
+  },
+  "actions": {
+    "title": "Actions",
+    "pdf": {
+      "title": "PDF report",
+      "body": "A beautiful report to keep.",
+      "button": "Download PDF (soon)"
+    },
+    "stories": {
+      "title": "Story cards",
+      "body": "9:16 images with numbers only, no messages.",
+      "button": "Generate cards (soon)",
+      "messagesIn": "messages in {years} years",
+      "split": "Who talks more"
+    },
+    "prompt": {
+      "title": "Copy prompt for AI",
+      "body": "The text carries only numbers and dates, never messages. Paste it into any AI chat.",
+      "dictionary": "Include the couple's dictionary (nicknames and words only you use)",
+      "copy": "Copy prompt",
+      "copied": "Copied!",
+      "error": "Could not copy. Please try again."
+    },
+    "delete": {
+      "title": "Delete everything",
+      "body": "Removes files and results from this tab's memory.",
+      "button": "Delete everything",
+      "confirmTitle": "Delete everything now?",
+      "confirmBody": "You go back to the start and will need to upload the files again.",
+      "confirm": "Yes, delete",
+      "cancel": "Cancel"
+    }
+  }
+}
