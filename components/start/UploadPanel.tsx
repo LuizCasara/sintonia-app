@@ -5,6 +5,8 @@ import { useId, useState, type DragEvent } from 'react';
 import { useReport, type UploadedFile } from '@/components/report/ReportProvider';
 import { Link, useRouter } from '@/i18n/navigation';
 import { detectFormat } from '@/lib/parsers/detect';
+import { errorCode } from '@/lib/pipeline';
+import { inspectFiles } from '@/lib/worker-client';
 
 const ACCEPTED = /\.(txt|zip|json)$/i;
 
@@ -18,7 +20,10 @@ function fmtSize(bytes: number): string {
 export function UploadPanel() {
   const t = useTranslations('home');
   const router = useRouter();
-  const { files, setFiles } = useReport();
+  const tErr = useTranslations('common.errors');
+  const { files, setFiles, setInspection, setMapping, setNames } = useReport();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
   const inputId = useId();
 
@@ -37,6 +42,28 @@ export function UploadPanel() {
         })),
     );
     setFiles([...files, ...items]);
+  }
+
+  /** Lê os arquivos no Worker. Um app só e 2 autores: vai direto a /processing (pula Confirmar). */
+  async function onContinue() {
+    setBusy(true);
+    setError(null);
+    try {
+      const inspection = await inspectFiles(files.map((f) => f.file));
+      setInspection(inspection);
+      setNames(null); // nomes de uma análise anterior não valem para esta
+      if (inspection.needsConfirm) {
+        setMapping(null);
+        router.push('/confirm');
+      } else {
+        setMapping(inspection.mapping);
+        router.push('/processing');
+      }
+    } catch (err) {
+      setError(tErr(errorCode(err) ?? 'unknown'));
+    } finally {
+      setBusy(false);
+    }
   }
 
   function onDrop(e: DragEvent) {
@@ -120,14 +147,20 @@ export function UploadPanel() {
         </div>
       )}
 
+      {error && (
+        <p role="alert" className="text-sm text-danger">
+          {error}
+        </p>
+      )}
+
       <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
         <button
           type="button"
           className="btn btn-primary"
-          disabled={!consent || files.length === 0}
-          onClick={() => router.push('/confirm')}
+          disabled={!consent || files.length === 0 || busy}
+          onClick={() => void onContinue()}
         >
-          {t('continue')}
+          {busy ? t('reading') : t('continue')}
         </button>
         <Link
           href="/report/timeline"

@@ -2,24 +2,32 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
+import { PrintReport } from './PrintReport';
+import { SavedSessions } from './SavedSessions';
+import { StoriesPanel } from './StoriesPanel';
 import { useReport } from '@/components/report/ReportProvider';
 import { useRouter } from '@/i18n/navigation';
-import { fmtNum } from '@/lib/format';
 import { buildPrompt } from '@/lib/prompt';
+import { clearSessions, saveSession } from '@/lib/saved';
 
 /** Ações: copiar prompt (funciona, em destaque), cards e PDF (em breve) e apagar tudo. */
 export function ActionsView() {
   const t = useTranslations('actions');
   const locale = useLocale() as 'pt' | 'en';
   const router = useRouter();
-  const { report, clearAll } = useReport();
+  const { report, clearAll, hiddenWords, isDemo } = useReport();
   const [includeDictionary, setIncludeDictionary] = useState(false); // só com consentimento
+  const [useRealNames, setUseRealNames] = useState(true);
   const [copy, setCopy] = useState<'idle' | 'copied' | 'error'>('idle');
   const [confirming, setConfirming] = useState(false);
+  const [save, setSave] = useState<'idle' | 'saved' | 'error'>('idle');
+  const [savedTick, setSavedTick] = useState(0);
 
   async function copyPrompt() {
     try {
-      await navigator.clipboard.writeText(buildPrompt(report, { locale, includeDictionary }));
+      await navigator.clipboard.writeText(
+        buildPrompt(report, { locale, includeDictionary, hiddenWords, useRealNames }),
+      );
       setCopy('copied');
       setTimeout(() => setCopy('idle'), 2500);
     } catch {
@@ -27,16 +35,34 @@ export function ActionsView() {
     }
   }
 
-  function deleteAll() {
-    clearAll();
-    router.push('/');
+  async function saveHere() {
+    try {
+      await saveSession(report, hiddenWords);
+      setSave('saved');
+      setSavedTick((n) => n + 1);
+    } catch {
+      setSave('error');
+    }
   }
 
-  const total = report.volume.perPerson.A.messages + report.volume.perPerson.B.messages;
-  const years = Math.max(1, Math.round(report.period.days / 365));
-  const shareA = Math.round((report.volume.perPerson.A.messages / total) * 100);
-  const nameA = report.people.A.split(' ')[0];
-  const nameB = report.people.B.split(' ')[0];
+  /** Abre a janela de impressão; "Salvar como PDF" gera o arquivo. O título vira o nome do arquivo. */
+  function printPdf() {
+    const previous = document.title;
+    const first = (full: string) => full.split(' ')[0] ?? full;
+    document.title = `Sintonia - ${first(report.people.A)} e ${first(report.people.B)}`;
+    window.addEventListener('afterprint', () => (document.title = previous), { once: true });
+    window.print();
+  }
+
+  async function deleteAll() {
+    clearAll();
+    try {
+      await clearSessions(); // inclui as sessões salvas neste navegador
+    } catch {
+      // sem IndexedDB: não há nada salvo para apagar
+    }
+    router.push('/');
+  }
 
   return (
     <main className="mx-auto max-w-5xl space-y-6 px-4 pt-4 sm:px-6">
@@ -50,12 +76,26 @@ export function ActionsView() {
           <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm">
             <input
               type="checkbox"
+              checked={useRealNames}
+              onChange={(e) => setUseRealNames(e.target.checked)}
+              className="mt-0.5 size-5 shrink-0 accent-[var(--color-sync)]"
+            />
+            {t('prompt.realNames')}
+          </label>
+          <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm">
+            <input
+              type="checkbox"
               checked={includeDictionary}
               onChange={(e) => setIncludeDictionary(e.target.checked)}
               className="mt-0.5 size-5 shrink-0 accent-[var(--color-sync)]"
             />
             {t('prompt.dictionary')}
           </label>
+          {includeDictionary && hiddenWords.length > 0 && (
+            <p className="text-sm text-muted">
+              {t('prompt.hiddenWords', { count: hiddenWords.length })}
+            </p>
+          )}
           <div className="flex flex-wrap items-center gap-4">
             <button type="button" className="btn btn-primary" onClick={copyPrompt}>
               {t('prompt.copy')}
@@ -67,28 +107,21 @@ export function ActionsView() {
           </div>
         </section>
 
-        {/* 2. Cards para stories */}
+        {/* 2. Cards para stories (imagens 9:16 feitas no navegador) */}
+        <StoriesPanel />
+
+        {/* 3. Salvar no navegador */}
         <section className="panel space-y-3 p-5">
-          <h2 className="font-display text-lg font-semibold">{t('stories.title')}</h2>
-          <p className="text-sm text-muted">{t('stories.body')}</p>
-          <div className="flex gap-3">
-            <div className="flex aspect-[9/16] w-28 flex-col items-center justify-center rounded-xl border border-line bg-void p-2 text-center">
-              <span className="font-display text-xl font-bold text-sync">
-                {fmtNum(locale, total)}
-              </span>
-              <span className="text-[10px] text-muted">{t('stories.messagesIn', { years })}</span>
-            </div>
-            <div className="flex aspect-[9/16] w-28 flex-col items-center justify-center gap-1 rounded-xl border border-line bg-void p-2 text-center">
-              <span className="text-[10px] text-muted">{t('stories.split')}</span>
-              <span className="font-display text-xl font-bold text-a">{shareA}%</span>
-              <span className="text-[10px] text-a">{nameA}</span>
-              <span className="font-display text-xl font-bold text-b">{100 - shareA}%</span>
-              <span className="text-[10px] text-b">{nameB}</span>
-            </div>
-          </div>
-          <button type="button" className="btn btn-ghost" disabled>
-            {t('stories.button')}
+          <h2 className="font-display text-lg font-semibold">{t('save.title')}</h2>
+          <p className="text-sm text-muted">{t('save.body')}</p>
+          <button type="button" className="btn btn-ghost" onClick={saveHere} disabled={isDemo}>
+            {t('save.button')}
           </button>
+          <p role="status" className={save === 'error' ? 'text-sm text-danger' : 'text-sm text-ok'}>
+            {isDemo && t('save.demo')}
+            {save === 'saved' && t('save.saved')}
+            {save === 'error' && t('save.error')}
+          </p>
         </section>
 
         {/* 3. PDF e 4. Apagar tudo, empilhados ao lado dos cards (sem espaço vazio) */}
@@ -96,9 +129,10 @@ export function ActionsView() {
           <section className="panel space-y-3 p-5">
             <h2 className="font-display text-lg font-semibold">{t('pdf.title')}</h2>
             <p className="text-sm text-muted">{t('pdf.body')}</p>
-            <button type="button" className="btn btn-ghost" disabled>
+            <button type="button" className="btn btn-primary" onClick={printPdf}>
               {t('pdf.button')}
             </button>
+            <p className="text-xs text-muted">{t('pdf.hint')}</p>
           </section>
 
           <section className="flex-1 space-y-3 rounded-2xl border border-danger/40 bg-danger/5 p-5">
@@ -143,6 +177,9 @@ export function ActionsView() {
           </section>
         </div>
       </div>
+
+      <SavedSessions refreshKey={savedTick} />
+      <PrintReport />
     </main>
   );
 }

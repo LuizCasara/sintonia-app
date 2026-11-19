@@ -2,37 +2,21 @@
 
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { useRouter } from '@/i18n/navigation';
-import { levenshtein } from '@/lib/merge';
+import { useReport } from '@/components/report/ReportProvider';
+import { Link, useRouter } from '@/i18n/navigation';
+import { mappingKey, nameSimilarity, type PersonMapping } from '@/lib/merge';
+import { MAX_NAME } from '@/lib/rename';
+import type { Source } from '@/lib/model';
 
-type App = 'whatsapp' | 'telegram';
+type Choice = 'A' | 'B' | 'ignore';
 interface Detected {
-  id: string;
-  app: App;
+  key: string;
+  app: Source;
   name: string;
   count: number;
 }
 
-// TODO(Luiz): trocar por suggestPeople(chats) quando o Worker devolver as pessoas reais.
-const WHATSAPP: [Detected, Detected] = [
-  { id: 'wa-ana', app: 'whatsapp', name: 'Ana Lima', count: 3120 },
-  { id: 'wa-bruno', app: 'whatsapp', name: 'Bruno Reis', count: 2890 },
-];
-const TELEGRAM: [Detected, Detected] = [
-  { id: 'tg-ana', app: 'telegram', name: 'Ana L.', count: 1040 },
-  { id: 'tg-bruno', app: 'telegram', name: 'Bruno', count: 910 },
-];
-const OTHERS: Detected[] = [
-  { id: 'tg-promo', app: 'telegram', name: 'Canal de promoções', count: 14 },
-];
-
-/** 0 a 1, a partir da distância de edição (nomes em minúsculas). */
-function similarity(a: string, b: string): number {
-  const [x, y] = [a.toLowerCase(), b.toLowerCase()];
-  return 1 - levenshtein(x, y) / Math.max(x.length, y.length);
-}
-
-function AppBadge({ app }: { app: App }) {
+function AppBadge({ app }: { app: Source }) {
   return (
     <span
       aria-label={app === 'whatsapp' ? 'WhatsApp' : 'Telegram'}
@@ -43,48 +27,83 @@ function AppBadge({ app }: { app: App }) {
   );
 }
 
+/** Tela "Confirmar": cada nome achado nos exports vai para a Pessoa A, a Pessoa B ou é ignorado. */
 export function ConfirmView() {
   const t = useTranslations('confirm');
   const router = useRouter();
-  const [swapped, setSwapped] = useState(false);
-  const [ignored, setIgnored] = useState<Set<string>>(new Set(OTHERS.map((o) => o.id)));
+  const { inspection, setMapping, setNames } = useReport();
 
-  // Telegram pareado com cada pessoa (o botão "Trocar" inverte).
-  const tgForA = swapped ? TELEGRAM[1] : TELEGRAM[0];
-  const tgForB = swapped ? TELEGRAM[0] : TELEGRAM[1];
-  const pairs = [
-    { id: 'A', label: t('personA'), color: 'text-a', rows: [WHATSAPP[0], tgForA] },
-    { id: 'B', label: t('personB'), color: 'text-b', rows: [WHATSAPP[1], tgForB] },
-  ];
+  const detected: Detected[] = (inspection?.people ?? []).flatMap((p) =>
+    p.names.map((n) => ({
+      key: mappingKey(n.source, n.name),
+      app: n.source,
+      name: n.name,
+      count: n.messageCount,
+    })),
+  );
+  // Começa com a sugestão do Worker; o que o usuário muda fica aqui.
+  const [overrides, setOverrides] = useState<Record<string, Choice>>({});
+  // Nome que aparece no relatório: começa com o nome mais usado do grupo e a pessoa pode trocar.
+  const [typed, setTyped] = useState<{ A?: string; B?: string }>({});
+  const choiceOf = (key: string): Choice => overrides[key] ?? inspection?.mapping[key] ?? 'ignore';
 
-  function toggleIgnore(id: string) {
-    const next = new Set(ignored);
-    if (!next.delete(id)) next.add(id);
-    setIgnored(next);
+  if (!inspection) {
+    return (
+      <main className="mx-auto max-w-3xl space-y-6 px-4 pb-16 pt-4 sm:px-6">
+        <h1 className="font-display text-3xl font-bold sm:text-4xl">{t('title')}</h1>
+        <p className="text-muted">{t('empty')}</p>
+        <Link href="/" className="btn btn-primary inline-flex">
+          {t('backHome')}
+        </Link>
+      </main>
+    );
   }
 
-  function Row({ d, base }: { d: Detected; base?: Detected }) {
-    const off = ignored.has(d.id);
+  const inGroup = (c: Choice) => detected.filter((d) => choiceOf(d.key) === c);
+  const groups = [
+    { id: 'A' as const, label: t('personA'), color: 'text-a', rows: inGroup('A') },
+    { id: 'B' as const, label: t('personB'), color: 'text-b', rows: inGroup('B') },
+  ];
+  const ignored = inGroup('ignore');
+  const ready = groups.every((g) => g.rows.length > 0);
+  const defaultName = (id: 'A' | 'B') =>
+    [...inGroup(id)].sort((x, y) => y.count - x.count)[0]?.name ?? '';
+  const nameOf = (id: 'A' | 'B') => typed[id] ?? defaultName(id);
+
+  function analyze() {
+    const mapping: PersonMapping = {};
+    for (const d of detected) {
+      const c = choiceOf(d.key);
+      if (c !== 'ignore') mapping[d.key] = c;
+    }
+    setMapping(mapping);
+    setNames({ A: nameOf('A'), B: nameOf('B') });
+    router.push('/processing');
+  }
+
+  function renderRow(d: Detected, base?: Detected) {
     return (
-      <li className={`flex flex-wrap items-center gap-3 py-2 ${off ? 'opacity-50' : ''}`}>
+      <li key={d.key} className="flex flex-wrap items-center gap-3 py-2">
         <AppBadge app={d.app} />
         <div className="min-w-0 flex-1">
           <p className="truncate font-medium">{d.name}</p>
           <p className="text-sm text-muted">
             {t('messages', { count: d.count })}
             {base &&
-              ` · ${t('similarity', { pct: Math.round(similarity(base.name, d.name) * 100) })}`}
+              base.app !== d.app &&
+              ` · ${t('similarity', { pct: Math.round(nameSimilarity(base.name, d.name) * 100) })}`}
           </p>
         </div>
-        <label className="flex min-h-11 cursor-pointer items-center gap-2 text-sm text-muted">
-          <input
-            type="checkbox"
-            checked={off}
-            onChange={() => toggleIgnore(d.id)}
-            className="size-5 accent-[var(--color-sync)]"
-          />
-          {t('ignore')}
-        </label>
+        <select
+          aria-label={t('assignLabel', { name: d.name })}
+          value={choiceOf(d.key)}
+          onChange={(e) => setOverrides({ ...overrides, [d.key]: e.target.value as Choice })}
+          className="min-h-11 rounded-lg border border-line bg-void px-3 text-sm"
+        >
+          <option value="A">{t('personA')}</option>
+          <option value="B">{t('personB')}</option>
+          <option value="ignore">{t('ignore')}</option>
+        </select>
       </li>
     );
   }
@@ -95,33 +114,40 @@ export function ConfirmView() {
       <p className="text-muted">{t('why')}</p>
 
       <div className="space-y-4">
-        {pairs.map((p) => (
-          <section key={p.id} className="panel p-5">
-            <div className="flex items-center justify-between">
-              <h2 className={`font-display text-lg font-semibold ${p.color}`}>{p.label}</h2>
-              <button type="button" className="btn btn-ghost" onClick={() => setSwapped(!swapped)}>
-                {t('swap')}
-              </button>
-            </div>
-            <ul className="mt-2 divide-y divide-line">
-              <Row d={p.rows[0] as Detected} />
-              <Row d={p.rows[1] as Detected} base={p.rows[0] as Detected} />
-            </ul>
+        {groups.map((g) => (
+          <section key={g.id} className="panel p-5">
+            <h2 className={`font-display text-lg font-semibold ${g.color}`}>{g.label}</h2>
+            <label className="mt-3 block text-sm">
+              <span className="text-muted">{t('nameLabel')}</span>
+              <input
+                type="text"
+                value={nameOf(g.id)}
+                maxLength={MAX_NAME}
+                onChange={(e) => setTyped({ ...typed, [g.id]: e.target.value })}
+                data-testid={`display-name-${g.id}`}
+                className="mt-1 block min-h-11 w-full rounded-lg border border-line bg-void px-3 text-base"
+              />
+              <span className="mt-1 block text-xs text-muted">{t('nameHint')}</span>
+            </label>
+            {g.rows.length === 0 ? (
+              <p className="mt-2 text-sm text-danger">{t('needOne', { person: g.label })}</p>
+            ) : (
+              <ul className="mt-2 divide-y divide-line">
+                {g.rows.map((d) => renderRow(d, g.rows[0]))}
+              </ul>
+            )}
           </section>
         ))}
 
-        <section className="panel p-5">
-          <h2 className="font-display text-lg font-semibold">{t('others')}</h2>
-          <ul className="mt-2 divide-y divide-line">
-            {OTHERS.map((o) => (
-              <Row key={o.id} d={o} />
-            ))}
-          </ul>
-        </section>
+        {ignored.length > 0 && (
+          <section className="panel p-5">
+            <h2 className="font-display text-lg font-semibold">{t('others')}</h2>
+            <ul className="mt-2 divide-y divide-line">{ignored.map((d) => renderRow(d))}</ul>
+          </section>
+        )}
       </div>
 
-      <p className="text-sm text-muted">{t('demoNote')}</p>
-      <button type="button" className="btn btn-primary" onClick={() => router.push('/processing')}>
+      <button type="button" className="btn btn-primary" disabled={!ready} onClick={analyze}>
         {t('analyze')}
       </button>
     </main>

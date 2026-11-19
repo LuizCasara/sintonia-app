@@ -29,3 +29,7 @@ export function weekdayName(locale: string, day: number): string {
     new Date(Date.UTC(2023, 0, 1 + day)),
   );
 }
+
+/** Nota de 0 a 10 com uma casa decimal: 8.2 → "8,2" (pt) / "8.2" (en). */
+export const fmtScore = (locale: string, n: number) =>
+  new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(n);

@@ -12,11 +12,21 @@
       "timeline": "História",
       "dashboard": "Painel",
       "actions": "Ações"
+    },
+    "errors": {
+      "zip": "Não conseguimos abrir esse .zip ou não achamos uma conversa (.txt ou .json) dentro dele. Tente extrair o arquivo e enviar ele.",
+      "unknownFormat": "Formato não reconhecido. Envie o .txt do WhatsApp ou o result.json do Telegram.",
+      "noMessages": "Não encontramos mensagens nesses arquivos.",
+      "needTwoPeople": "Precisamos de pelo menos duas pessoas na conversa.",
+      "unknown": "Algo deu errado ao ler os arquivos. Tente de novo."
     }
   },
+  "meta": {
+    "title": "Sintonia: veja o quanto vocês estão em sintonia",
+    "description": "Envie o histórico de conversa do casal e descubra a história, os ritmos e os números de vocês dois. Tudo roda no seu navegador, nenhuma mensagem sai do seu aparelho.",
+    "ogAlt": "Sintonia: duas ondas, uma ciano e uma magenta, que entram em fase. Veja o quanto vocês estão em sintonia."
+  },
   "home": {
-    "title": "Veja o quanto vocês estão em sintonia",
-    "subtitle": "Envie o histórico de conversa do casal e descubra a história, os ritmos e os números de vocês dois.",
     "privacy": {
       "title": "Privacidade em primeiro lugar",
       "p1": "Tudo acontece no seu navegador.",
@@ -27,11 +37,12 @@
       "title": "Como exportar a conversa",
       "whatsapp": {
         "title": "WhatsApp",
-        "body": "Na conversa: menu ⋮ → Mais → Exportar conversa → Sem mídia. Envie o arquivo .txt ou .zip."
+        "body": "No celular, na conversa: menu ⋮ → Mais → Exportar conversa → Sem mídia. Mande o arquivo para você mesmo (e-mail ou Drive), baixe no computador e envie aqui o .txt ou .zip."
       },
       "telegram": {
         "title": "Telegram Desktop",
-        "body": "No computador: menu ⋮ → Exportar histórico → formato JSON. Envie o arquivo result.json."
+        "body": "No computador: menu ⋮ → Exportar histórico. Escolha o formato JSON e deixe as mídias desmarcadas, como na imagem. Envie o arquivo result.json.",
+        "alt": "Janela de exportação do Telegram Desktop com formato JSON, todas as mídias desmarcadas e período da mensagem mais antiga até o presente."
       }
     },
     "consent": {
@@ -57,7 +68,8 @@
       "unknown": "Formato não reconhecido"
     },
     "continue": "Continuar",
-    "demo": "Ver uma demonstração com dados fictícios"
+    "demo": "Ver uma demonstração com dados fictícios",
+    "reading": "Lendo arquivos…"
   },
   "confirm": {
     "title": "Confirme quem é quem",
@@ -66,11 +78,15 @@
     "personB": "Pessoa B",
     "messages": "{count} mensagens",
     "similarity": "{pct}% parecido",
-    "swap": "Trocar",
     "ignore": "Não é do casal / ignorar",
     "others": "Outros nomes encontrados",
-    "demoNote": "Exemplo com nomes fictícios. A detecção real vem do Worker.",
-    "analyze": "Analisar"
+    "analyze": "Analisar",
+    "assignLabel": "Quem é {name}?",
+    "needOne": "Escolha pelo menos um nome para a {person}.",
+    "empty": "Envie os arquivos na tela inicial para ver quem é quem.",
+    "backHome": "Voltar ao início",
+    "nameLabel": "Nome no relatório",
+    "nameHint": "Como a pessoa aparece no painel, no PDF e nos cards. Pode ser só o primeiro nome ou um apelido."
   },
   "processing": {
     "title": "Processando",
@@ -83,7 +99,13 @@
     "progressLabel": "Progresso da análise",
     "done": "Pronto! Sua sintonia está esperando.",
     "open": "Ver a linha do tempo",
-    "stepDone": "concluída"
+    "stepDone": "concluída",
+    "failed": "Não foi possível analisar",
+    "empty": {
+      "title": "Nenhum arquivo para processar",
+      "body": "Envie os arquivos na tela inicial para começar."
+    },
+    "backHome": "Voltar ao início"
   },
   "timeline": {
     "title": "A história de vocês",
@@ -97,31 +119,67 @@
       "firstPhoto": "Primeira foto",
       "firstAudio": "Primeiro áudio",
       "peak": "Pico de conversa",
-      "valley": "Vale de conversa"
+      "valley": "Vale de conversa",
+      "anniversary": "{years, plural, one {# ano de conversa} other {# anos de conversa}}",
+      "messages": "{count} mensagens",
+      "record": "Mês mais movimentado",
+      "telegram": "Telegram passou o WhatsApp"
     },
     "counter": "Marco {current} de {total}",
     "chip": {
       "first": "Primeira vez",
       "peak": "Pico",
-      "valley": "Vale"
+      "valley": "Vale",
+      "mark": "Marco"
     },
     "legend": {
       "firsts": "Primeiras vezes",
-      "phases": "Fases (pico/vale)"
+      "phases": "Fases (pico/vale)",
+      "marks": "Marcos da jornada"
     },
     "desc": {
-      "start": "Onde tudo começou. Desde então, {total} mensagens.",
-      "after": "{days} dias depois da primeira mensagem.",
-      "peak": "Pico: +{pct}% de mensagens acima da média",
-      "valley": "Vale: {pct}% de mensagens abaixo da média"
-    }
+      "start": "Onde tudo começou. De lá para cá, {total} mensagens em {time}.",
+      "after": "{time} depois da primeira mensagem.",
+      "sameDay": "No mesmo dia da primeira mensagem.",
+      "peak": "Um mês acima do normal: {count} mensagens, {pct}% a mais que a média dos meses ao redor.",
+      "valley": "Um mês mais quieto: {count} mensagens, {pct}% a menos que a média dos meses ao redor.",
+      "anniversary": "{count} mensagens até aqui.",
+      "messages": "Vocês chegaram a esse número com {time} de conversa.",
+      "record": "{count} mensagens em um único mês.",
+      "telegram": "Neste mês o Telegram teve mais mensagens que o WhatsApp."
+    },
+    "facts": {
+      "lead": "{name} falou mais neste mês: {pct}% das mensagens.",
+      "even": "Neste mês os dois falaram quase o mesmo tanto.",
+      "nextUp": "No mês seguinte, o volume subiu {pct}%.",
+      "nextDown": "No mês seguinte, o volume caiu {pct}%.",
+      "nextSame": "No mês seguinte, o volume ficou parecido.",
+      "vsAverage": "{times} vezes a média mensal de vocês.",
+      "perDay": "Em média, {count} mensagens por dia desde o início.",
+      "since": "Aconteceu quando vocês tinham {time} de conversa."
+    },
+    "span": {
+      "years": "{n, plural, one {# ano} other {# anos}}",
+      "months": "{n, plural, one {# mês} other {# meses}}",
+      "days": "{n, plural, one {# dia} other {# dias}}"
+    },
+    "hover": {
+      "total": "{count} no mês"
+    },
+    "pace": {
+      "label": "Ritmo de resposta por ano",
+      "faster": "{pct}% mais rápido",
+      "slower": "{pct}% mais lento",
+      "usual": "no ritmo de sempre",
+      "note": "Faixa de baixo: a mediana de resposta de cada ano contra o ritmo habitual do casal ({time}). Não é uma nota, só mostra mudanças."
+    },
+    "toDashboard": "Ver o painel"
   },
   "dashboard": {
     "title": "Painel",
     "subtitle": "Toque em um card para ver o detalhe.",
     "open": "Ver detalhe",
     "close": "Fechar",
-    "balancePending": "Fórmula em definição",
     "cards": {
       "volume": "Mensagens no total",
       "perPerson": "Mensagens por pessoa",
@@ -132,7 +190,11 @@
       "media": "Áudio × texto",
       "streaks": "Sequências",
       "apps": "WhatsApp × Telegram",
-      "balance": "Equilíbrio"
+      "balance": "Equilíbrio",
+      "sintonia": "Sintonia",
+      "time": "Tempo de conversa",
+      "book": "Em livros",
+      "words": "Palavras só de vocês"
     },
     "m": {
       "messages": "Mensagens",
@@ -166,39 +228,312 @@
       "audioLegend": "Áudio",
       "textLegend": "Texto",
       "morning": "Bom dia",
-      "night": "Boa noite"
+      "night": "Boa noite",
+      "medianResponse": "Mediana da 1ª resposta"
+    },
+    "score": {
+      "outOf": "de 10",
+      "weight": "peso {pct}%"
+    },
+    "sintonia": {
+      "tagline": "Se a conversa flui",
+      "explain": "A Sintonia mede se a conversa flui: se as mensagens recebem resposta, quão rápido e com que tom. Ela não mede o quanto vocês se querem bem, só o que aparece neste histórico.",
+      "short": "Histórico curto demais para uma nota confiável (mínimo de 3 meses e 500 mensagens).",
+      "parts": {
+        "reciprocity": "Reciprocidade",
+        "responseTime": "Tempo de resposta",
+        "tone": "Tom"
+      },
+      "detail": {
+        "reciprocity": "{pct} das conversas tiveram resposta dos dois lados",
+        "responseTime": "Mediana de {time} para responder",
+        "tone": "{pct} das mensagens com carinho ou risada"
+      },
+      "toneNote": "O tom conta palavras de uma lista (carinho e risada). É uma medida simples: não entende ironia nem contexto. Pedidos de desculpa não entram na nota."
+    },
+    "balance": {
+      "explain": "O Equilíbrio mede se o esforço da conversa é dividido: quem abre as conversas, quem manda mais mensagens e palavras e quem fecha. 10 é divisão igual. Um casal pode ter sintonia alta e equilíbrio baixo: uma pessoa puxa e a outra responde bem.",
+      "even": "O esforço está bem dividido",
+      "leans": "{name} puxa {pct}% do esforço",
+      "items": {
+        "opens": "Quem abre as conversas",
+        "messages": "Mensagens",
+        "words": "Palavras",
+        "closes": "Quem fecha as conversas"
+      },
+      "note": "Nota alta não quer dizer relação melhor: só mostra o quanto o esforço está dividido."
+    },
+    "time": {
+      "activeOf": "{active} de {total} dias com mensagem",
+      "rate": "{pct}% dos dias",
+      "start": "Primeira mensagem",
+      "end": "Última mensagem",
+      "totalDays": "Dias de conversa",
+      "activeDays": "Dias com mensagem",
+      "silentDays": "Dias sem mensagem",
+      "streak": "Maior sequência de dias seguidos",
+      "silence": "Maior pausa sem mensagem",
+      "days": "{n, plural, one {# dia} other {# dias}}",
+      "span": {
+        "years": "{n, plural, one {# ano} other {# anos}}",
+        "months": "{n, plural, one {# mês} other {# meses}}",
+        "days": "{n, plural, one {# dia} other {# dias}}"
+      },
+      "same": "No mesmo dia"
+    },
+    "book": {
+      "ofSeries": "de 7 livros de Harry Potter",
+      "wholeSeries": "a série inteira de Harry Potter",
+      "next": "Faltam {count} palavras para fechar {title}.",
+      "nextStart": "{pct}% de {title}.",
+      "intro": "As palavras de vocês dois, lidas como a série de Harry Potter ({total} palavras nas edições originais em inglês).",
+      "person": "{name}: {words} palavras, {share}",
+      "times": "{n}× a série",
+      "part": "{pct}% da série",
+      "read": "lido",
+      "title": {
+        "1": "A Pedra Filosofal",
+        "2": "A Câmara Secreta",
+        "3": "O Prisioneiro de Azkaban",
+        "4": "O Cálice de Fogo",
+        "5": "A Ordem da Fênix",
+        "6": "O Enigma do Príncipe",
+        "7": "As Relíquias da Morte"
+      }
+    },
+    "words": {
+      "hint": "As palavras que vocês mais usam e quase ninguém mais usa. Só vão para o que você compartilhar as que estiverem com o olho aberto.",
+      "hide": "Esconder “{word}” do compartilhamento",
+      "show": "Mostrar “{word}” no compartilhamento",
+      "hidden": "{count, plural, one {# escondida} other {# escondidas}} do compartilhamento",
+      "empty": "Ainda não achamos palavras só de vocês: cada uma precisa aparecer pelo menos 5 vezes.",
+      "mostly": "{name} diz mais",
+      "both": "os dois dizem parecido"
     }
   },
   "actions": {
     "title": "Ações",
     "pdf": {
       "title": "Relatório em PDF",
-      "body": "Um relatório bonito para guardar.",
-      "button": "Baixar PDF (em breve)"
+      "body": "Todas as informações, já expandidas: notas, números por pessoa, horários, ritmo por ano, primeiras vezes, livros e palavras.",
+      "button": "Baixar PDF",
+      "hint": "Abre a impressão do navegador: escolha “Salvar como PDF”. Só números e datas, nenhuma mensagem."
     },
     "stories": {
       "title": "Cards para stories",
-      "body": "Imagens 9:16 só com números, sem nenhuma mensagem.",
-      "button": "Gerar cards (em breve)",
+      "body": "Imagens 9:16 só com números, geradas aqui no navegador. Nenhuma mensagem entra neles.",
+      "button": "Gerar cards",
       "messagesIn": "mensagens em {years} anos",
-      "split": "Quem fala mais"
+      "split": "Quem fala mais",
+      "regenerate": "Gerar de novo",
+      "viewer": "Visualizar cards",
+      "zoom": "Ampliar",
+      "close": "Fechar",
+      "prev": "Card anterior",
+      "next": "Próximo card",
+      "share": "Compartilhar",
+      "shareError": "Não foi possível compartilhar. Use o botão Baixar.",
+      "downloadAll": "Baixar todos",
+      "download": "Baixar",
+      "useNames": "Mostrar os primeiros nomes nos cards",
+      "personA": "Pessoa A",
+      "personB": "Pessoa B",
+      "footer": "Sintonizados desde a primeira mensagem.",
+      "wordsNote": "{words} palavras escritas",
+      "cards": {
+        "messages": "Mensagens",
+        "split": "Quem fala mais",
+        "scores": "Notas",
+        "books": "Em livros",
+        "time": "Tempo",
+        "words": "Palavras"
+      },
+      "kickers": {
+        "messages": "Nossa conversa",
+        "scores": "Nossas notas",
+        "books": "Palavras viram livros",
+        "time": "Tempo de conversa"
+      },
+      "error": "Não foi possível gerar os cards. Tente de novo."
     },
     "prompt": {
       "title": "Copiar prompt para IA",
       "body": "O texto leva só números e datas, nunca mensagens. Cole em qualquer chat de IA.",
+      "realNames": "Usar os nomes do relatório no prompt (desmarcado, vão nomes inventados)",
       "dictionary": "Incluir dicionário do casal (apelidos e palavras só de vocês)",
       "copy": "Copiar prompt",
       "copied": "Copiado!",
-      "error": "Não foi possível copiar. Tente de novo."
+      "error": "Não foi possível copiar. Tente de novo.",
+      "hiddenWords": "{count, plural, one {# palavra escondida no painel fica de fora.} other {# palavras escondidas no painel ficam de fora.}}"
     },
     "delete": {
       "title": "Apagar tudo",
-      "body": "Remove arquivos e resultados da memória desta aba.",
+      "body": "Remove arquivos e resultados da memória desta aba e também as sessões salvas neste navegador.",
       "button": "Apagar tudo",
       "confirmTitle": "Apagar tudo agora?",
-      "confirmBody": "Você volta ao início e precisará enviar os arquivos de novo.",
+      "confirmBody": "Você volta ao início e precisará enviar os arquivos de novo. As sessões salvas neste navegador também serão apagadas.",
       "confirm": "Sim, apagar",
       "cancel": "Cancelar"
+    },
+    "save": {
+      "title": "Salvar neste navegador",
+      "body": "Guarda só os números e datas deste relatório (nunca as mensagens) aqui neste navegador, junto com um cookie com um código (uuid) que dura mais de 1 ano. Depois, na tela de envio, aparece “Sessões salvas” para abrir de novo.",
+      "button": "Salvar neste navegador",
+      "saved": "Salvo! Ela aparece em “Sessões salvas” na tela de envio.",
+      "demo": "A demonstração não pode ser salva.",
+      "error": "Não foi possível salvar (o navegador bloqueou o armazenamento)."
+    }
+  },
+  "start": {
+    "title": "Vamos começar",
+    "subtitle": "Três passos rápidos: entenda a privacidade, exporte a conversa e envie o arquivo.",
+    "back": "← Voltar"
+  },
+  "landing": {
+    "title": "Veja o quanto vocês estão em sintonia",
+    "subtitle": "Envie o histórico de conversa do casal e descubra a história, os ritmos e os números de vocês dois.",
+    "cta": "Descobrir nossa sintonia",
+    "demo": "Ver uma demonstração",
+    "trust": "100% no seu navegador · sem cadastro · nada é enviado",
+    "peek": {
+      "kicker": "Uma espiada no que vem por aí",
+      "title": "Sua história, em números e momentos",
+      "note": "Exemplo com dados fictícios."
+    },
+    "score": {
+      "title": "Nota de Sintonia",
+      "body": "Uma nota de 0 a 10 de como a conversa flui.",
+      "out": "de 10",
+      "p1": "Reciprocidade",
+      "p2": "Tempo de resposta",
+      "p3": "Tom"
+    },
+    "timeline": {
+      "title": "Linha do tempo",
+      "body": "Os marcos da jornada: primeira conversa, recordes e fases.",
+      "m1": "Primeira mensagem",
+      "m2": "Dia mais animado",
+      "m3": "1.000 mensagens"
+    },
+    "rhythm": {
+      "title": "Ritmo do dia",
+      "body": "Em que horas cada um de vocês mais fala.",
+      "a": "Pessoa A",
+      "b": "Pessoa B"
+    },
+    "balance": {
+      "title": "Equilíbrio",
+      "body": "Quem puxa assunto, quanto cada um fala e quem fecha, sem julgamentos."
+    },
+    "words": {
+      "title": "Palavras só de vocês",
+      "body": "Na cor de quem mais diz cada uma, com a contagem. Você escolhe o que fica de fora do que compartilhar.",
+      "list": [
+        "amor",
+        "saudade",
+        "kkkk",
+        "bom dia",
+        "te amo",
+        "vem",
+        "café",
+        "dorme bem",
+        "meu bem"
+      ]
+    },
+    "final": {
+      "title": "Pronto para ouvir a frequência de vocês?",
+      "body": "Leva poucos minutos e fica tudo no seu aparelho."
+    },
+    "books": {
+      "title": "Em livros",
+      "body": "Suas palavras viram páginas: quantos livros de Harry Potter vocês já escreveram.",
+      "of": "de 7 livros de Harry Potter"
+    },
+    "share": {
+      "title": "Leve com você",
+      "body": "Tudo gerado no seu navegador, só com números.",
+      "pdf": "Relatório em PDF",
+      "pdfBody": "Todas as informações, expandidas.",
+      "stories": "Cards para stories",
+      "storiesBody": "Imagens 9:16 prontas para postar.",
+      "save": "Sessões salvas",
+      "saveBody": "Abra de novo sem reenviar os arquivos. Fica só neste navegador, e só se você pedir."
+    }
+  },
+  "saved": {
+    "title": "Sessões salvas",
+    "body": "Estão só neste navegador. Abra uma para ver o relatório de novo, sem enviar os arquivos.",
+    "open": "Abrir",
+    "remove": "Remover",
+    "removeLabel": "Remover a sessão de {name}",
+    "openError": "Não foi possível abrir essa sessão.",
+    "meta": "{messages} mensagens · {from} a {to} · salva em {saved}"
+  },
+  "print": {
+    "title": "Relatório Sintonia",
+    "subtitle": "{a} e {b}",
+    "generated": "Gerado em {date}, no navegador. Só números e datas: nenhuma mensagem está neste relatório.",
+    "totalMessages": "{count} mensagens no total",
+    "perMonth": "Mensagens por mês",
+    "perYear": "Por ano",
+    "heatmap": "Mensagens por dia e horário",
+    "words": "Palavras",
+    "read": "Lido",
+    "word": "Palavra",
+    "booksIntro": "As {words} palavras de vocês dois, lidas como a série de Harry Potter ({total} palavras nas edições originais em inglês).",
+    "hiddenNote": "{count, plural, one {# palavra escondida no painel ficou de fora.} other {# palavras escondidas no painel ficaram de fora.}}",
+    "footer": "Sintonia · tudo foi calculado no seu navegador; nada foi enviado a servidores.",
+    "s": {
+      "scores": "Notas",
+      "volume": "Volume de mensagens",
+      "response": "Tempo de resposta",
+      "sessions": "Quem inicia as conversas",
+      "language": "Emojis e linguagem",
+      "media": "Áudio, texto e mídia",
+      "hours": "Horários",
+      "streaks": "Sequências",
+      "time": "Tempo de conversa",
+      "apps": "WhatsApp e Telegram",
+      "journey": "Primeiras vezes e fases",
+      "highlights": "Em destaque",
+      "topMonths": "Os meses mais movimentados",
+      "timeline": "Linha do tempo",
+      "matrix": "Mensagens mês a mês"
+    },
+    "pace": {
+      "median": "Mediana de resposta",
+      "vsUsual": "Contra o habitual",
+      "title": "Ritmo de resposta por ano (mediana e comparação com o habitual do casal)",
+      "note": "Verde: mais rápido que o habitual. Magenta: mais lento. A barra mostra o tamanho da diferença. Não é uma nota, só mostra mudanças."
+    },
+    "firsts": {
+      "firstMessage": "Primeira mensagem",
+      "firstILoveYou": "Primeiro “eu te amo”",
+      "firstPhoto": "Primeira foto",
+      "firstAudio": "Primeiro áudio"
+    },
+    "phase": {
+      "peak": "Pico: {pct}% acima do normal dos meses ao redor",
+      "valley": "Vale: {pct}% abaixo do normal dos meses ao redor"
+    },
+    "cover": {
+      "kicker": "Relatório da conversa"
+    },
+    "headline": "Vocês trocaram {count} mensagens em {time}, uma média de {perDay} por dia.",
+    "timelineHint": "Os marcos da jornada, na ordem em que aconteceram.",
+    "matrixHint": "Total de mensagens de cada mês. Quanto mais forte a cor, mais movimentado o mês.",
+    "month": "Mês",
+    "total": "Total",
+    "stat": {
+      "messages": "Mensagens",
+      "perDay": "{count} por dia, em média",
+      "together": "De conversa",
+      "since": "Desde {date}",
+      "activeRate": "Dias com mensagem",
+      "streak": "Maior sequência de dias",
+      "silence": "Maior pausa: {days}",
+      "record": "Mês mais movimentado",
+      "topEmoji": "Emoji mais usado"
     }
   }
 }

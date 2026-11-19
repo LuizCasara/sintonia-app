@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useState, type ReactNode } from 'react';
 import { useReport } from '@/components/report/ReportProvider';
-import { fmtDuration, fmtNum, fmtPct, weekdayName } from '@/lib/format';
+import { fmtDuration, fmtNum, fmtPct, fmtScore, weekdayName } from '@/lib/format';
 import {
   DualBar,
   Heatmap,
@@ -15,6 +15,10 @@ import {
   StackedBars,
 } from './charts';
 import { DetailPanel } from './DetailPanel';
+import { useInsightCards } from './InsightCards';
+import { ScoreBadge, ScoreBreakdown } from './ScorePanel';
+import { useScoreRows } from './scoreRows';
+import { WordsCard } from './WordsCard';
 
 type CardId =
   | 'volume'
@@ -25,7 +29,11 @@ type CardId =
   | 'emojis'
   | 'media'
   | 'streaks'
-  | 'apps';
+  | 'apps'
+  | 'time'
+  | 'book'
+  | 'sintonia'
+  | 'balance';
 
 const BANDS = ['00', '04', '08', '12', '16', '20']; // faixas de 4 h
 const firstName = (full: string) => full.split(' ')[0] ?? full;
@@ -34,7 +42,7 @@ const firstName = (full: string) => full.split(' ')[0] ?? full;
 export function DashboardView() {
   const t = useTranslations('dashboard');
   const locale = useLocale();
-  const { report: r } = useReport();
+  const { report: r, hiddenWords, toggleWord } = useReport();
   const [open, setOpen] = useState<CardId | null>(null);
   const close = useCallback(() => setOpen(null), []);
 
@@ -71,6 +79,13 @@ export function DashboardView() {
       .slice(0, count)
       .map((e) => e.emoji)
       .join(' ');
+
+  const sintonia = r.sintonia;
+  const balance = r.balance;
+  const { sintoniaRows, balanceRows, balanceHint } = useScoreRows(r, nameA, nameB);
+
+  const insight = useInsightCards(r, { A: nameA, B: nameB });
+  const dictWords = r.dictionary?.topWords ?? [];
 
   const cards: { id: CardId; span?: string; summary: ReactNode; detail: ReactNode }[] = [
     {
@@ -276,6 +291,70 @@ export function DashboardView() {
         </table>
       ),
     },
+    { id: 'time', span: 'sm:col-span-2 lg:col-span-1', ...insight.time },
+    { id: 'book', span: 'sm:col-span-2', ...insight.book },
+    {
+      id: 'sintonia',
+      summary:
+        sintonia.score === null ? (
+          <p className="text-sm text-muted">{t('sintonia.short')}</p>
+        ) : (
+          <ScoreBadge
+            value={fmtScore(locale, sintonia.score)}
+            outOf={t('score.outOf')}
+            hint={t('sintonia.tagline')}
+          />
+        ),
+      detail: (
+        <div className="space-y-5">
+          {sintonia.score !== null && (
+            <ScoreBadge
+              value={fmtScore(locale, sintonia.score)}
+              outOf={t('score.outOf')}
+              hint={t('sintonia.tagline')}
+            />
+          )}
+          <p className="text-muted">{t('sintonia.explain')}</p>
+          {sintonia.score === null ? (
+            <p className="text-sm text-sync">{t('sintonia.short')}</p>
+          ) : (
+            <>
+              <ScoreBreakdown rows={sintoniaRows} />
+              <p className="text-sm text-muted">{t('sintonia.toneNote')}</p>
+            </>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: 'balance',
+      summary:
+        balance.score === null ? (
+          <p className="text-sm text-muted">—</p>
+        ) : (
+          <ScoreBadge
+            value={fmtScore(locale, balance.score)}
+            outOf={t('score.outOf')}
+            hint={balanceHint}
+            tone={balance.leaning === 'A' ? 'a' : balance.leaning === 'B' ? 'b' : 'sync'}
+          />
+        ),
+      detail: (
+        <div className="space-y-5">
+          {balance.score !== null && (
+            <ScoreBadge
+              value={fmtScore(locale, balance.score)}
+              outOf={t('score.outOf')}
+              hint={balanceHint}
+              tone={balance.leaning === 'A' ? 'a' : balance.leaning === 'B' ? 'b' : 'sync'}
+            />
+          )}
+          <p className="text-muted">{t('balance.explain')}</p>
+          <ScoreBreakdown rows={balanceRows} />
+          <p className="text-sm text-muted">{t('balance.note')}</p>
+        </div>
+      ),
+    },
   ];
 
   const active = cards.find((c) => c.id === open);
@@ -316,11 +395,18 @@ export function DashboardView() {
 
         {renderCard('apps')}
 
-        {/* Equilíbrio: a fórmula ainda não foi decidida, então nada de número ou nota */}
-        <section className="panel flex flex-col gap-3 p-5 lg:col-span-2">
-          <h2 className="text-sm font-semibold text-muted">{t('cards.balance')}</h2>
-          <p className="font-display text-xl font-bold text-sync">{t('balancePending')}</p>
-        </section>
+        {renderCard('sintonia')}
+        {renderCard('balance')}
+
+        {renderCard('time')}
+        {renderCard('book')}
+        <WordsCard
+          words={dictWords}
+          usage={r.dictionary?.usage ?? {}}
+          names={{ A: nameA, B: nameB }}
+          hidden={hiddenWords}
+          onToggle={toggleWord}
+        />
       </div>
 
       {active && (

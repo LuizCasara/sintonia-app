@@ -24,6 +24,7 @@ export interface Message {
   kind: Kind;
   text?: string; // fica só na memória do navegador
   durationSec?: number; // áudio, quando o export trouxer
+  stickerEmoji?: string; // figurinha do Telegram: emoji associado ao sticker (conta como emoji)
 }
 
 /** Mensagem como sai do parser (ainda com o nome do autor, antes do merge). */
