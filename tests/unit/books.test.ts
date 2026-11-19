@@ -58,6 +58,13 @@ describe('uso das palavras por pessoa', () => {
     const d = sharedDictionary(getDemoReport('pt'), ['jujuba'])!;
     expect(d.usage.jujuba).toBeUndefined();
     expect(d.usage.bolinho).toEqual({ A: 530, B: 140 });
-    expect(Object.keys(d.usage).sort()).toEqual([...d.topWords].sort());
+    expect(Object.keys(d.usage).sort()).toEqual([...d.topWords, ...d.own.A, ...d.own.B].sort());
+  });
+  it('palavras escondidas saem também das listas de cada pessoa', () => {
+    const d = sharedDictionary(getDemoReport('pt'), ['miau', 'trem'])!;
+    expect(d.own.A).not.toContain('miau');
+    expect(d.own.B).not.toContain('trem');
+    expect(d.own.A).toContain('zap');
+    expect(d.usage.miau).toBeUndefined();
   });
 });

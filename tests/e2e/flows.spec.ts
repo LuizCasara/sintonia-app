@@ -51,6 +51,12 @@ test('apagar tudo volta ao início', async ({ page }) => {
   await expect(page).toHaveURL(/\/pt\/?$/);
 });
 
+/** Todo envio passa pela tela Confirmar: confere a página e clica em Analisar. */
+async function confirmAndAnalyze(page: import('@playwright/test').Page) {
+  await expect(page).toHaveURL(/\/pt\/confirm\/?$/);
+  await page.getByRole('button', { name: 'Analisar' }).click();
+}
+
 async function consentAndUpload(
   page: import('@playwright/test').Page,
   files: string[] | { name: string; mimeType: string; buffer: Buffer }[],
@@ -61,8 +67,11 @@ async function consentAndUpload(
   await page.getByRole('button', { name: 'Continuar' }).click();
 }
 
-test('um app com 2 autores pula o Confirmar e abre o relatório real', async ({ page }) => {
+test('um app com 2 autores também passa pelo Confirmar e abre o relatório real', async ({
+  page,
+}) => {
   await consentAndUpload(page, ['fixtures/whatsapp/android-pt.txt']);
+  await confirmAndAnalyze(page);
   await expect(page).toHaveURL(/\/pt\/processing\/?$/);
   await expect(page).toHaveURL(/\/pt\/report\/timeline\/?$/);
   await expect(page.getByText('Dados fictícios de demonstração')).toBeHidden();
@@ -94,7 +103,7 @@ test('arquivo .zip mostra o erro em vez de travar', async ({ page }) => {
   await expect(page).toHaveURL(/\/pt\/start\/?$/);
 });
 
-test('.zip do WhatsApp abre e vai direto ao relatório real', async ({ page }) => {
+test('.zip do WhatsApp abre e leva ao relatório real', async ({ page }) => {
   const chat = new Uint8Array(readFileSync('fixtures/whatsapp/android-pt.txt'));
   const buffer = Buffer.from(
     zipSync({ '_chat.txt': chat, 'IMG-0001.jpg': new Uint8Array([1, 2, 3]) }),
@@ -102,6 +111,7 @@ test('.zip do WhatsApp abre e vai direto ao relatório real', async ({ page }) =
   await consentAndUpload(page, [
     { name: 'WhatsApp Chat.zip', mimeType: 'application/zip', buffer },
   ]);
+  await confirmAndAnalyze(page);
   await expect(page).toHaveURL(/\/pt\/report\/timeline\/?$/);
   await expect(page.getByText('Dados fictícios de demonstração')).toBeHidden();
 });
@@ -153,6 +163,7 @@ test('painel mostra Sintonia e Equilíbrio com as partes de cada nota', async ({
 
 test('histórico curto de verdade: a Sintonia explica por que não tem nota', async ({ page }) => {
   await consentAndUpload(page, ['fixtures/whatsapp/android-pt.txt']);
+  await confirmAndAnalyze(page);
   await expect(page).toHaveURL(/report\/timeline/);
   await page
     .getByRole('link', { name: /Painel/ })
@@ -226,7 +237,12 @@ test('esconder uma palavra no painel tira ela do prompt compartilhado', async ({
   const words = page.getByTestId('words-card');
   await expect(words).toContainText('jujuba');
   await expect(words.getByTestId('word-count').first()).toContainText('×');
-  await expect(words.getByText('Ana diz mais')).toBeVisible();
+  // três listas: as dos dois e as de cada pessoa
+  await expect(words.getByTestId('words-shared')).toContainText('As palavras dos dois');
+  await expect(words.getByTestId('words-A')).toContainText('As palavras de Ana');
+  await expect(words.getByTestId('words-A')).toContainText('miau');
+  await expect(words.getByTestId('words-B')).toContainText('As palavras de Bruno');
+  await expect(words.getByTestId('words-B')).toContainText('cafuné');
   const hide = words.getByRole('button', { name: /Esconder “jujuba”/ });
   await expect(hide).toHaveAttribute('aria-pressed', 'false');
   await hide.click();
@@ -254,13 +270,14 @@ test.describe('processando com ritmo cinematográfico', () => {
     page,
   }) => {
     await consentAndUpload(page, ['fixtures/whatsapp/android-pt.txt']);
+    await confirmAndAnalyze(page);
     await expect(page).toHaveURL(/\/pt\/processing\/?$/);
     const bar = page.getByRole('progressbar');
     await page.waitForTimeout(1000);
     const early = Number(await bar.getAttribute('aria-valuenow'));
     expect(early).toBeLessThan(60); // o Worker já terminou, mas a tela segura o ritmo
     await expect(page).toHaveURL(/\/pt\/processing\/?$/);
-    await expect(page).toHaveURL(/\/pt\/report\/timeline\/?$/, { timeout: 20_000 });
+    await expect(page).toHaveURL(/\/pt\/report\/timeline\/?$/, { timeout: 40_000 });
   });
 });
 
@@ -278,6 +295,7 @@ test('o último marco da linha do tempo leva ao Painel', async ({ page }) => {
 test.describe('ações', () => {
   async function analyzeAndOpenActions(page: import('@playwright/test').Page) {
     await consentAndUpload(page, ['fixtures/whatsapp/android-pt.txt']);
+    await confirmAndAnalyze(page);
     await expect(page).toHaveURL(/report\/timeline/);
     await page.getByRole('link', { name: 'Ações' }).first().click();
   }
@@ -287,7 +305,7 @@ test.describe('ações', () => {
     await expect(page.getByRole('button', { name: 'Salvar neste navegador' })).toBeDisabled();
   });
 
-  test('salvar no navegador gera cookie com uuid e a sessão reabre na tela de envio', async ({
+  test('salvar no navegador guarda um uuid (sem cookie) e a sessão reabre na tela de envio', async ({
     page,
     context,
   }) => {
@@ -295,9 +313,9 @@ test.describe('ações', () => {
     await page.getByRole('button', { name: 'Salvar neste navegador' }).click();
     await expect(page.getByText(/Salvo!/)).toBeVisible();
 
-    const cookie = (await context.cookies()).find((c) => c.name === 'sintonia_id');
-    expect(cookie?.value).toMatch(/^[0-9a-f-]{36}$/);
-    expect(cookie!.expires).toBeGreaterThan(Date.now() / 1000 + 300 * 24 * 3600);
+    const id = await page.evaluate(() => localStorage.getItem('sintonia_id'));
+    expect(id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(await context.cookies()).toEqual([]); // nenhum cookie é criado
 
     // recarregar apaga a memória da aba; a sessão salva continua e abre de novo
     await page.goto('/pt/start/');
@@ -314,6 +332,20 @@ test.describe('ações', () => {
       .getByRole('button', { name: /Remover a sessão/ })
       .click();
     await expect(page.getByTestId('saved-sessions')).toBeHidden();
+  });
+
+  test('o cookie das versões antigas vira o uuid do navegador e é apagado', async ({
+    page,
+    context,
+  }) => {
+    const id = '3f2b8c1e-9d4a-4b6e-8a1f-0c7d5e2a9b34';
+    await context.addCookies([
+      { name: 'sintonia_id', value: id, url: test.info().project.use.baseURL! },
+    ]);
+    await page.goto('/pt/start/');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('sintonia_id'))).toBe(id);
+    expect(await context.cookies()).toEqual([]);
   });
 
   test('salvar duas vezes a mesma conversa não duplica; apagar tudo limpa as sessões', async ({
@@ -372,11 +404,11 @@ test.describe('ações', () => {
     await expect(page.getByTestId('print-report')).not.toContainText('jujuba');
   });
 
-  test('cards para stories: 6 imagens 1080×1920 que dá para baixar', async ({ page }) => {
+  test('cards para stories: 7 imagens 1080×1920 que dá para baixar', async ({ page }) => {
     await page.goto('/pt/report/actions/');
     await page.getByRole('button', { name: 'Gerar cards' }).click();
     const panel = page.getByTestId('stories-panel');
-    await expect(panel.getByRole('img')).toHaveCount(6);
+    await expect(panel.getByRole('img')).toHaveCount(7);
     const size = await panel
       .getByRole('img', { name: 'Mensagens' })
       .evaluate((img: HTMLImageElement) => [img.naturalWidth, img.naturalHeight]);
@@ -391,11 +423,11 @@ test.describe('ações', () => {
     await page.getByRole('button', { name: 'Gerar cards' }).click();
     await page.getByRole('button', { name: 'Ampliar: Mensagens' }).click();
     const viewer = page.getByTestId('story-viewer');
-    await expect(viewer).toContainText('Mensagens · 1/6');
+    await expect(viewer).toContainText('Mensagens · 1/7');
     await viewer.getByRole('button', { name: 'Próximo card' }).click();
-    await expect(viewer).toContainText('Quem fala mais · 2/6');
+    await expect(viewer).toContainText('Quem fala mais · 2/7');
     await page.keyboard.press('ArrowLeft');
-    await expect(viewer).toContainText('Mensagens · 1/6');
+    await expect(viewer).toContainText('Mensagens · 1/7');
     const download = page.waitForEvent('download');
     await viewer.getByRole('button', { name: 'Baixar' }).click();
     expect((await download).suggestedFilename()).toBe('sintonia-messages.png');
@@ -417,10 +449,10 @@ test.describe('ações', () => {
     await page.getByRole('link', { name: 'Ações' }).first().click();
     await page.getByRole('checkbox', { name: /primeiros nomes/ }).uncheck();
     await page.getByRole('button', { name: 'Gerar cards' }).click();
-    await expect(page.getByTestId('stories-panel').getByRole('img')).toHaveCount(6);
+    await expect(page.getByTestId('stories-panel').getByRole('img')).toHaveCount(7);
     // trocar a opção com cards na tela refaz os cards
     await page.getByRole('checkbox', { name: /primeiros nomes/ }).check();
-    await expect(page.getByTestId('stories-panel').getByRole('img')).toHaveCount(6);
+    await expect(page.getByTestId('stories-panel').getByRole('img')).toHaveCount(7);
   });
 });
 

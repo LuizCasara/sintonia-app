@@ -44,7 +44,7 @@ export function UploadPanel() {
     setFiles([...files, ...items]);
   }
 
-  /** Lê os arquivos no Worker. Um app só e 2 autores: vai direto a /processing (pula Confirmar). */
+  /** Lê os arquivos no Worker. Sempre passa pela tela Confirmar (quem é quem e nome no relatório). */
   async function onContinue() {
     setBusy(true);
     setError(null);
@@ -52,13 +52,8 @@ export function UploadPanel() {
       const inspection = await inspectFiles(files.map((f) => f.file));
       setInspection(inspection);
       setNames(null); // nomes de uma análise anterior não valem para esta
-      if (inspection.needsConfirm) {
-        setMapping(null);
-        router.push('/confirm');
-      } else {
-        setMapping(inspection.mapping);
-        router.push('/processing');
-      }
+      setMapping(null);
+      router.push('/confirm'); // sempre confirma quem é quem e deixa renomear
     } catch (err) {
       setError(tErr(errorCode(err) ?? 'unknown'));
     } finally {

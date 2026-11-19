@@ -8,7 +8,7 @@ import { useReport } from '@/components/report/ReportProvider';
 import { useTimelineModel, type Kind } from '@/components/timeline/useTimelineModel';
 import { bookProgress, HARRY_POTTER_TOTAL, HARRY_POTTER_WORDS } from '@/lib/books';
 import { fmtDate, fmtDuration, fmtNum, fmtPct, fmtScore, weekdayName } from '@/lib/format';
-import { sharedDictionary, wordOwner } from '@/lib/share';
+import { sharedDictionary, wordGroups, wordOwner } from '@/lib/share';
 import { daysBetween, formatSpan, spanBetween } from '@/lib/span';
 
 // Cores do relatório em papel: as da marca, um pouco mais escuras para ler no branco.
@@ -321,6 +321,8 @@ export function PrintReport() {
   const bookFill = (i: number) =>
     book.times >= 1 || i < book.full ? 1 : i === book.current.index ? book.current.fraction : 0;
   const dict = sharedDictionary(r, hiddenWords);
+  const wordLists = wordGroups(dict);
+  const wordTotal = wordLists.shared.length + wordLists.A.length + wordLists.B.length;
   const heatMax = Math.max(1, ...r.hours.heatmap.flat());
   const apps = r.apps.perYear;
 
@@ -1003,33 +1005,63 @@ export function PrintReport() {
       </Section>
 
       {/* Palavras */}
-      {dict && dict.topWords.length > 0 && (
+      {dict && wordTotal > 0 && (
         <Section title={td('cards.words')} keep>
-          <p className="mb-2 text-[10px]" style={{ color: C.muted }}>
-            <span style={{ color: C.a }}>■ {td('words.mostly', { name: nameA })}</span>{' '}
-            <span style={{ color: C.b }}>■ {td('words.mostly', { name: nameB })}</span>{' '}
-            <span style={{ color: C.v }}>■ {td('words.both')}</span>
-          </p>
-          <ul className="flex flex-wrap gap-2">
-            {dict.topWords.map((w) => {
-              const u = dict.usage[w];
-              const who = wordOwner(u);
-              return (
-                <li
-                  key={w}
-                  className="break-inside-avoid rounded-full px-3 py-1"
-                  style={{ border: `1.5px solid ${WHO[who]}`, color: WHO[who] }}
-                >
-                  <span className="font-display text-[14px] font-bold">{w}</span>
-                  {u && (
-                    <span className="ml-1.5 text-[10px] tabular-nums" style={{ color: C.muted }}>
-                      {n(u.A + u.B)}× ({n(u.A)} · {n(u.B)})
-                    </span>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+          <div className="space-y-3">
+            {(
+              [
+                {
+                  id: 'shared',
+                  title: td('words.groupShared'),
+                  color: C.v,
+                  words: wordLists.shared,
+                },
+                {
+                  id: 'A',
+                  title: td('words.groupOwn', { name: nameA }),
+                  color: C.a,
+                  words: wordLists.A,
+                },
+                {
+                  id: 'B',
+                  title: td('words.groupOwn', { name: nameB }),
+                  color: C.b,
+                  words: wordLists.B,
+                },
+              ] as const
+            )
+              .filter((g) => g.words.length > 0)
+              .map((g) => (
+                <div key={g.id} className="break-inside-avoid">
+                  <p className="mb-1 text-[11px] font-bold" style={{ color: g.color }}>
+                    {g.title}
+                  </p>
+                  <ul className="flex flex-wrap gap-2">
+                    {g.words.map((w) => {
+                      const u = dict.usage[w];
+                      const who = wordOwner(u);
+                      return (
+                        <li
+                          key={w}
+                          className="break-inside-avoid rounded-full px-3 py-1"
+                          style={{ border: `1.5px solid ${WHO[who]}`, color: WHO[who] }}
+                        >
+                          <span className="font-display text-[14px] font-bold">{w}</span>
+                          {u && (
+                            <span
+                              className="ml-1.5 text-[10px] tabular-nums"
+                              style={{ color: C.muted }}
+                            >
+                              {n(u.A + u.B)}× ({n(u.A)} · {n(u.B)})
+                            </span>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ))}
+          </div>
           {hiddenWords.length > 0 && (
             <p className="mt-1.5 text-[9.5px]" style={{ color: C.muted }}>
               {t('hiddenNote', { count: hiddenWords.length })}

@@ -73,7 +73,9 @@ export function ProcessingView() {
     let last = performance.now();
     let raf = 0;
     const tick = (now: number) => {
-      const dt = Math.min(100, now - last);
+      // Teto de 1 s por quadro: em máquina lenta a animação não se arrasta, e com a aba escondida
+      // as pausas de cada etapa impedem que ela pule direto ao fim.
+      const dt = Math.min(1000, now - last);
       last = now;
       if (hold > 0) {
         hold -= dt;

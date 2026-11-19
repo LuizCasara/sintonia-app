@@ -6,7 +6,7 @@ import { StoryViewer } from './StoryViewer';
 import { useReport } from '@/components/report/ReportProvider';
 import { bookProgress, HARRY_POTTER_WORDS } from '@/lib/books';
 import { fmtNum, fmtScore } from '@/lib/format';
-import { sharedDictionary, wordOwner } from '@/lib/share';
+import { sharedDictionary, wordGroups, wordOwner } from '@/lib/share';
 import { daysBetween, formatSpan, spanBetween } from '@/lib/span';
 import { canvasToBlob, download, renderStory, themeFromPage, type StorySpec } from '@/lib/stories';
 
@@ -133,17 +133,45 @@ export function StoriesPanel() {
     });
 
     const dict = sharedDictionary(r, hiddenWords);
-    if (dict && dict.topWords.length > 0) {
+    const lists = wordGroups(dict);
+    const countOf = (word: string) => {
+      const u = dict?.usage[word];
+      return u ? `${n(u.A + u.B)}×` : '';
+    };
+    if (dict && lists.shared.length > 0) {
       out.push({
         id: 'words',
         label: t('cards.words'),
         spec: {
           kind: 'words',
-          kicker: td('cards.words'),
-          words: dict.topWords.map((word) => {
-            const u = dict.usage[word];
-            return { word, count: u ? `${n(u.A + u.B)}×` : '', who: wordOwner(u) };
-          }),
+          kicker: td('words.groupShared'),
+          words: lists.shared.map((word) => ({
+            word,
+            count: countOf(word),
+            who: wordOwner(dict.usage[word]),
+          })),
+        },
+      });
+    }
+    if (dict && (lists.A.length > 0 || lists.B.length > 0)) {
+      out.push({
+        id: 'own-words',
+        label: t('cards.ownWords'),
+        spec: {
+          kind: 'duo',
+          kicker: t('cards.ownWords'),
+          columns: [
+            {
+              title: nameA,
+              who: 'A',
+              words: lists.A.map((word) => ({ word, count: countOf(word) })),
+            },
+            {
+              title: nameB,
+              who: 'B',
+              words: lists.B.map((word) => ({ word, count: countOf(word) })),
+            },
+          ],
         },
       });
     }

@@ -1,6 +1,26 @@
 import type { Report } from './metrics';
 import type { DictionaryMetrics } from './metrics/dictionary';
 
+/** As listas de palavras (do casal e de cada pessoa) sem o que o usuário escondeu. */
+export interface WordGroups {
+  shared: string[];
+  A: string[];
+  B: string[];
+}
+
+export function wordGroups(
+  dictionary: DictionaryMetrics | null,
+  hidden: readonly string[] = [],
+): WordGroups {
+  const skip = new Set(hidden);
+  const keep = (words: string[] | undefined) => (words ?? []).filter((w) => !skip.has(w));
+  return {
+    shared: keep(dictionary?.topWords),
+    A: keep(dictionary?.own?.A), // relatórios antigos não têm as listas por pessoa
+    B: keep(dictionary?.own?.B),
+  };
+}
+
 /** Dicionário do casal sem as palavras que o usuário escondeu (é o que sai em qualquer compartilhamento). */
 export function sharedDictionary(
   report: Report,
@@ -8,12 +28,13 @@ export function sharedDictionary(
 ): DictionaryMetrics | null {
   if (!report.dictionary) return null;
   if (hidden.length === 0) return report.dictionary;
-  const skip = new Set(hidden);
-  const topWords = report.dictionary.topWords.filter((w) => !skip.has(w));
+  const groups = wordGroups(report.dictionary, hidden);
   const usage = report.dictionary.usage ?? {};
+  const all = [...groups.shared, ...groups.A, ...groups.B];
   return {
-    topWords,
-    usage: Object.fromEntries(topWords.flatMap((w) => (usage[w] ? [[w, usage[w]]] : []))),
+    topWords: groups.shared,
+    own: { A: groups.A, B: groups.B },
+    usage: Object.fromEntries(all.flatMap((w) => (usage[w] ? [[w, usage[w]]] : []))),
   };
 }
 

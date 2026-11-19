@@ -302,11 +302,13 @@
       }
     },
     "words": {
-      "hint": "As palavras que vocês mais usam e quase ninguém mais usa. Só vão para o que você compartilhar as que estiverem com o olho aberto.",
+      "hint": "As palavras que quase ninguém mais usa: as que os dois dizem e as que cada um diz muito mais que o outro. Só vão para o que você compartilhar as que estiverem com o olho aberto.",
       "hide": "Esconder “{word}” do compartilhamento",
       "show": "Mostrar “{word}” no compartilhamento",
       "hidden": "{count, plural, one {# escondida} other {# escondidas}} do compartilhamento",
       "empty": "Ainda não achamos palavras só de vocês: cada uma precisa aparecer pelo menos 5 vezes.",
+      "groupShared": "As palavras dos dois",
+      "groupOwn": "As palavras de {name}",
       "mostly": "{name} diz mais",
       "both": "os dois dizem parecido"
     }
@@ -346,7 +348,8 @@
         "scores": "Notas",
         "books": "Em livros",
         "time": "Tempo",
-        "words": "Palavras"
+        "words": "Palavras",
+        "ownWords": "Palavras de cada um"
       },
       "kickers": {
         "messages": "Nossa conversa",
@@ -377,7 +380,7 @@
     },
     "save": {
       "title": "Salvar neste navegador",
-      "body": "Guarda só os números e datas deste relatório (nunca as mensagens) aqui neste navegador, junto com um cookie com um código (uuid) que dura mais de 1 ano. Depois, na tela de envio, aparece “Sessões salvas” para abrir de novo.",
+      "body": "Guarda só os números e datas deste relatório (nunca as mensagens) aqui neste navegador, junto com um código (uuid) que identifica este navegador. Não é cookie e não é enviado a lugar nenhum. Depois, na tela de envio, aparece “Sessões salvas” para abrir de novo.",
       "button": "Salvar neste navegador",
       "saved": "Salvo! Ela aparece em “Sessões salvas” na tela de envio.",
       "demo": "A demonstração não pode ser salva.",

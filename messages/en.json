@@ -302,11 +302,13 @@
       }
     },
     "words": {
-      "hint": "The words you use most that almost nobody else does. Only the ones with the eye open go into whatever you share.",
+      "hint": "Words almost nobody else uses: the ones you both say and the ones each of you says far more than the other. Only the ones with the eye open go into whatever you share.",
       "hide": "Hide “{word}” from sharing",
       "show": "Show “{word}” when sharing",
       "hidden": "{count, plural, one {# hidden} other {# hidden}} from sharing",
       "empty": "We could not find words only you use yet: each one has to show up at least 5 times.",
+      "groupShared": "Words you both use",
+      "groupOwn": "{name}’s words",
       "mostly": "{name} says it more",
       "both": "both say it about the same"
     }
@@ -346,7 +348,8 @@
         "scores": "Scores",
         "books": "In books",
         "time": "Time",
-        "words": "Words"
+        "words": "Words",
+        "ownWords": "Each one’s words"
       },
       "kickers": {
         "messages": "Our chat",
@@ -377,7 +380,7 @@
     },
     "save": {
       "title": "Save in this browser",
-      "body": "Keeps only the numbers and dates of this report (never the messages) in this browser, along with a cookie holding a code (uuid) that lasts over 1 year. Then, on the upload screen, “Saved sessions” lets you open it again.",
+      "body": "Keeps only the numbers and dates of this report (never the messages) in this browser, along with a code (uuid) that identifies this browser. It is not a cookie and is never sent anywhere. Then, on the upload screen, “Saved sessions” lets you open it again.",
       "button": "Save in this browser",
       "saved": "Saved! It shows up under “Saved sessions” on the upload screen.",
       "demo": "The demo cannot be saved.",

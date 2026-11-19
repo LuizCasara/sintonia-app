@@ -56,7 +56,7 @@ O fluxo tem duas telas de entrada e três de resultado:
 | ------------------- | ----------- | ------------------------------------------------------------------------------------------- |
 | `/`                 | Home        | Apresenta o app com prévias fictícias das telas e um botão para começar.                    |
 | `/start`            | Começar     | Explica a privacidade, ensina a exportar a conversa, pede o consentimento e recebe o envio. Mostra as **sessões salvas** neste navegador, se houver. |
-| `/confirm`          | Confirmar   | Só aparece quando o app precisa de ajuda para saber quem é quem. Dá para escolher o **nome que aparece no relatório**. |
+| `/confirm`          | Confirmar   | Toda análise passa por aqui: confirma quem é quem e deixa escolher o **nome que aparece no relatório**. |
 | `/processing`       | Processando | Lê e analisa os arquivos no Worker, com o andamento real.                                   |
 | `/report/timeline`  | Linha do tempo | Marcos da jornada, com leitura ao passar o mouse e ritmo de resposta por ano.            |
 | `/report/dashboard` | Painel      | Notas, gráficos e detalhes de cada métrica.                                                 |
@@ -79,14 +79,14 @@ Todas as rotas existem em português (`/pt/...`) e inglês (`/en/...`). Quem que
 - **Ritmos:** horários do dia, sequências de dias seguidos, sessões de conversa e tempo de resposta (com a evolução por ano).
 - **Tempo de conversa:** quanto tempo e quantos dias tiveram mensagem, a maior sequência e a maior pausa.
 - **Em livros:** as palavras de vocês viram livros de Harry Potter (contagens reais das edições originais).
-- **Palavras:** carinho, desculpas, risadas e as palavras só dos dois, na cor de quem mais diz cada uma, com a contagem. Cada palavra tem um olho para esconder do que for compartilhado.
+- **Palavras:** carinho, desculpas, risadas e três listas de palavras (as dos dois e as que cada um quase só diz), na cor de quem mais diz, com a contagem. Abreviações e vícios de digitação ficam de fora das listas de cada um. Cada palavra tem um olho para esconder do que for compartilhado.
 - **Textos dos marcos:** cada cartão da linha do tempo diz quem falou mais no mês, o que veio depois e quanto tempo de conversa já havia.
 
 ### O que dá para levar
 
 - **PDF:** relatório completo e colorido, feito pela impressão do navegador (“Salvar como PDF”): capa com a marca, destaques, notas com barras, volume mês a mês, a linha do tempo inteira, horários em mapa de calor, livros e palavras. Dá para trocar o idioma antes de gerar.
-- **Cards para stories:** 6 imagens 1080×1920 desenhadas num `<canvas>`, só com números.
-- **Salvar no navegador:** guarda o relatório (números e datas, nunca as mensagens) no IndexedDB, com um cookie `sintonia_id` (uuid) de 400 dias. Na tela `/start` aparecem as “Sessões salvas”, que reabrem o relatório sem reenviar os arquivos.
+- **Cards para stories:** 7 imagens 1080×1920 desenhadas num `<canvas>`, só com números. Abrem ampliados, como um carrossel, com baixar e compartilhar.
+- **Salvar no navegador:** guarda o relatório (números e datas, nunca as mensagens) no IndexedDB, com um uuid `sintonia_id` guardado no `localStorage` (não é cookie e nunca viaja em requisições). Na tela `/start` aparecem as “Sessões salvas”, que reabrem o relatório sem reenviar os arquivos.
 - **Prompt para IA:** um texto pronto, com nomes inventados no lugar dos reais, para colar na IA de sua preferência.
 
 > As fórmulas das notas estão implementadas ([docs/DECISOES.md](docs/DECISOES.md)). Falta calibrar duas constantes (`RECIPROCITY_CEIL` e `TONE_CAP`, em `lib/metrics/sintonia.ts`) com exports reais.
@@ -94,7 +94,7 @@ Todas as rotas existem em português (`/pt/...`) e inglês (`/en/...`). Quem que
 ## Privacidade e LGPD
 
 - Tudo acontece no navegador. Nenhuma mensagem, nome ou arquivo é enviado a um servidor.
-- Por padrão, fechar ou recarregar a aba apaga tudo. Só é guardado algo se a pessoa clicar em **Salvar neste navegador**: aí o relatório (só números e datas) vai para o IndexedDB e um cookie com um uuid identifica o navegador. “Apagar tudo” remove isso também.
+- Por padrão, fechar ou recarregar a aba apaga tudo. Só é guardado algo se a pessoa clicar em **Salvar neste navegador**: aí o relatório (só números e datas) vai para o IndexedDB e um uuid no `localStorage` identifica o navegador. “Apagar tudo” remove isso também.
 - O envio de arquivos só é liberado depois que a pessoa declara que tem o direito de analisar a conversa, com o acordo da outra pessoa.
 - O código de `lib/` e `workers/` nunca faz requisição de rede, e há um teste que garante isso.
 

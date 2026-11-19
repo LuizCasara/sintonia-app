@@ -47,7 +47,7 @@ Um casal pode ter sintonia alta e equilíbrio baixo (uma pessoa carrega, a outra
 
 ## Pendente, não bloqueia
 
-**CI.** O workflow está em `ci/ci.yml`. Para ir para `.github/workflows/`, falta a permissão `workflow` no GitHub ou mover o arquivo pela interface. Não impede o desenvolvimento.
+**CI.** O workflow está em `.github/workflows/ci.yml` (lint, typecheck, testes unitários, build e e2e a cada PR e push na `main`).
 
 ## Análise feita, confirmação no marco
 
@@ -131,7 +131,6 @@ Na tela Confirmar, cada nome tem um seletor (Pessoa A, Pessoa B ou ignorar). Iss
 ## Já pendentes (sem mudança)
 
 - **Fórmulas de Sintonia e de Equilíbrio:** decididas e implementadas em 18/11/2026 (seção abaixo). Falta só calibrar `RECIPROCITY_CEIL` e `TONE_CAP` com exports reais.
-- **CI:** mover `ci/ci.yml` para `.github/workflows/` (falta a permissão `workflow`).
 - **Listas de palavras:** o Luiz valida no final.
 
 # Fórmulas das notas (decidido em 18/11/2026)
