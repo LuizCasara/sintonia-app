@@ -19,7 +19,7 @@ const api = {
 
   /**
    * Fluxo: arquivo → detect → parser → merge → metrics → Report (ver lib/pipeline.ts).
-   * Em .zip ainda devolve o erro 'zip' (a leitura do .zip depende do fflate, depois).
+   * .zip é aberto aqui mesmo (fflate): só os .txt e .json de dentro são lidos.
    * Tudo roda aqui no navegador: este arquivo NUNCA faz requisição de rede.
    */
   analyze(files: InputFile[], mapping: PersonMapping, onProgress: OnProgress): Report {

@@ -55,6 +55,10 @@ describe('métricas (conversa montada à mão)', () => {
     expect(r.period.days).toBe(2);
   });
 
+  it('atividade: dias com mensagem, maior sequência e maior pausa', () => {
+    expect(r.activity).toEqual({ activeDays: 2, longestStreak: 1, longestSilence: 1 });
+  });
+
   it('volume: link conta como mensagem, mas não como texto', () => {
     const a = r.volume.perPerson.A;
     // A: texto, texto, imagem, áudio, link, "alguem ai?", "boa noite" = 7 (sistema fora)
@@ -83,6 +87,20 @@ describe('métricas (conversa montada à mão)', () => {
   it('emojis: ❤ e ❤️ juntos, por pessoa', () => {
     expect(r.language.perPerson.A.topEmojis[0]).toEqual({ emoji: '😂', count: 3 });
     expect(r.language.perPerson.A.topEmojis[1]).toEqual({ emoji: '❤️', count: 1 });
+  });
+
+  it('emoji de figurinha do Telegram soma ao top', () => {
+    const t = c.messages[0]!.ts;
+    const extra: Message[] = [
+      { ts: t, source: 'telegram', authorId: 'B', kind: 'sticker', stickerEmoji: '🥰' },
+      { ts: t + 1, source: 'telegram', authorId: 'B', kind: 'sticker', stickerEmoji: '🥰' },
+      { ts: t + 2, source: 'whatsapp', authorId: 'B', kind: 'sticker' }, // sem emoji: ignorada
+    ];
+    const withStickers = computeReport({ ...c, messages: [...c.messages, ...extra] });
+    const top = withStickers.language.perPerson.B.topEmojis;
+    expect(top.find((e) => e.emoji === '🥰')?.count).toBe(
+      (r.language.perPerson.B.topEmojis.find((e) => e.emoji === '🥰')?.count ?? 0) + 2,
+    );
   });
 
   it('risadas, perguntas, desculpas e carinho', () => {
@@ -166,23 +184,32 @@ describe('fases', () => {
 });
 
 describe('dicionário do casal', () => {
-  it('só palavras raras no corpus e usadas várias vezes', () => {
+  const said = (authorId: 'A' | 'B', text: string, n: number, from = 0) =>
+    Array.from({ length: n }, (_, i) => ({ ts: t0 + (from + i) * MIN, authorId, text }));
+
+  it('só palavras raras no corpus, usadas várias vezes e pelas duas pessoas', () => {
     const msgs = [
-      ...Array.from({ length: 6 }, (_, i) => ({
-        ts: t0 + i * MIN,
-        text: 'oi jujuba, o tempo hoje',
-      })),
-      ...Array.from({ length: 6 }, (_, i) => ({
-        ts: t0 + (10 + i) * MIN,
-        text: 'kkkkkkkk bolinho',
-      })),
-      { ts: t0 + 60 * MIN, text: 'raridade' },
+      ...said('A', 'oi jujuba, o tempo hoje', 3),
+      ...said('B', 'oi jujuba, o tempo hoje', 3, 10),
+      ...said('A', 'kkkkkkkk bolinho', 3, 20),
+      ...said('B', 'kkkkkkkk bolinho', 3, 30),
+      { ts: t0 + 60 * MIN, authorId: 'A' as const, text: 'raridade' },
+      ...said('A', 'xibiu xibiu', 5, 70), // só uma pessoa usa
     ];
-    const r = computeReport(conv(msgs));
-    expect(r.dictionary?.topWords).toEqual(expect.arrayContaining(['jujuba', 'bolinho']));
-    expect(r.dictionary?.topWords).not.toContain('tempo'); // comum no corpus
-    expect(r.dictionary?.topWords).not.toContain('raridade'); // só 1 vez
-    expect(r.dictionary?.topWords.some((w) => /^k+$/.test(w))).toBe(false);
+    const words = computeReport(conv(msgs)).dictionary?.topWords ?? [];
+    expect(words).toEqual(expect.arrayContaining(['jujuba', 'bolinho']));
+    expect(computeReport(conv(msgs)).dictionary?.usage.jujuba).toEqual({ A: 3, B: 3 });
+    expect(words).not.toContain('tempo'); // comum no corpus
+    expect(words).not.toContain('raridade'); // só 1 vez
+    expect(words).not.toContain('xibiu'); // vício de digitação de uma pessoa só
+    expect(words.some((w) => /^k+$/.test(w))).toBe(false);
+  });
+
+  it('gíria de chat não é palavra do casal', () => {
+    const msgs = [...said('A', 'tava tmbm', 4), ...said('B', 'tava tmbm', 4, 10)];
+    const words = computeReport(conv(msgs)).dictionary?.topWords ?? [];
+    expect(words).not.toContain('tava');
+    expect(words).not.toContain('tmbm');
   });
 });
 

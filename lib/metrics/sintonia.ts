@@ -37,6 +37,10 @@ export const MIN_MESSAGES = 500;
 export const MIN_MONTHS = 3;
 /** Respostas mínimas num ano para mostrar a evolução dele. */
 export const YEAR_MIN_REPLIES = 30;
+/** Diferença mínima (s) entre o ano e o ritmo habitual para contar como mudança: 44 s → 72 s não é "64% mais lento". */
+export const PACE_MIN_DELTA_SEC = 120;
+/** ...e a proporção também precisa ser pequena: 30 s → 140 s é 4,7 vezes mais lento, mesmo com só 110 s de diferença. */
+export const PACE_MAX_RATIO = 2;
 
 export interface SintoniaPart {
   id: SintoniaPartId;
@@ -97,10 +101,14 @@ export function summarizeReplies(replies: Reply[]): ReplySummary {
         return { year, medianResponseSec: null, vsUsualPct: null };
       }
       const m = median(secs);
+      const same =
+        Math.abs(m - usual) < PACE_MIN_DELTA_SEC &&
+        m < usual * PACE_MAX_RATIO &&
+        usual < m * PACE_MAX_RATIO;
       return {
         year,
         medianResponseSec: Math.round(m),
-        vsUsualPct: Math.round((m / usual - 1) * 100),
+        vsUsualPct: same ? 0 : Math.round((m / usual - 1) * 100),
       };
     });
   return { medianSec: usual, perYear };

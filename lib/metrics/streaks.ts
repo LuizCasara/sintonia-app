@@ -14,7 +14,7 @@ const isMorning = phraseTester([...GOOD_MORNING.pt, ...GOOD_MORNING.en]);
 const isNight = phraseTester([...GOOD_NIGHT.pt, ...GOOD_NIGHT.en]);
 
 /** Maior sequência de números consecutivos. */
-function longestRun(days: Set<number>): number {
+export function longestRun(days: Set<number>): number {
   let best = 0;
   for (const d of days) {
     if (days.has(d - 1)) continue; // só começa a contar no início da sequência

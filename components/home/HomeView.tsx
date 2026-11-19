@@ -1,7 +1,15 @@
 import { useTranslations } from 'next-intl';
 import { SyncWave } from '@/components/fx/SyncWave';
 import { Link } from '@/i18n/navigation';
-import { PeekBalance, PeekRhythm, PeekScore, PeekTimeline, PeekWords } from './Peeks';
+import {
+  PeekBalance,
+  PeekBooks,
+  PeekRhythm,
+  PeekScore,
+  PeekShare,
+  PeekTimeline,
+  PeekWords,
+} from './Peeks';
 
 function Cta({ className = '' }: { className?: string }) {
   const t = useTranslations('landing');
@@ -50,7 +58,9 @@ export function HomeView() {
           <PeekTimeline className="lg:col-span-4" />
           <PeekRhythm className="lg:col-span-3" />
           <PeekBalance className="lg:col-span-3" />
-          <PeekWords className="sm:col-span-2 lg:col-span-6" />
+          <PeekBooks className="lg:col-span-2" />
+          <PeekWords className="sm:col-span-2 lg:col-span-4" />
+          <PeekShare className="sm:col-span-2 lg:col-span-6" />
         </div>
         <p className="mt-4 text-center text-xs text-muted">{t('peek.note')}</p>
       </section>

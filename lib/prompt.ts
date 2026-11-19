@@ -1,10 +1,13 @@
 import type { Report } from './metrics';
+import { sharedDictionary } from './share';
 import { PROMPT_TEMPLATE } from './prompt-template';
 
 export interface PromptOptions {
   locale: 'pt' | 'en';
   /** Só true se o usuário marcou a caixa do "dicionário do casal". */
   includeDictionary: boolean;
+  /** Palavras que o usuário escondeu no painel: não saem em nada compartilhado. */
+  hiddenWords?: readonly string[];
 }
 
 /** Nomes inventados no prompt. Os nomes do export nunca saem daqui. */
@@ -19,7 +22,7 @@ export function buildPrompt(report: Report, opts: PromptOptions): string {
   const data = {
     ...report,
     people: { A: PROMPT_NAMES.A, B: PROMPT_NAMES.B },
-    dictionary: opts.includeDictionary ? report.dictionary : null,
+    dictionary: opts.includeDictionary ? sharedDictionary(report, opts.hiddenWords) : null,
   };
   if (!opts.includeDictionary) delete (data as Partial<Report>).dictionary;
   // As notas do app (Sintonia e Equilíbrio) não vão no prompt na V1: a IA não deve dar nota própria.

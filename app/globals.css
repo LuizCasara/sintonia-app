@@ -185,3 +185,28 @@
     scrollbar-color: color-mix(in srgb, var(--color-sync) 55%, transparent) transparent;
   }
 }
+
+/* Relatório em PDF: fica escondido na tela e é a única coisa que sai na impressão. */
+#print-root {
+  display: none;
+}
+@media print {
+  @page {
+    margin: 14mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  body > *:not(#print-root) {
+    display: none !important;
+  }
+  #print-root {
+    display: block;
+    color: #111;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

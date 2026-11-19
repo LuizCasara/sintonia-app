@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useReport } from '@/components/report/ReportProvider';
 import { Link, useRouter } from '@/i18n/navigation';
 import { mappingKey, nameSimilarity, type PersonMapping } from '@/lib/merge';
+import { MAX_NAME } from '@/lib/rename';
 import type { Source } from '@/lib/model';
 
 type Choice = 'A' | 'B' | 'ignore';
@@ -30,7 +31,7 @@ function AppBadge({ app }: { app: Source }) {
 export function ConfirmView() {
   const t = useTranslations('confirm');
   const router = useRouter();
-  const { inspection, setMapping } = useReport();
+  const { inspection, setMapping, setNames } = useReport();
 
   const detected: Detected[] = (inspection?.people ?? []).flatMap((p) =>
     p.names.map((n) => ({
@@ -42,6 +43,8 @@ export function ConfirmView() {
   );
   // Começa com a sugestão do Worker; o que o usuário muda fica aqui.
   const [overrides, setOverrides] = useState<Record<string, Choice>>({});
+  // Nome que aparece no relatório: começa com o nome mais usado do grupo e a pessoa pode trocar.
+  const [typed, setTyped] = useState<{ A?: string; B?: string }>({});
   const choiceOf = (key: string): Choice => overrides[key] ?? inspection?.mapping[key] ?? 'ignore';
 
   if (!inspection) {
@@ -63,6 +66,9 @@ export function ConfirmView() {
   ];
   const ignored = inGroup('ignore');
   const ready = groups.every((g) => g.rows.length > 0);
+  const defaultName = (id: 'A' | 'B') =>
+    [...inGroup(id)].sort((x, y) => y.count - x.count)[0]?.name ?? '';
+  const nameOf = (id: 'A' | 'B') => typed[id] ?? defaultName(id);
 
   function analyze() {
     const mapping: PersonMapping = {};
@@ -71,6 +77,7 @@ export function ConfirmView() {
       if (c !== 'ignore') mapping[d.key] = c;
     }
     setMapping(mapping);
+    setNames({ A: nameOf('A'), B: nameOf('B') });
     router.push('/processing');
   }
 
@@ -110,6 +117,18 @@ export function ConfirmView() {
         {groups.map((g) => (
           <section key={g.id} className="panel p-5">
             <h2 className={`font-display text-lg font-semibold ${g.color}`}>{g.label}</h2>
+            <label className="mt-3 block text-sm">
+              <span className="text-muted">{t('nameLabel')}</span>
+              <input
+                type="text"
+                value={nameOf(g.id)}
+                maxLength={MAX_NAME}
+                onChange={(e) => setTyped({ ...typed, [g.id]: e.target.value })}
+                data-testid={`display-name-${g.id}`}
+                className="mt-1 block min-h-11 w-full rounded-lg border border-line bg-void px-3 text-base"
+              />
+              <span className="mt-1 block text-xs text-muted">{t('nameHint')}</span>
+            </label>
             {g.rows.length === 0 ? (
               <p className="mt-2 text-sm text-danger">{t('needOne', { person: g.label })}</p>
             ) : (

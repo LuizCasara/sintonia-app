@@ -1,5 +1,7 @@
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
+import { SavedSessions } from '@/components/share/SavedSessions';
 import { UploadPanel } from './UploadPanel';
 
 /** Segunda tela: privacidade, como exportar a conversa, consentimento e envio dos arquivos. */
@@ -50,10 +52,21 @@ export function StartView() {
             <article key={app} className="panel p-5">
               <h3 className="font-semibold">{t(`how.${app}.title`)}</h3>
               <p className="mt-1 text-sm text-muted">{t(`how.${app}.body`)}</p>
+              {app === 'telegram' && (
+                <Image
+                  src="/guide/telegram-export.png"
+                  width={377}
+                  height={492}
+                  alt={t('how.telegram.alt')}
+                  className="mx-auto mt-4 h-auto w-full max-w-[260px] rounded-xl"
+                />
+              )}
             </article>
           ))}
         </div>
       </section>
+
+      <SavedSessions />
 
       <UploadPanel />
     </main>

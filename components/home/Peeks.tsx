@@ -167,6 +167,9 @@ const WORD_STYLES = [
   'text-b text-xl',
 ] as const;
 
+// Quantas vezes cada palavra aparece (exemplo fictício).
+const WORD_COUNTS = [412, 388, 1204, 96, 530, 240, 177, 85, 310] as const;
+
 export function PeekWords({ className }: Props) {
   const t = useTranslations('landing.words');
   const words = t.raw('list') as string[];
@@ -176,9 +179,81 @@ export function PeekWords({ className }: Props) {
         {words.map((w, i) => (
           <span key={w} className={WORD_STYLES[i]}>
             {w}
+            <span className="ml-1 font-sans text-xs font-normal tabular-nums text-muted">
+              {WORD_COUNTS[i]}×
+            </span>
           </span>
         ))}
       </p>
     </Card>
+  );
+}
+
+export function PeekBooks({ className }: Props) {
+  const t = useTranslations('landing.books');
+  const segments = [1, 1, 1, 1, 1, 0.02, 0] as const;
+  return (
+    <Card title={t('title')} body={t('body')} className={className}>
+      <p className="flex flex-wrap items-baseline gap-x-2">
+        <span className="glow-sync font-display text-5xl font-bold text-sync">5</span>
+        <span className="text-sm text-muted">{t('of')}</span>
+      </p>
+      <div className="mt-4 flex gap-1">
+        {segments.map((fill, i) => (
+          <div key={i} className="h-3 flex-1 overflow-hidden rounded-full bg-void">
+            <div className="h-full bg-sync" style={{ width: `${fill * 100}%` }} />
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
+/** PDF, cards para stories e sessões salvas: o que dá para levar do relatório. */
+export function PeekShare({ className }: Props) {
+  const t = useTranslations('landing.share');
+  return (
+    <article className={`panel panel-hover p-5 ${className ?? ''}`}>
+      <h3 className="font-semibold">{t('title')}</h3>
+      <p className="mt-1 text-sm text-muted">{t('body')}</p>
+      <ul className="mt-4 grid gap-4 sm:grid-cols-3">
+        {(
+          [
+            ['pdf', 'pdfBody'],
+            ['stories', 'storiesBody'],
+            ['save', 'saveBody'],
+          ] as const
+        ).map(([title, body]) => (
+          <li key={title} className="flex gap-3">
+            <span aria-hidden="true" className="mt-0.5 shrink-0">
+              {title === 'pdf' && (
+                <span className="flex h-12 w-9 flex-col gap-1 rounded-sm bg-ink/90 p-1.5">
+                  <span className="h-1 w-full rounded bg-void/70" />
+                  <span className="h-1 w-3/4 rounded bg-void/40" />
+                  <span className="h-1 w-full rounded bg-void/40" />
+                  <span className="mt-auto h-3 w-full rounded-sm bg-gradient-to-r from-a to-b" />
+                </span>
+              )}
+              {title === 'stories' && (
+                <span className="flex h-12 w-7 items-center justify-center rounded-md border border-line bg-gradient-to-b from-a/40 via-void to-b/40 font-display text-[9px] font-bold text-ink">
+                  8,2
+                </span>
+              )}
+              {title === 'save' && (
+                <span className="flex h-12 w-9 flex-col justify-center gap-1.5">
+                  <span className="h-2 w-full rounded bg-sync/70" />
+                  <span className="h-2 w-full rounded bg-sync/40" />
+                  <span className="h-2 w-full rounded bg-sync/20" />
+                </span>
+              )}
+            </span>
+            <span>
+              <span className="block text-sm font-semibold">{t(title)}</span>
+              <span className="block text-sm text-muted">{t(body)}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </article>
   );
 }

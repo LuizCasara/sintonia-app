@@ -21,7 +21,7 @@ export function UploadPanel() {
   const t = useTranslations('home');
   const router = useRouter();
   const tErr = useTranslations('common.errors');
-  const { files, setFiles, setInspection, setMapping } = useReport();
+  const { files, setFiles, setInspection, setMapping, setNames } = useReport();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
@@ -51,6 +51,7 @@ export function UploadPanel() {
     try {
       const inspection = await inspectFiles(files.map((f) => f.file));
       setInspection(inspection);
+      setNames(null); // nomes de uma análise anterior não valem para esta
       if (inspection.needsConfirm) {
         setMapping(null);
         router.push('/confirm');

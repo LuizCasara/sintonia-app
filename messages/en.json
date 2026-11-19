@@ -14,12 +14,17 @@
       "actions": "Actions"
     },
     "errors": {
-      "zip": ".zip files are not supported yet. Extract the .txt inside and upload it.",
+      "zip": "We could not open that .zip or find a chat (.txt or .json) inside it. Try extracting the file and uploading it instead.",
       "unknownFormat": "Unrecognized format. Upload the WhatsApp .txt or the Telegram result.json.",
       "noMessages": "We found no messages in these files.",
       "needTwoPeople": "We need at least two people in the conversation.",
       "unknown": "Something went wrong while reading the files. Please try again."
     }
+  },
+  "meta": {
+    "title": "Sintonia: see how in sync you two are",
+    "description": "Upload your couple chat history and discover the story, the rhythms and the numbers of the two of you. Everything runs in your browser, no message ever leaves your device.",
+    "ogAlt": "Sintonia: two waves, one cyan and one magenta, falling into phase. See how in sync you two are."
   },
   "home": {
     "privacy": {
@@ -32,11 +37,12 @@
       "title": "How to export the chat",
       "whatsapp": {
         "title": "WhatsApp",
-        "body": "In the chat: ⋮ menu → More → Export chat → Without media. Upload the .txt or .zip file."
+        "body": "On your phone, in the chat: ⋮ menu → More → Export chat → Without media. Send the file to yourself (email or Drive), download it on your computer and upload the .txt or .zip here."
       },
       "telegram": {
         "title": "Telegram Desktop",
-        "body": "On desktop: ⋮ menu → Export chat history → JSON format. Upload the result.json file."
+        "body": "On desktop: ⋮ menu → Export chat history. Pick the JSON format and leave all media unchecked, as in the image. Upload the result.json file.",
+        "alt": "Telegram Desktop export window with JSON format, all media unchecked, and the range from the oldest message to the present."
       }
     },
     "consent": {
@@ -78,7 +84,9 @@
     "assignLabel": "Who is {name}?",
     "needOne": "Pick at least one name for {person}.",
     "empty": "Upload your files on the home screen to see who is who.",
-    "backHome": "Back to start"
+    "backHome": "Back to start",
+    "nameLabel": "Name in the report",
+    "nameHint": "How this person shows up on the dashboard, the PDF and the cards. It can be just a first name or a nickname."
   },
   "processing": {
     "title": "Processing",
@@ -130,14 +138,30 @@
       "marks": "Journey marks"
     },
     "desc": {
-      "start": "Where it all began. Since then, {total} messages.",
-      "after": "{days} days after the first message.",
-      "peak": "Peak: +{pct}% messages above average",
-      "valley": "Valley: {pct}% messages below average",
+      "start": "Where it all began. Since then, {total} messages over {time}.",
+      "after": "{time} after the first message.",
+      "sameDay": "On the same day as the first message.",
+      "peak": "A busier-than-usual month: {count} messages, {pct}% above the average of the months around it.",
+      "valley": "A quieter month: {count} messages, {pct}% below the average of the months around it.",
       "anniversary": "{count} messages so far.",
-      "messages": "You reached this number this month.",
+      "messages": "You reached this number after {time} of chatting.",
       "record": "{count} messages in a single month.",
       "telegram": "This month Telegram had more messages than WhatsApp."
+    },
+    "facts": {
+      "lead": "{name} talked more this month: {pct}% of the messages.",
+      "even": "This month you both talked about the same amount.",
+      "nextUp": "The following month, volume rose {pct}%.",
+      "nextDown": "The following month, volume dropped {pct}%.",
+      "nextSame": "The following month, volume stayed about the same.",
+      "vsAverage": "{times} times your monthly average.",
+      "perDay": "On average, {count} messages a day since the start.",
+      "since": "It happened when you had been chatting for {time}."
+    },
+    "span": {
+      "years": "{n, plural, one {# year} other {# years}}",
+      "months": "{n, plural, one {# month} other {# months}}",
+      "days": "{n, plural, one {# day} other {# days}}"
     },
     "hover": {
       "total": "{count} this month"
@@ -148,7 +172,8 @@
       "slower": "{pct}% slower",
       "usual": "at the usual pace",
       "note": "Bottom strip: the median response time of each year against the usual pace of the couple ({time}). It is not a score, it only shows changes."
-    }
+    },
+    "toDashboard": "See the dashboard"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -166,7 +191,10 @@
       "streaks": "Streaks",
       "apps": "WhatsApp × Telegram",
       "balance": "Balance",
-      "sintonia": "Sync"
+      "sintonia": "Sync",
+      "time": "Time chatting",
+      "book": "In books",
+      "words": "Words only you use"
     },
     "m": {
       "messages": "Messages",
@@ -200,7 +228,8 @@
       "audioLegend": "Voice",
       "textLegend": "Text",
       "morning": "Good morning",
-      "night": "Good night"
+      "night": "Good night",
+      "medianResponse": "Median 1st response"
     },
     "score": {
       "outOf": "out of 10",
@@ -233,21 +262,92 @@
         "closes": "Who closes conversations"
       },
       "note": "A high score does not mean a better relationship: it only shows how evenly the effort is shared."
+    },
+    "time": {
+      "activeOf": "{active} of {total} days with a message",
+      "rate": "{pct}% of days",
+      "start": "First message",
+      "end": "Last message",
+      "totalDays": "Days chatting",
+      "activeDays": "Days with a message",
+      "silentDays": "Days without a message",
+      "streak": "Longest streak of days in a row",
+      "silence": "Longest pause without a message",
+      "days": "{n, plural, one {# day} other {# days}}",
+      "span": {
+        "years": "{n, plural, one {# year} other {# years}}",
+        "months": "{n, plural, one {# month} other {# months}}",
+        "days": "{n, plural, one {# day} other {# days}}"
+      },
+      "same": "On the same day"
+    },
+    "book": {
+      "ofSeries": "of the 7 Harry Potter books",
+      "wholeSeries": "the whole Harry Potter series",
+      "next": "{count} words to go to finish {title}.",
+      "nextStart": "{pct}% of {title}.",
+      "intro": "Both your words, read as the Harry Potter series ({total} words in the original English editions).",
+      "person": "{name}: {words} words, {share} of the series",
+      "times": "{n}× the series",
+      "part": "{pct}% of the series",
+      "read": "read",
+      "title": {
+        "1": "Philosopher’s Stone",
+        "2": "Chamber of Secrets",
+        "3": "Prisoner of Azkaban",
+        "4": "Goblet of Fire",
+        "5": "Order of the Phoenix",
+        "6": "Half-Blood Prince",
+        "7": "Deathly Hallows"
+      }
+    },
+    "words": {
+      "hint": "The words you use most that almost nobody else does. Only the ones with the eye open go into whatever you share.",
+      "hide": "Hide “{word}” from sharing",
+      "show": "Show “{word}” when sharing",
+      "hidden": "{count, plural, one {# hidden} other {# hidden}} from sharing",
+      "empty": "We could not find words only you use yet: each one has to show up at least 5 times.",
+      "mostly": "{name} says it more",
+      "both": "both say it about the same"
     }
   },
   "actions": {
     "title": "Actions",
     "pdf": {
       "title": "PDF report",
-      "body": "A beautiful report to keep.",
-      "button": "Download PDF (soon)"
+      "body": "All the information, fully expanded: scores, numbers per person, hours, pace per year, firsts, books and words.",
+      "button": "Download PDF",
+      "hint": "Opens the browser print dialog: choose “Save as PDF”. Only numbers and dates, no messages."
     },
     "stories": {
       "title": "Story cards",
-      "body": "9:16 images with numbers only, no messages.",
-      "button": "Generate cards (soon)",
+      "body": "9:16 images with numbers only, made here in your browser. No message goes into them.",
+      "button": "Generate cards",
       "messagesIn": "messages in {years} years",
-      "split": "Who talks more"
+      "split": "Who talks more",
+      "regenerate": "Generate again",
+      "downloadAll": "Download all",
+      "download": "Download",
+      "useNames": "Show first names on the cards",
+      "personA": "Person A",
+      "personB": "Person B",
+      "footer": "made in the browser · nothing was sent",
+      "wordsNote": "{words} words written",
+      "cards": {
+        "messages": "Messages",
+        "split": "Who talks more",
+        "scores": "Scores",
+        "books": "In books",
+        "time": "Time",
+        "words": "Words"
+      },
+      "kickers": {
+        "messages": "Our chat",
+        "scores": "Our scores",
+        "books": "Words become books",
+        "time": "Time chatting"
+      },
+      "error": "Could not generate the cards. Try again."
     },
     "prompt": {
       "title": "Copy prompt for AI",
@@ -255,16 +355,25 @@
       "dictionary": "Include the couple's dictionary (nicknames and words only you use)",
       "copy": "Copy prompt",
       "copied": "Copied!",
-      "error": "Could not copy. Please try again."
+      "error": "Could not copy. Please try again.",
+      "hiddenWords": "{count, plural, one {# word hidden on the dashboard is left out.} other {# words hidden on the dashboard are left out.}}"
     },
     "delete": {
       "title": "Delete everything",
-      "body": "Removes files and results from this tab's memory.",
+      "body": "Removes files and results from this tab’s memory and also the sessions saved in this browser.",
       "button": "Delete everything",
       "confirmTitle": "Delete everything now?",
-      "confirmBody": "You go back to the start and will need to upload the files again.",
+      "confirmBody": "You go back to the start and will need to upload the files again. Sessions saved in this browser will be erased too.",
       "confirm": "Yes, delete",
       "cancel": "Cancel"
+    },
+    "save": {
+      "title": "Save in this browser",
+      "body": "Keeps only the numbers and dates of this report (never the messages) in this browser, along with a cookie holding a code (uuid) that lasts over 1 year. Then, on the upload screen, “Saved sessions” lets you open it again.",
+      "button": "Save in this browser",
+      "saved": "Saved! It shows up under “Saved sessions” on the upload screen.",
+      "demo": "The demo cannot be saved.",
+      "error": "Could not save (the browser blocked storage)."
     }
   },
   "start": {
@@ -285,11 +394,11 @@
     },
     "score": {
       "title": "Sync score",
-      "body": "A 0 to 10 score showing how well you two fit together.",
+      "body": "A 0 to 10 score of how the conversation flows.",
       "out": "out of 10",
-      "p1": "Balance",
-      "p2": "Response",
-      "p3": "Consistency"
+      "p1": "Reciprocity",
+      "p2": "Response time",
+      "p3": "Tone"
     },
     "timeline": {
       "title": "Timeline",
@@ -305,12 +414,12 @@
       "b": "Person B"
     },
     "balance": {
-      "title": "Who talks more?",
-      "body": "The balance of the conversation, no judgment."
+      "title": "Balance",
+      "body": "Who starts, how much each one talks and who wraps up, no judgment."
     },
     "words": {
-      "title": "Your words",
-      "body": "The terms and nicknames only the two of you use.",
+      "title": "Words only you use",
+      "body": "In the color of whoever says each one more, with the count. You choose what stays out of whatever you share.",
       "list": [
         "love",
         "miss you",
@@ -326,6 +435,72 @@
     "final": {
       "title": "Ready to hear your frequency?",
       "body": "It takes a few minutes and everything stays on your device."
+    },
+    "books": {
+      "title": "In books",
+      "body": "Your words become pages: how many Harry Potter books you two have written.",
+      "of": "of the 7 Harry Potter books"
+    },
+    "share": {
+      "title": "Take it with you",
+      "body": "All made in your browser, numbers only.",
+      "pdf": "PDF report",
+      "pdfBody": "All the information, expanded.",
+      "stories": "Story cards",
+      "storiesBody": "9:16 images ready to post.",
+      "save": "Saved sessions",
+      "saveBody": "Open again without re-uploading the files. Stays in this browser only, and only if you ask."
+    }
+  },
+  "saved": {
+    "title": "Saved sessions",
+    "body": "They live only in this browser. Open one to see the report again without uploading the files.",
+    "open": "Open",
+    "remove": "Remove",
+    "removeLabel": "Remove the session of {name}",
+    "openError": "Could not open that session.",
+    "meta": "{messages} messages · {from} to {to} · saved {saved}"
+  },
+  "print": {
+    "title": "Sintonia report",
+    "subtitle": "{a} and {b}",
+    "generated": "Generated on {date}, in the browser. Only numbers and dates: no messages are in this report.",
+    "totalMessages": "{count} messages in total",
+    "perMonth": "Messages per month",
+    "perYear": "Per year",
+    "heatmap": "Messages by day and time",
+    "words": "Words",
+    "read": "Read",
+    "word": "Word",
+    "booksIntro": "Your {words} words, read as the Harry Potter series ({total} words in the original English editions).",
+    "hiddenNote": "{count, plural, one {# word hidden on the dashboard was left out.} other {# words hidden on the dashboard were left out.}}",
+    "footer": "Sintonia · everything was computed in your browser; nothing was sent to any server.",
+    "s": {
+      "scores": "Scores",
+      "volume": "Message volume",
+      "response": "Response time",
+      "sessions": "Who starts conversations",
+      "language": "Emojis and language",
+      "media": "Audio, text and media",
+      "hours": "Hours",
+      "streaks": "Streaks",
+      "time": "Time chatting",
+      "apps": "WhatsApp and Telegram",
+      "journey": "Firsts and phases"
+    },
+    "pace": {
+      "median": "Median response",
+      "vsUsual": "Versus usual"
+    },
+    "firsts": {
+      "firstMessage": "First message",
+      "firstILoveYou": "First “I love you”",
+      "firstPhoto": "First photo",
+      "firstAudio": "First audio"
+    },
+    "phase": {
+      "peak": "Peak: {pct}% above the usual of the surrounding months",
+      "valley": "Valley: {pct}% below the usual of the surrounding months"
     }
   }
 }

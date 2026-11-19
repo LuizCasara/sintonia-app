@@ -55,37 +55,46 @@ O fluxo tem duas telas de entrada e três de resultado:
 | Rota                | Tela        | O que faz                                                                                   |
 | ------------------- | ----------- | ------------------------------------------------------------------------------------------- |
 | `/`                 | Home        | Apresenta o app com prévias fictícias das telas e um botão para começar.                    |
-| `/start`            | Começar     | Explica a privacidade, ensina a exportar a conversa, pede o consentimento e recebe o envio. |
-| `/confirm`          | Confirmar   | Só aparece quando o app precisa de ajuda para saber quem é quem na conversa.                |
+| `/start`            | Começar     | Explica a privacidade, ensina a exportar a conversa, pede o consentimento e recebe o envio. Mostra as **sessões salvas** neste navegador, se houver. |
+| `/confirm`          | Confirmar   | Só aparece quando o app precisa de ajuda para saber quem é quem. Dá para escolher o **nome que aparece no relatório**. |
 | `/processing`       | Processando | Lê e analisa os arquivos no Worker, com o andamento real.                                   |
 | `/report/timeline`  | Linha do tempo | Marcos da jornada, com leitura ao passar o mouse e ritmo de resposta por ano.            |
 | `/report/dashboard` | Painel      | Notas, gráficos e detalhes de cada métrica.                                                 |
-| `/report/actions`   | Ações       | Copiar o prompt para uma IA, apagar tudo (PDF e cards para stories: em breve).              |
+| `/report/actions`   | Ações       | PDF completo, cards para stories, salvar no navegador, copiar o prompt para uma IA e apagar tudo. |
 
 Todas as rotas existem em português (`/pt/...`) e inglês (`/en/...`). Quem quer só espiar pode abrir a demonstração com dados fictícios, sem enviar nada.
 
 ### Como exportar a conversa
 
-- **WhatsApp:** na conversa, menu ⋮ → Mais → Exportar conversa → Sem mídia. Envie o `.txt` ou o `.zip`.
+- **WhatsApp:** na conversa, menu ⋮ → Mais → Exportar conversa → Sem mídia. Envie o `.txt` ou o `.zip` (o app abre o `.zip` no navegador e lê só o texto de dentro).
 - **Telegram Desktop:** menu ⋮ → Exportar histórico → formato JSON. Envie o `result.json`.
 
 É possível enviar os dois apps juntos: o Sintonia junta tudo como uma conversa só, sem comparar um app contra o outro.
 
 ## O que o app mostra
 
-- **Nota de Sintonia:** a fluidez da conversa (reciprocidade, tempo de resposta, tom).
+- **Nota de Sintonia:** a fluidez da conversa, com três partes: reciprocidade (40%), tempo de resposta (40%) e tom (20%). Histórico curto demais não recebe nota.
 - **Nota de Equilíbrio:** a divisão do esforço (quem puxa assunto, volume, quem fecha). As duas notas são separadas de propósito: um casal pode ter sintonia alta e equilíbrio baixo.
 - **Linha do tempo:** primeira mensagem, picos e vales de atividade, fases da relação e o tempo de conversa em cada marco.
-- **Ritmos:** horários do dia, sequências de dias seguidos, sessões de conversa e tempo de resposta.
-- **Palavras:** carinho, desculpas, risadas e os termos que só os dois usam.
+- **Ritmos:** horários do dia, sequências de dias seguidos, sessões de conversa e tempo de resposta (com a evolução por ano).
+- **Tempo de conversa:** quanto tempo e quantos dias tiveram mensagem, a maior sequência e a maior pausa.
+- **Em livros:** as palavras de vocês viram livros de Harry Potter (contagens reais das edições originais).
+- **Palavras:** carinho, desculpas, risadas e as palavras só dos dois, na cor de quem mais diz cada uma, com a contagem. Cada palavra tem um olho para esconder do que for compartilhado.
+- **Textos dos marcos:** cada cartão da linha do tempo diz quem falou mais no mês, o que veio depois e quanto tempo de conversa já havia.
+
+### O que dá para levar
+
+- **PDF:** relatório completo e expandido, feito pela impressão do navegador (“Salvar como PDF”).
+- **Cards para stories:** 6 imagens 1080×1920 desenhadas num `<canvas>`, só com números.
+- **Salvar no navegador:** guarda o relatório (números e datas, nunca as mensagens) no IndexedDB, com um cookie `sintonia_id` (uuid) de 400 dias. Na tela `/start` aparecem as “Sessões salvas”, que reabrem o relatório sem reenviar os arquivos.
 - **Prompt para IA:** um texto pronto, com nomes inventados no lugar dos reais, para colar na IA de sua preferência.
 
-> A fórmula final das notas ainda está em aberto. Veja [docs/DECISOES.md](docs/DECISOES.md).
+> As fórmulas das notas estão implementadas ([docs/DECISOES.md](docs/DECISOES.md)). Falta calibrar duas constantes (`RECIPROCITY_CEIL` e `TONE_CAP`, em `lib/metrics/sintonia.ts`) com exports reais.
 
 ## Privacidade e LGPD
 
 - Tudo acontece no navegador. Nenhuma mensagem, nome ou arquivo é enviado a um servidor.
-- Fechar ou recarregar a aba apaga tudo. Nada é salvo.
+- Por padrão, fechar ou recarregar a aba apaga tudo. Só é guardado algo se a pessoa clicar em **Salvar neste navegador**: aí o relatório (só números e datas) vai para o IndexedDB e um cookie com um uuid identifica o navegador. “Apagar tudo” remove isso também.
 - O envio de arquivos só é liberado depois que a pessoa declara que tem o direito de analisar a conversa, com o acordo da outra pessoa.
 - O código de `lib/` e `workers/` nunca faz requisição de rede, e há um teste que garante isso.
 
@@ -101,6 +110,8 @@ pnpm dev
 ```
 
 Abra <http://localhost:3000>. A rota raiz leva para o idioma padrão (português).
+
+Defina `NEXT_PUBLIC_SITE_URL` (o endereço público do site, por exemplo `https://sintonia.exemplo.com`) no ambiente de build. Ela monta os links absolutos da imagem de compartilhamento (Open Graph); sem ela o padrão é `http://localhost:3000`.
 
 Para gerar o site estático (pasta `out/`):
 
@@ -122,6 +133,7 @@ pnpm build
 | `pnpm fixtures`        | Gera as conversas fictícias de `fixtures/`.                                |
 | `pnpm bench:generate`  | Gera a fixture grande de benchmark.                                        |
 | `pnpm bench`           | Benchmark com 150 mil mensagens (fora do `pnpm test`).                     |
+| `node scripts/brand.mjs` | Regenera o ícone (`app/icon.svg`, `favicon.ico`, `apple-icon.png`) e as imagens de compartilhamento (`public/og/`). Precisa de Chrome e de rede (fontes). |
 
 ## Como funciona por dentro
 
@@ -129,15 +141,15 @@ pnpm build
 arquivo → detectFormat → parser (parseWhatsApp / parseTelegram) → mergeChats → computeReport → Report → telas
 ```
 
-1. **Detecção:** `detectFormat` olha só os primeiros 4 KB do arquivo para reconhecer WhatsApp (Android ou iPhone), Telegram ou `.zip`.
+1. **Detecção:** `detectFormat` olha só os primeiros 4 KB do arquivo para reconhecer WhatsApp (Android ou iPhone) ou Telegram. Um `.zip` é aberto antes (com [fflate](https://github.com/101arrowz/fflate)), e só os `.txt` e `.json` de dentro são lidos.
 2. **Parsers:** transformam cada formato no modelo comum de `lib/model.ts`.
 3. **Junção:** `mergeChats` junta vários arquivos e apps em uma conversa só; `suggestPeople` sugere quem é quem.
 4. **Métricas:** `computeReport` calcula uma métrica por arquivo em `lib/metrics/`.
-5. **Telas:** o `ReportProvider` guarda o relatório em memória e as telas só leem dele.
+5. **Telas:** o `ReportProvider` guarda o relatório em memória e as telas só leem dele. As ações (PDF, stories, salvar) também só leem o relatório.
 
 Tudo isso roda em um Web Worker (comunicação via [Comlink](https://github.com/GoogleChromeLabs/comlink)), para não travar a interface.
 
-**Stack:** Next.js (App Router, export estático), React, TypeScript, Tailwind CSS 4 e next-intl para os idiomas. Os gráficos são próprios, em SVG.
+**Stack:** Next.js (App Router, export estático), React, TypeScript, Tailwind CSS 4 e next-intl para os idiomas. Os gráficos são próprios, em SVG, e os cards para stories são desenhados em `<canvas>`.
 
 **Convenção de componentes:** tudo é Server Component por padrão. O `"use client"` fica só nas folhas que precisam de estado, eventos ou APIs do navegador (por exemplo, o `UploadPanel`).
 
@@ -146,8 +158,10 @@ Tudo isso roda em um Web Worker (comunicação via [Comlink](https://github.com/
 ```text
 app/[locale]/     páginas (pt e en), site estático
 components/       telas e peças visuais (home, start, confirm, processing, timeline, dashboard, share, fx, shell)
-lib/              model, parsers, merge, metrics, prompt, demo, lexicon, pipeline
+lib/              model, parsers, merge, metrics, prompt, demo, lexicon, pipeline, books, span, stories, saved, share, rename
 workers/          analyze.worker.ts: roda tudo fora da thread da tela
+public/og/        imagens de compartilhamento (pt e en)
+scripts/          brand.mjs (ícone e imagens de compartilhamento) e bench.ts
 fixtures/         gerador, conversas fictícias e fixture de benchmark
 messages/         textos em pt e en (next-intl)
 i18n/             configuração de rotas e idiomas
@@ -162,7 +176,7 @@ pnpm test         # unitários
 pnpm build && pnpm test:e2e
 ```
 
-Os testes e2e servem a pasta `out/`, por isso o `pnpm build` vem antes. Sem o Chromium do Playwright instalado, aponte `PW_CHROME_PATH` para um Chrome que você já tenha.
+Os testes e2e servem a pasta `out/` na porta 3100, por isso o `pnpm build` vem antes. Se a 3100 estiver ocupada, use `PW_PORT=3187`. Sem o Chromium do Playwright instalado, aponte `PW_CHROME_PATH` para um Chrome que você já tenha.
 
 ## Dados fictícios
 
@@ -186,9 +200,13 @@ Versão **V1, em construção**.
 - [x] Pipeline real no Worker, telas Confirmar e Processando
 - [x] Linha do tempo e painel
 - [x] Home com prévias e tela Começar separada
-- [ ] Fórmula final das notas de Sintonia e Equilíbrio
-- [ ] Relatório em PDF
-- [ ] Cards para stories
+- [x] Notas de Sintonia e Equilíbrio, evolução de resposta por ano e textos ricos nos marcos
+- [x] Painel com tempo de conversa, livros de Harry Potter e palavras só de vocês
+- [x] Leitura de `.zip` do WhatsApp
+- [x] Relatório em PDF, cards para stories e sessões salvas no navegador
+- [x] Favicon e imagem de compartilhamento
+- [ ] Calibrar `RECIPROCITY_CEIL` e `TONE_CAP` com exports reais
+- [ ] Definir o domínio público (`NEXT_PUBLIC_SITE_URL`)
 - [ ] Revisão jurídica do termo de consentimento
 - [ ] Revisão das listas de palavras (pt-BR e en)
 

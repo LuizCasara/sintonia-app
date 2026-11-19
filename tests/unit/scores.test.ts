@@ -206,3 +206,30 @@ describe('prompt da IA', () => {
     expect(text).toContain('"medianFirstResponseSec"'); // os números brutos continuam
   });
 });
+
+describe('evolução por ano com respostas rápidas', () => {
+  it('diferença pequena em segundos conta como o ritmo de sempre (44 s → 72 s não é "64% mais lento")', () => {
+    const at = (year: number) => Date.UTC(year, 5, 1);
+    const replies: Reply[] = [
+      ...Array.from({ length: 200 }, () => ({ ts: at(2024), who: 'A' as const, sec: 44 })),
+      ...Array.from({ length: 40 }, () => ({ ts: at(2026), who: 'B' as const, sec: 72 })),
+    ];
+    const s = summarizeReplies(replies);
+    expect(s.perYear.find((y) => y.year === 2026)).toMatchObject({
+      medianResponseSec: 72,
+      vsUsualPct: 0,
+    });
+  });
+});
+
+describe('evolução por ano: proporção', () => {
+  it('30 s → 140 s é bem mais lento mesmo com menos de 2 min de diferença', () => {
+    const at = (year: number) => Date.UTC(year, 5, 1);
+    const replies: Reply[] = [
+      ...Array.from({ length: 200 }, () => ({ ts: at(2024), who: 'A' as const, sec: 30 })),
+      ...Array.from({ length: 40 }, () => ({ ts: at(2026), who: 'B' as const, sec: 140 })),
+    ];
+    const y = summarizeReplies(replies).perYear.find((x) => x.year === 2026)!;
+    expect(y.vsUsualPct).toBeGreaterThan(100);
+  });
+});

@@ -3,7 +3,9 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
 import { useReport } from '@/components/report/ReportProvider';
+import { Link } from '@/i18n/navigation';
 import { fmtDate, fmtDuration, fmtNum } from '@/lib/format';
+import { daysBetween, formatSpan, spanBetween } from '@/lib/span';
 
 const STEP = 24; // px por mês
 const CHART_H = 120; // altura da sparkline
@@ -115,7 +117,7 @@ export function TimelineView() {
         withDay: true,
         monthIndex: 0,
         descKey: 'anniversary',
-        descParams: { count: fmtNum(locale, at) },
+        descParams: { count: fmtNum(locale, at), countRaw: at },
       });
     }
   }
@@ -215,15 +217,88 @@ export function TimelineView() {
 
   const title = (ms: Milestone) => t(`milestones.${ms.titleKey}`, ms.titleParams);
 
+  // "1 ano e 3 meses", "12 dias". Vazio se for o mesmo dia.
+  const spanText = (from: string, to: string): string =>
+    formatSpan(spanBetween(from, to), locale, (unit, n) => t(`span.${unit}`, { n }));
+  const periodStart = report.period.start;
+  const periodEnd = report.period.end;
+  const sinceStart = (ms: Milestone) => (periodStart ? spanText(periodStart, ms.date) : '');
+  const monthCount = (i: number) => (months[i] ? months[i]!.A + months[i]!.B : 0);
+
   function description(ms: Milestone): string {
-    if (ms.descKey) return t(`desc.${ms.descKey}`, ms.descParams);
-    if (ms.kind === 'peak') return t('desc.peak', { pct: Math.abs(ms.pct ?? 0) });
-    if (ms.kind === 'valley') return t('desc.valley', { pct: Math.abs(ms.pct ?? 0) });
-    if (ms.id === 'firstMessage') return t('desc.start', { total: fmtNum(locale, total) });
-    const days = firstDate
-      ? Math.round((Date.parse(ms.date) - Date.parse(firstDate)) / 86_400_000)
-      : 0;
-    return t('desc.after', { days: fmtNum(locale, days) });
+    const count = fmtNum(locale, monthCount(ms.monthIndex));
+    if (ms.descKey) {
+      const extra: Params = { ...ms.descParams };
+      if (ms.descKey === 'messages') extra.time = sinceStart(ms);
+      return t(`desc.${ms.descKey}`, extra);
+    }
+    if (ms.kind === 'peak' || ms.kind === 'valley') {
+      return t(`desc.${ms.kind}`, { pct: Math.abs(ms.pct ?? 0), count });
+    }
+    if (ms.id === 'firstMessage') {
+      const time = periodEnd ? spanText(ms.date, periodEnd) : '';
+      return t('desc.start', { total: fmtNum(locale, total), time });
+    }
+    const time = firstDate ? spanText(firstDate, ms.date) : '';
+    return time ? t('desc.after', { time }) : t('desc.sameDay');
+  }
+
+  // Fatos curtos sob o texto do cartão: quem falou mais no mês, o que veio depois, quanto tempo desde o início.
+  function facts(ms: Milestone): string[] {
+    const out: string[] = [];
+    const i = ms.monthIndex;
+    const m = months[i];
+    if (m && m.A + m.B > 0) {
+      const shareA = m.A / (m.A + m.B);
+      if (Math.abs(shareA - 0.5) < 0.04) {
+        // "Meio a meio" só vale como destaque nos meses que já são marcos de volume.
+        if (ms.kind === 'peak' || ms.kind === 'valley' || ms.id === 'record') {
+          out.push(t('facts.even'));
+        }
+      } else {
+        const aLeads = shareA > 0.5;
+        out.push(
+          t('facts.lead', {
+            name: aLeads ? report.people.A : report.people.B,
+            pct: Math.round((aLeads ? shareA : 1 - shareA) * 100),
+          }),
+        );
+      }
+    }
+    if (ms.kind === 'peak' || ms.kind === 'valley') {
+      const next = months[i + 1];
+      const cur = monthCount(i);
+      // O último mês costuma ser parcial: não vira "queda".
+      if (next && i + 1 < months.length - 1 && cur > 0) {
+        const delta = Math.round(((next.A + next.B) / cur - 1) * 100);
+        if (Math.abs(delta) < 3) out.push(t('facts.nextSame'));
+        else out.push(t(delta > 0 ? 'facts.nextUp' : 'facts.nextDown', { pct: Math.abs(delta) }));
+      }
+    }
+    if (ms.id === 'record') {
+      const avg = months.reduce((s, x) => s + x.A + x.B, 0) / Math.max(1, months.length);
+      if (avg > 0) {
+        const times = Math.round((monthCount(i) / avg) * 10) / 10;
+        out.push(t('facts.vsAverage', { times: fmtNum(locale, times) }));
+      }
+    }
+    if (ms.id.startsWith('anniversary')) {
+      const days = periodStart ? daysBetween(periodStart, ms.date) : 0;
+      const at = Number(ms.descParams?.countRaw ?? 0);
+      if (days > 0 && at > 0) {
+        const perDay = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(
+          at / days,
+        );
+        out.push(t('facts.perDay', { count: perDay }));
+      }
+    }
+    const since =
+      ms.kind === 'peak' || ms.kind === 'valley' || ms.id === 'record' || ms.id === 'telegram-lead';
+    if (since) {
+      const time = sinceStart(ms);
+      if (time) out.push(t('facts.since', { time }));
+    }
+    return out;
   }
 
   const dotClass = (kind: Kind) =>
@@ -520,6 +595,14 @@ export function TimelineView() {
           <h2 className="mt-3 font-display text-2xl font-bold sm:text-3xl">{title(current)}</h2>
           <p className="mt-1 text-lg text-sync">{fmtDate(locale, current.date, current.withDay)}</p>
           <p className="mt-2 text-muted">{description(current)}</p>
+          <ul data-testid="timeline-facts" className="mt-4 space-y-1.5 text-sm text-muted">
+            {facts(current).map((f) => (
+              <li key={f} className="flex gap-2">
+                <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-sync" />
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
         </article>
       )}
 
@@ -527,14 +610,15 @@ export function TimelineView() {
         <button type="button" className="btn btn-ghost" onClick={() => go(-1)} disabled={sel === 0}>
           ← <span className="sr-only">{t('prev')}</span>
         </button>
-        <button
-          type="button"
-          className="btn btn-ghost"
-          onClick={() => go(1)}
-          disabled={sel >= milestones.length - 1}
-        >
-          → <span className="sr-only">{t('next')}</span>
-        </button>
+        {sel >= milestones.length - 1 ? (
+          <Link href="/report/dashboard" className="btn btn-primary">
+            {t('toDashboard')} →
+          </Link>
+        ) : (
+          <button type="button" className="btn btn-ghost" onClick={() => go(1)}>
+            → <span className="sr-only">{t('next')}</span>
+          </button>
+        )}
       </div>
     </main>
   );

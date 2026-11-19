@@ -10,6 +10,7 @@ export function getDemoReport(locale: 'pt' | 'en'): Report {
 
   const base: Omit<Report, 'balance' | 'sintonia'> = {
     period: { start: '2019-03-14', end: '2026-11-01', days: 2788 },
+    activity: { activeDays: 2410, longestStreak: 214, longestSilence: 9 },
     people: names,
     volume: {
       perPerson: {
@@ -119,6 +120,18 @@ export function getDemoReport(locale: 'pt' | 'en'): Report {
         'zap',
         'dengo',
       ],
+      usage: {
+        pão: { A: 412, B: 388 },
+        bolinho: { A: 530, B: 140 },
+        jujuba: { A: 96, B: 410 },
+        bora: { A: 240, B: 215 },
+        miau: { A: 180, B: 60 },
+        cafuné: { A: 70, B: 150 },
+        trem: { A: 45, B: 160 },
+        sô: { A: 38, B: 120 },
+        zap: { A: 90, B: 55 },
+        dengo: { A: 51, B: 49 },
+      },
     },
     apps: {
       perYear: [

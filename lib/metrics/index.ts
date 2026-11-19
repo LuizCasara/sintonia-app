@@ -1,4 +1,5 @@
 import type { Conversation } from '../model';
+import { computeActivity, type ActivityMetrics } from './activity';
 import { computeApps, type AppsMetrics } from './apps';
 import { computeBalance, type BalanceMetrics } from './balance';
 import { computeDictionary, type DictionaryMetrics } from './dictionary';
@@ -18,6 +19,8 @@ import { computeVolume, type VolumeMetrics } from './volume';
 export interface Report {
   /** periodo */
   period: { start: string; end: string; days: number };
+  /** Dias com mensagem e maiores sequências e pausas. */
+  activity: ActivityMetrics;
   people: { A: string; B: string };
   volume: VolumeMetrics;
   /** Divisão do esforço (nota 0 a 10 do casal). */
@@ -55,6 +58,7 @@ export function computeReport(conv: Conversation): Report {
   const replies = collectReplies(conv);
   return {
     period: computePeriod(conv),
+    activity: computeActivity(conv),
     people: { A: conv.people[0].displayName, B: conv.people[1].displayName },
     volume,
     balance: computeBalance(volume, sessions),

@@ -15,7 +15,10 @@ import {
   StackedBars,
 } from './charts';
 import { DetailPanel } from './DetailPanel';
-import { ScoreBadge, ScoreBreakdown, type ScoreRow } from './ScorePanel';
+import { useInsightCards } from './InsightCards';
+import { ScoreBadge, ScoreBreakdown } from './ScorePanel';
+import { useScoreRows } from './scoreRows';
+import { WordsCard } from './WordsCard';
 
 type CardId =
   | 'volume'
@@ -27,6 +30,8 @@ type CardId =
   | 'media'
   | 'streaks'
   | 'apps'
+  | 'time'
+  | 'book'
   | 'sintonia'
   | 'balance';
 
@@ -37,7 +42,7 @@ const firstName = (full: string) => full.split(' ')[0] ?? full;
 export function DashboardView() {
   const t = useTranslations('dashboard');
   const locale = useLocale();
-  const { report: r } = useReport();
+  const { report: r, hiddenWords, toggleWord } = useReport();
   const [open, setOpen] = useState<CardId | null>(null);
   const close = useCallback(() => setOpen(null), []);
 
@@ -75,37 +80,12 @@ export function DashboardView() {
       .map((e) => e.emoji)
       .join(' ');
 
-  const pct = (v: number) => Math.round(v * 100);
   const sintonia = r.sintonia;
   const balance = r.balance;
-  const sintoniaRows: ScoreRow[] = sintonia.parts.map((p) => ({
-    id: p.id,
-    label: t(`sintonia.parts.${p.id}`),
-    detail:
-      p.id === 'responseTime'
-        ? t('sintonia.detail.responseTime', { time: fmtDuration(p.value) })
-        : t(`sintonia.detail.${p.id}`, { pct: fmtPct(p.value) }),
-    weight: t('score.weight', { pct: pct(p.weight) }),
-    score: p.score,
-    scoreText: fmtScore(locale, p.score * 10),
-  }));
-  const balanceRows: ScoreRow[] = balance.items.map((i) => ({
-    id: i.id,
-    label: t(`balance.items.${i.id}`),
-    detail: `${nameA} ${pct(i.shareA)}% · ${nameB} ${pct(1 - i.shareA)}%`,
-    weight: t('score.weight', { pct: pct(i.weight) }),
-    score: i.score,
-    scoreText: fmtScore(locale, i.score * 10),
-  }));
-  // Parte do esforço de quem puxa mais (média ponderada dos itens).
-  const effortA = balance.items.reduce((sum, i) => sum + i.weight * i.shareA, 0);
-  const balanceHint =
-    balance.leaning === null
-      ? t('balance.even')
-      : t('balance.leans', {
-          name: balance.leaning === 'A' ? nameA : nameB,
-          pct: pct(balance.leaning === 'A' ? effortA : 1 - effortA),
-        });
+  const { sintoniaRows, balanceRows, balanceHint } = useScoreRows(r, nameA, nameB);
+
+  const insight = useInsightCards(r, { A: nameA, B: nameB });
+  const dictWords = r.dictionary?.topWords ?? [];
 
   const cards: { id: CardId; span?: string; summary: ReactNode; detail: ReactNode }[] = [
     {
@@ -311,6 +291,8 @@ export function DashboardView() {
         </table>
       ),
     },
+    { id: 'time', span: 'sm:col-span-2 lg:col-span-1', ...insight.time },
+    { id: 'book', span: 'sm:col-span-2', ...insight.book },
     {
       id: 'sintonia',
       summary:
@@ -415,6 +397,16 @@ export function DashboardView() {
 
         {renderCard('sintonia')}
         {renderCard('balance')}
+
+        {renderCard('time')}
+        {renderCard('book')}
+        <WordsCard
+          words={dictWords}
+          usage={r.dictionary?.usage ?? {}}
+          names={{ A: nameA, B: nameB }}
+          hidden={hiddenWords}
+          onToggle={toggleWord}
+        />
       </div>
 
       {active && (

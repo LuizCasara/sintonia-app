@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { zipSync } from 'fflate';
 import { describe, expect, it } from 'vitest';
 import { defaultMapping } from '../../lib/merge';
 import {
@@ -55,6 +56,7 @@ describe('inspect', () => {
       }
     };
     expect(code(() => inspect([file('conversa.zip', 'PK')]))).toBe('zip');
+    expect(code(() => inspect([zip('vazio.zip', { 'foto.jpg': 'x' })]))).toBe('zip');
     expect(code(() => inspect([file('foto.txt', 'não é uma conversa')]))).toBe('unknownFormat');
     expect(code(() => inspect([file('x.json', '{quebrado')]))).toBe('unknownFormat');
     expect(code(() => inspect([file('so.txt', '15/11/2026 22:10 - Ana: oi')]))).toBe(
@@ -62,6 +64,42 @@ describe('inspect', () => {
     );
     expect(errorCode(new Error('outra coisa'))).toBeNull();
     expect(new AnalyzeError('zip').message).toBe('zip');
+  });
+});
+
+/** Monta um .zip em memória com os arquivos dados. */
+function zip(name: string, entries: Record<string, string | Uint8Array>): InputFile {
+  const raw = zipSync(
+    Object.fromEntries(
+      Object.entries(entries).map(([k, v]) => [
+        k,
+        typeof v === 'string' ? new TextEncoder().encode(v) : new Uint8Array(v),
+      ]),
+    ),
+  );
+  return {
+    name,
+    data: raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength) as ArrayBuffer,
+  };
+}
+
+describe('.zip', () => {
+  const chat = readFileSync(join(__dirname, '../../fixtures/whatsapp/android-pt.txt'));
+  it('abre o .zip do WhatsApp e lê o _chat.txt de dentro, ignorando mídia e lixo do macOS', () => {
+    const z = zip('WhatsApp Chat.zip', {
+      '_chat.txt': chat,
+      'IMG-0001.jpg': 'binario',
+      '__MACOSX/._chat.txt': 'lixo',
+    });
+    const r = inspect([z]);
+    expect(r.people).toHaveLength(2);
+    expect(r.needsConfirm).toBe(false);
+  });
+  it('dá o mesmo relatório que o .txt solto', () => {
+    const mapping = inspect([file('a.txt', chat.toString('utf-8'))]).mapping;
+    const solto = analyze([file('a.txt', chat.toString('utf-8'))], mapping);
+    const zipado = analyze([zip('a.zip', { '_chat.txt': chat })], mapping);
+    expect(zipado).toEqual(solto);
   });
 });
 

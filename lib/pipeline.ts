@@ -1,3 +1,4 @@
+import { unzipSync } from 'fflate';
 import {
   defaultMapping,
   mergeChats,
@@ -50,13 +51,55 @@ export interface Inspection {
   needsConfirm: boolean;
 }
 
-/** Lê e interpreta os arquivos. */
-export function parseInputs(files: InputFile[], onProgress?: OnProgress): ParsedChat[] {
+/** Teto de cada arquivo lido de dentro de um .zip (protege contra zip bomba). */
+const MAX_ENTRY_BYTES = 400 * 1024 * 1024; // abaixo do maior texto que o navegador monta numa string
+const MAX_ZIP_BYTES = 800 * 1024 * 1024; // soma de tudo que sai de um .zip
+const CHAT_ENTRY = /\.(txt|json)$/i;
+
+/** Troca cada .zip pelos .txt e .json de dentro dele (a mídia, se houver, fica de fora). */
+export function expandZips(files: InputFile[]): InputFile[] {
+  return files.flatMap((f): InputFile[] => {
+    if (!/\.zip$/i.test(f.name)) return [f];
+    let entries: Record<string, Uint8Array>;
+    let budget = MAX_ZIP_BYTES;
+    try {
+      entries = unzipSync(new Uint8Array(f.data), {
+        filter: (e) => {
+          const ok =
+            CHAT_ENTRY.test(e.name) &&
+            !/(^|\/)(__MACOSX|\.)/.test(e.name) &&
+            e.originalSize <= MAX_ENTRY_BYTES &&
+            e.originalSize <= budget;
+          if (ok) budget -= e.originalSize;
+          return ok;
+        },
+      });
+    } catch {
+      throw new AnalyzeError('zip');
+    }
+    const found = Object.entries(entries).map(([name, bytes]) => ({
+      name: name.split('/').pop() ?? name,
+      data: bytes.buffer.slice(
+        bytes.byteOffset,
+        bytes.byteOffset + bytes.byteLength,
+      ) as ArrayBuffer,
+    }));
+    if (found.length === 0) throw new AnalyzeError('zip');
+    return found;
+  });
+}
+
+/** Lê e interpreta os arquivos (.zip é aberto antes). */
+export function parseInputs(input: InputFile[], onProgress?: OnProgress): ParsedChat[] {
+  const files = expandZips(input);
   const decoder = new TextDecoder('utf-8');
   const texts = files.map((f, i) => {
     onProgress?.('read', i / files.length);
-    if (/\.zip$/i.test(f.name)) throw new AnalyzeError('zip');
-    return decoder.decode(f.data);
+    try {
+      return decoder.decode(f.data);
+    } catch {
+      throw new AnalyzeError('unknownFormat'); // grande demais para virar texto
+    }
   });
   onProgress?.('read', 1);
 
