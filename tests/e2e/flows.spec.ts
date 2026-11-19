@@ -399,6 +399,11 @@ test.describe('ações', () => {
     const download = page.waitForEvent('download');
     await viewer.getByRole('button', { name: 'Baixar' }).click();
     expect((await download).suggestedFilename()).toBe('sintonia-messages.png');
+    // Tab não sai do visualizador
+    for (let i = 0; i < 8; i++) await page.keyboard.press('Tab');
+    expect(
+      await page.evaluate(() => !!document.activeElement?.closest('[data-testid="story-viewer"]')),
+    ).toBe(true);
     await page.keyboard.press('Escape');
     await expect(viewer).toBeHidden();
   });

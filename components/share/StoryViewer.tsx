@@ -25,6 +25,7 @@ export function StoryViewer({
   const [index, setIndex] = useState(start);
   const [shareFailed, setShareFailed] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const touchX = useRef<number | null>(null);
 
   const count = cards.length;
@@ -50,6 +51,21 @@ export function StoryViewer({
       if (e.key === 'Escape') onClose();
       else if (e.key === 'ArrowRight') go(1);
       else if (e.key === 'ArrowLeft') go(-1);
+      else if (e.key === 'Tab') {
+        // Mantém o foco dentro do visualizador (a página de trás não pode receber Tab).
+        const items = dialogRef.current?.querySelectorAll<HTMLElement>('button:not([disabled])');
+        if (!items || items.length === 0) return;
+        const firstEl = items[0]!;
+        const lastEl = items[items.length - 1]!;
+        const active = document.activeElement;
+        if (e.shiftKey && (active === firstEl || !dialogRef.current?.contains(active))) {
+          e.preventDefault();
+          lastEl.focus();
+        } else if (!e.shiftKey && (active === lastEl || !dialogRef.current?.contains(active))) {
+          e.preventDefault();
+          firstEl.focus();
+        }
+      }
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -76,6 +92,7 @@ export function StoryViewer({
 
   return (
     <div
+      ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-label={t('viewer')}
