@@ -4,7 +4,8 @@ import type { PerPerson } from './types';
 import { foldLexeme, perPerson, phraseCounter, talk } from './util';
 
 // Linguagem: top emojis, risadas, perguntas, desculpas, carinho (usa lexicon.ts).
-// - topEmojis: só emojis escritos em mensagens de texto e link (figurinhas e reações ficam de fora).
+// - topEmojis: emojis escritos em mensagens de texto e link, mais o emoji das figurinhas do Telegram
+//   (`stickerEmoji`). Reações ficam de fora.
 // - laughs/apologies/affection: quantas vezes aparecem (pt e en juntos, o idioma do export é incerto).
 // - questions: mensagens com "?".
 
@@ -55,6 +56,14 @@ export function computeLanguage(conv: Conversation): LanguageMetrics {
   }));
 
   for (const m of talk(conv)) {
+    // Figurinha do Telegram: o emoji associado ao sticker conta como emoji.
+    if (m.kind === 'sticker' && m.stickerEmoji) {
+      for (const e of m.stickerEmoji.match(EMOJI) ?? []) {
+        const key = e.replace(/️/g, '');
+        emojis[m.authorId].set(key, (emojis[m.authorId].get(key) ?? 0) + 1);
+      }
+      continue;
+    }
     if ((m.kind !== 'text' && m.kind !== 'link') || !m.text) continue;
     const p = per[m.authorId];
     if (m.text.includes('?')) p.questions++;

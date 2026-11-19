@@ -131,6 +131,18 @@ describe('parseTelegram', () => {
     expect(chat.messages.map((m) => m.kind)).toEqual(['image', 'sticker', 'gif', 'system']);
   });
 
+  it('sticker_emoji vira stickerEmoji só em figurinha', () => {
+    const base = { type: 'message', date: '2026-01-01T10:00:00', from: 'Ana', text: '' };
+    const chat = parseTelegram({
+      messages: [
+        { ...base, id: 1, media_type: 'sticker', sticker_emoji: '😂' },
+        { ...base, id: 2, media_type: 'sticker' },
+        { ...base, id: 3, media_type: 'animation', sticker_emoji: '🔥' },
+      ],
+    });
+    expect(chat.messages.map((m) => m.stickerEmoji)).toEqual(['😂', undefined, undefined]);
+  });
+
   it('entrada inválida não quebra', () => {
     expect(parseTelegram(null).messages).toEqual([]);
     expect(parseTelegram({}).warnings.length).toBeGreaterThan(0);

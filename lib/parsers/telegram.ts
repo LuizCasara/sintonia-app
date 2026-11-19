@@ -16,6 +16,7 @@ export interface TelegramMessage {
   media_type?:
     'voice_message' | 'video_message' | 'video_file' | 'sticker' | 'animation' | 'audio_file';
   duration_seconds?: number;
+  sticker_emoji?: string;
   poll?: unknown;
   location_information?: unknown;
   contact_information?: unknown;
@@ -102,6 +103,9 @@ export function parseTelegram(json: unknown): ParsedChat {
     if (text) msg.text = text;
     if (kind === 'audio' && typeof m.duration_seconds === 'number') {
       msg.durationSec = m.duration_seconds;
+    }
+    if (kind === 'sticker' && typeof m.sticker_emoji === 'string' && m.sticker_emoji) {
+      msg.stickerEmoji = m.sticker_emoji;
     }
     messages.push(msg);
     if (authorName) counts.set(authorName, (counts.get(authorName) ?? 0) + 1);
