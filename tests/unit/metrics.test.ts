@@ -205,6 +205,37 @@ describe('dicionário do casal', () => {
     expect(words.some((w) => /^k+$/.test(w))).toBe(false);
   });
 
+  it('palavras de cada pessoa: quase só dela, sem vício de digitação nem as do casal', () => {
+    const msgs = [
+      ...said('A', 'oi jujuba', 6), // do casal
+      ...said('B', 'oi jujuba', 6, 10),
+      ...said('A', 'chuchu fofura', 9, 20), // só da A
+      ...said('B', 'chuchu', 1, 40), // 90%: ainda é da A
+      ...said('B', 'trenzinho cafuné', 9, 50), // só da B
+      ...said('A', 'qndo siim', 12, 80), // abreviação e letra repetida: não contam
+      ...said('B', 'bolachinha', 4, 100), // poucas vezes
+    ];
+    const d = computeReport(conv(msgs)).dictionary!;
+    expect(d.topWords).toEqual(['jujuba']);
+    expect(d.own.A).toEqual(expect.arrayContaining(['chuchu', 'fofura']));
+    expect(d.own.B).toEqual(expect.arrayContaining(['trenzinho', 'cafuné']));
+    expect(d.own.A).not.toContain('jujuba');
+    expect([...d.own.A, ...d.own.B]).not.toContain('qndo');
+    expect([...d.own.A, ...d.own.B]).not.toContain('siim');
+    expect(d.own.B).not.toContain('bolachinha');
+    expect(d.usage.chuchu).toEqual({ A: 9, B: 1 });
+  });
+
+  it('as listas têm no máximo 5 palavras cada', () => {
+    const words = ['abacaxi', 'bergamota', 'cambuci', 'damasco', 'embaúba', 'framboesa', 'goiaba'];
+    const msgs = words.flatMap((w, i) => [
+      ...said('A', w, 12, i * 30),
+      ...said('B', w, 12, i * 30 + 15),
+    ]);
+    const d = computeReport(conv(msgs)).dictionary!;
+    expect(d.topWords).toHaveLength(5);
+  });
+
   it('gíria de chat não é palavra do casal', () => {
     const msgs = [...said('A', 'tava tmbm', 4), ...said('B', 'tava tmbm', 4, 10)];
     const words = computeReport(conv(msgs)).dictionary?.topWords ?? [];

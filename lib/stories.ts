@@ -50,6 +50,12 @@ export type StorySpec =
       kind: 'words';
       kicker: string;
       words: { word: string; count: string; who: Who }[];
+    }
+  | {
+      kind: 'duo';
+      kicker: string;
+      /** Duas colunas: as palavras de cada pessoa. */
+      columns: { title: string; who: Who; words: { word: string; count: string }[] }[];
     };
 
 export interface StoryTheme {
@@ -275,6 +281,23 @@ export function renderStory(spec: StorySpec, theme: StoryTheme): HTMLCanvasEleme
       text(ctx, w.count, STORY_W - 90, y, `500 56px ${theme.body}`, C.muted, 'right');
       ctx.fillStyle = C.line;
       ctx.fillRect(90, y + 28, 900, 2);
+    });
+  }
+  if (spec.kind === 'duo') {
+    const colW = 440;
+    spec.columns.slice(0, 2).forEach((col, i) => {
+      const x = 90 + i * (colW + 20);
+      const color = COLOR[col.who];
+      text(ctx, col.title, x, 560, fit(ctx, col.title, theme.body, 700, 56, colW), color);
+      ctx.fillStyle = color;
+      ctx.fillRect(x, 590, colW, 6);
+      const words = col.words.slice(0, 6);
+      const step = Math.min(220, 1200 / Math.max(1, words.length));
+      words.forEach((w, k) => {
+        const y = 720 + k * step + 80;
+        text(ctx, w.word, x, y, fit(ctx, w.word, theme.display, 700, 92, colW), C.ink);
+        text(ctx, w.count, x, y + 56, `500 44px ${theme.body}`, C.muted);
+      });
     });
   }
   return canvas;

@@ -1,35 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { getDemoReport } from '../../lib/demo';
 import { sharedDictionary } from '../../lib/share';
-import {
-  COOKIE_NAME,
-  SAVED_VERSION,
-  cookieString,
-  isUsable,
-  isUuid,
-  readCookie,
-  summarize,
-} from '../../lib/saved';
+import { SAVED_VERSION, isUsable, isUuid, readCookie, summarize } from '../../lib/saved';
 
-describe('cookie do navegador', () => {
+describe('identificador do navegador', () => {
   const id = '3f2b8c1e-9d4a-4b6e-8a1f-0c7d5e2a9b34';
-  it('lê o uuid no meio de outros cookies', () => {
-    expect(readCookie(COOKIE_NAME, `a=1; ${COOKIE_NAME}=${id}; b=2`)).toBe(id);
-    expect(readCookie(COOKIE_NAME, 'a=1')).toBeNull();
+  it('lê o uuid do cookie antigo no meio de outros cookies (migração)', () => {
+    expect(readCookie('sintonia_id', `a=1; sintonia_id=${id}; b=2`)).toBe(id);
+    expect(readCookie('sintonia_id', 'a=1')).toBeNull();
   });
   it('só aceita uuid de verdade', () => {
     expect(isUuid(id)).toBe(true);
     expect(isUuid('qualquer-coisa')).toBe(false);
     expect(isUuid(null)).toBe(false);
-  });
-  it('dura mais de 1 ano, vale para o site todo e só vai em https quando for o caso', () => {
-    const c = cookieString(id, true);
-    expect(c).toContain(`${COOKIE_NAME}=${id}`);
-    expect(Number(/Max-Age=(\d+)/.exec(c)?.[1])).toBeGreaterThan(365 * 24 * 3600);
-    expect(c).toContain('Path=/');
-    expect(c).toContain('SameSite=Lax');
-    expect(c).toContain('Secure');
-    expect(cookieString(id, false)).not.toContain('Secure');
   });
 });
 
@@ -82,6 +65,27 @@ describe('relatórios antigos', () => {
         hiddenWords: [],
       }),
     ).toBe(false);
-    expect(sharedDictionary(old, ['jujuba'])).toEqual({ topWords: [], usage: {} });
+    expect(sharedDictionary(old, ['jujuba'])).toEqual({
+      topWords: [],
+      own: { A: [], B: [] },
+      usage: {},
+    });
+  });
+  it('dicionário sem as listas de cada pessoa também não abre', () => {
+    const report = getDemoReport('pt');
+    const { own: _own, ...rest } = report.dictionary!;
+    void _own;
+    const old = { ...report, dictionary: rest } as unknown as typeof report;
+    expect(
+      isUsable({
+        ...summarize(report),
+        id: 'x',
+        savedAt: 1,
+        version: SAVED_VERSION,
+        owner: 'o',
+        report: old,
+        hiddenWords: [],
+      }),
+    ).toBe(false);
   });
 });

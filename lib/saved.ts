@@ -2,14 +2,14 @@ import type { Report } from './metrics';
 
 // Sessões salvas NESTE navegador (só quando a pessoa pede). O que vai para o IndexedDB é o
 // relatório, que tem só números e datas (nunca o texto das mensagens), mais as palavras escondidas.
-// Um cookie com um uuid identifica o navegador e fica por mais de um ano.
+// Um uuid guardado no localStorage identifica o navegador. Não é cookie: nunca viaja em requisições.
 // Nada sai do dispositivo.
 
 export const SAVED_VERSION = 1;
 const DB_NAME = 'sintonia';
 const STORE = 'sessions';
-export const COOKIE_NAME = 'sintonia_id';
-const COOKIE_MAX_AGE = 400 * 24 * 60 * 60; // o teto que o Chrome aceita
+export const OWNER_KEY = 'sintonia_id';
+const LEGACY_COOKIE = 'sintonia_id'; // usado antes: só é lido para migrar
 
 export interface SavedSummary {
   id: string;
@@ -27,8 +27,12 @@ export interface SavedSession extends SavedSummary {
   hiddenWords: string[];
 }
 
-// ---------- cookie ----------
+// ---------- identificador do navegador ----------
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+export const isUuid = (v: string | null): v is string => v !== null && UUID.test(v);
+
+/** Lê um cookie de uma string `document.cookie` (só para migrar o cookie das versões antigas). */
 export function readCookie(name: string, cookie: string): string | null {
   for (const part of cookie.split(';')) {
     const [key, ...rest] = part.trim().split('=');
@@ -37,23 +41,46 @@ export function readCookie(name: string, cookie: string): string | null {
   return null;
 }
 
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-export const isUuid = (v: string | null): v is string => v !== null && UUID.test(v);
-
-export function cookieString(id: string, secure: boolean): string {
-  return `${COOKIE_NAME}=${id}; Max-Age=${COOKIE_MAX_AGE}; Path=/; SameSite=Lax${secure ? '; Secure' : ''}`;
+function storage(): Storage | null {
+  try {
+    return window.localStorage;
+  } catch {
+    return null; // bloqueado (janela privada, dados do site bloqueados)
+  }
 }
 
-/** O uuid deste navegador, se já existir (só ler nunca cria cookie). */
+/** Apaga o cookie das versões antigas (não é mais usado). */
+function dropLegacyCookie() {
+  document.cookie = `${LEGACY_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax`;
+}
+
+/**
+ * O uuid deste navegador, se já existir (só ler nunca cria nada). Quem salvou na versão com cookie
+ * mantém as sessões: o uuid do cookie vira o do navegador e o cookie é apagado.
+ */
 function readOwner(): string | null {
-  const current = readCookie(COOKIE_NAME, document.cookie);
-  return isUuid(current) ? current : null;
+  const store = storage();
+  const current = store?.getItem(OWNER_KEY) ?? null;
+  if (isUuid(current)) return current;
+  const legacy = readCookie(LEGACY_COOKIE, document.cookie);
+  if (isUuid(legacy)) {
+    try {
+      store?.setItem(OWNER_KEY, legacy);
+    } catch {
+      // sem armazenamento: o uuid antigo continua valendo só nesta visita
+    }
+    dropLegacyCookie();
+    return legacy;
+  }
+  return null;
 }
 
-/** O uuid deste navegador: lê o cookie ou cria um e renova o prazo (só ao salvar). */
+/** O uuid deste navegador: lê o guardado ou cria um (só ao salvar). Fica só no navegador. */
 export function ownerId(): string {
-  const id = readOwner() ?? crypto.randomUUID();
-  document.cookie = cookieString(id, location.protocol === 'https:');
+  const existing = readOwner();
+  if (existing) return existing;
+  const id = crypto.randomUUID();
+  storage()?.setItem(OWNER_KEY, id);
   return id;
 }
 
@@ -92,7 +119,8 @@ export function isUsable(value: unknown): value is SavedSession {
   const s = value as Partial<SavedSession>;
   if (s.version !== SAVED_VERSION || typeof s.id !== 'string' || !s.report) return false;
   const dictionary = s.report.dictionary;
-  if (dictionary && !dictionary.usage) return false; // relatório de antes da contagem por pessoa
+  // relatório de antes da contagem por pessoa ou das listas de cada pessoa
+  if (dictionary && (!dictionary.usage || !dictionary.own)) return false;
   return REQUIRED.every((key) => s.report![key] !== undefined) && Array.isArray(s.hiddenWords);
 }
 
@@ -181,8 +209,13 @@ export async function deleteSession(id: string): Promise<void> {
     await run('readwrite', (s) => s.delete(id));
 }
 
-/** Remove todas as sessões deste navegador e o cookie do uuid. */
+/** Remove todas as sessões deste navegador e o uuid. */
 export async function clearSessions(): Promise<void> {
   for (const s of await all()) await run('readwrite', (st) => st.delete(s.id));
-  document.cookie = `${COOKIE_NAME}=; Max-Age=0; Path=/; SameSite=Lax`;
+  dropLegacyCookie();
+  try {
+    storage()?.removeItem(OWNER_KEY);
+  } catch {
+    // nada a remover
+  }
 }

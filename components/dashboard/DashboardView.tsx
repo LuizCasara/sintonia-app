@@ -14,6 +14,7 @@ import {
   Spark,
   StackedBars,
 } from './charts';
+import { wordGroups } from '@/lib/share';
 import { DetailPanel } from './DetailPanel';
 import { useInsightCards } from './InsightCards';
 import { ScoreBadge, ScoreBreakdown } from './ScorePanel';
@@ -85,7 +86,7 @@ export function DashboardView() {
   const { sintoniaRows, balanceRows, balanceHint } = useScoreRows(r, nameA, nameB);
 
   const insight = useInsightCards(r, { A: nameA, B: nameB });
-  const dictWords = r.dictionary?.topWords ?? [];
+  const wordLists = wordGroups(r.dictionary);
 
   const cards: { id: CardId; span?: string; summary: ReactNode; detail: ReactNode }[] = [
     {
@@ -401,7 +402,7 @@ export function DashboardView() {
         {renderCard('time')}
         {renderCard('book')}
         <WordsCard
-          words={dictWords}
+          groups={wordLists}
           usage={r.dictionary?.usage ?? {}}
           names={{ A: nameA, B: nameB }}
           hidden={hiddenWords}
