@@ -338,7 +338,7 @@
       "useNames": "Show first names on the cards",
       "personA": "Person A",
       "personB": "Person B",
-      "footer": "made in the browser · nothing was sent",
+      "footer": "In sync since the first message.",
       "wordsNote": "{words} words written",
       "cards": {
         "messages": "Messages",

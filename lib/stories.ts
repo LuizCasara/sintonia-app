@@ -55,7 +55,7 @@ export type StorySpec =
 export interface StoryTheme {
   display: string; // família da fonte dos títulos
   body: string;
-  footer: string; // "feito no navegador, nada foi enviado"
+  footer: string; // "Sintonizados desde a primeira mensagem."
 }
 
 /** Lê as fontes do app (Space Grotesk e Inter) para o canvas usar as mesmas. */
