@@ -17,6 +17,7 @@ export function ActionsView() {
   const router = useRouter();
   const { report, clearAll, hiddenWords, isDemo } = useReport();
   const [includeDictionary, setIncludeDictionary] = useState(false); // só com consentimento
+  const [useRealNames, setUseRealNames] = useState(true);
   const [copy, setCopy] = useState<'idle' | 'copied' | 'error'>('idle');
   const [confirming, setConfirming] = useState(false);
   const [save, setSave] = useState<'idle' | 'saved' | 'error'>('idle');
@@ -25,7 +26,7 @@ export function ActionsView() {
   async function copyPrompt() {
     try {
       await navigator.clipboard.writeText(
-        buildPrompt(report, { locale, includeDictionary, hiddenWords }),
+        buildPrompt(report, { locale, includeDictionary, hiddenWords, useRealNames }),
       );
       setCopy('copied');
       setTimeout(() => setCopy('idle'), 2500);
@@ -72,6 +73,15 @@ export function ActionsView() {
         <section className="space-y-3 rounded-2xl border border-sync/60 bg-sync/10 p-5 shadow-[0_0_32px_-6px_color-mix(in_srgb,var(--color-sync)_40%,transparent)] md:col-span-2 sm:p-6">
           <h2 className="font-display text-xl font-semibold">{t('prompt.title')}</h2>
           <p className="text-muted">{t('prompt.body')}</p>
+          <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm">
+            <input
+              type="checkbox"
+              checked={useRealNames}
+              onChange={(e) => setUseRealNames(e.target.checked)}
+              className="mt-0.5 size-5 shrink-0 accent-[var(--color-sync)]"
+            />
+            {t('prompt.realNames')}
+          </label>
           <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm">
             <input
               type="checkbox"

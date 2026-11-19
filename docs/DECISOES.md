@@ -17,7 +17,7 @@ Um casal pode ter sintonia alta e equilíbrio baixo (uma pessoa carrega, a outra
 
 **WhatsApp + Telegram.** Juntar como uma conversa só. Não comparar um app contra o outro. A origem talvez não precise ser controlada.
 
-**Nomes no prompt da IA.** Usar 2 nomes inventados (Ana Lima e Bruno Reis). Nunca os nomes reais do export.
+**Nomes no prompt da IA.** Por padrão, os nomes do relatório (os que a pessoa escolheu na tela Confirmar). Há uma caixa para trocar por 2 nomes inventados (Ana Lima e Bruno Reis).
 
 **Rotas.** Confirmadas, com slugs em inglês: `/confirm`, `/processing`, `/report/{timeline,dashboard,actions}`.
 

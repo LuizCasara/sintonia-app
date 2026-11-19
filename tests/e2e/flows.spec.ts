@@ -386,6 +386,23 @@ test.describe('ações', () => {
     expect((await download).suggestedFilename()).toBe('sintonia-messages.png');
   });
 
+  test('cards para stories abrem ampliados, passam como carrossel e baixam', async ({ page }) => {
+    await page.goto('/pt/report/actions/');
+    await page.getByRole('button', { name: 'Gerar cards' }).click();
+    await page.getByRole('button', { name: 'Ampliar: Mensagens' }).click();
+    const viewer = page.getByTestId('story-viewer');
+    await expect(viewer).toContainText('Mensagens · 1/6');
+    await viewer.getByRole('button', { name: 'Próximo card' }).click();
+    await expect(viewer).toContainText('Quem fala mais · 2/6');
+    await page.keyboard.press('ArrowLeft');
+    await expect(viewer).toContainText('Mensagens · 1/6');
+    const download = page.waitForEvent('download');
+    await viewer.getByRole('button', { name: 'Baixar' }).click();
+    expect((await download).suggestedFilename()).toBe('sintonia-messages.png');
+    await page.keyboard.press('Escape');
+    await expect(viewer).toBeHidden();
+  });
+
   test('stories sem nomes e sem as palavras escondidas', async ({ page }) => {
     await page.goto('/pt/report/dashboard/');
     await page

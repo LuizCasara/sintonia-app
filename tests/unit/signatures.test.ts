@@ -41,7 +41,19 @@ describe('buildPrompt', () => {
     expect(withDict).toContain('jujuba');
   });
 
-  it('usa nomes inventados, nunca os do relatório', () => {
+  it('com a opção marcada, usa os nomes do relatório em todo o prompt', () => {
+    const report = { ...getDemoReport('pt'), people: { A: 'Nome Real A', B: 'Nome Real B' } };
+    const text = buildPrompt(report, {
+      locale: 'pt',
+      includeDictionary: false,
+      useRealNames: true,
+    });
+    expect(text).toContain('Nome Real A');
+    expect(text).toContain('Nome Real B');
+    expect(text).not.toContain('Ana Lima');
+  });
+
+  it('por padrão (sem a opção), usa nomes inventados', () => {
     const report = { ...getDemoReport('pt'), people: { A: 'Nome Real A', B: 'Nome Real B' } };
     const text = buildPrompt(report, { locale: 'pt', includeDictionary: false });
     expect(text).toContain('Ana Lima');

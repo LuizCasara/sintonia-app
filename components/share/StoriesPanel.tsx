@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import { StoryViewer } from './StoryViewer';
 import { useReport } from '@/components/report/ReportProvider';
 import { bookProgress, HARRY_POTTER_WORDS } from '@/lib/books';
 import { fmtNum, fmtScore } from '@/lib/format';
@@ -26,6 +27,7 @@ export function StoriesPanel() {
   const [cards, setCards] = useState<Card[]>([]);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [viewing, setViewing] = useState<number | null>(null);
   const run = useRef(0); // só o último lote gerado vale (evita um lote antigo sobrescrever o novo)
 
   const n = (v: number) => fmtNum(locale, v);
@@ -165,6 +167,7 @@ export function StoriesPanel() {
         return;
       }
       setCards(made);
+      setViewing(null);
     } catch {
       if (mine === run.current) setFailed(true);
     } finally {
@@ -219,14 +222,21 @@ export function StoriesPanel() {
       )}
       {cards.length > 0 && (
         <ul className="flex gap-4 overflow-x-auto pb-2" aria-label={t('title')}>
-          {cards.map((c) => (
+          {cards.map((c, i) => (
             <li key={c.id} className="flex shrink-0 flex-col gap-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={c.url}
-                alt={c.label}
-                className="aspect-[9/16] w-36 rounded-xl border border-line object-cover"
-              />
+              <button
+                type="button"
+                aria-label={`${t('zoom')}: ${c.label}`}
+                onClick={() => setViewing(i)}
+                className="cursor-zoom-in rounded-xl focus-visible:outline-2"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={c.url}
+                  alt={c.label}
+                  className="aspect-[9/16] w-36 rounded-xl border border-line object-cover"
+                />
+              </button>
               <button
                 type="button"
                 className="btn btn-ghost !min-h-9 text-xs"
@@ -237,6 +247,9 @@ export function StoriesPanel() {
             </li>
           ))}
         </ul>
+      )}
+      {viewing !== null && cards[viewing] && (
+        <StoryViewer cards={cards} start={viewing} onClose={() => setViewing(null)} />
       )}
     </section>
   );
