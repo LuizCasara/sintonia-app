@@ -338,13 +338,18 @@ test.describe('ações', () => {
     await page.emulateMedia({ media: 'print' });
     const report = page.getByTestId('print-report');
     await expect(report).toBeVisible();
-    await expect(report).toContainText('Relatório Sintonia');
+    await expect(report).toContainText('Ana Lima');
+    await expect(report).toContainText('Bruno Reis');
     for (const text of [
+      'Relatório da conversa',
+      'Em destaque',
       'Notas',
       'Volume de mensagens',
+      'Linha do tempo',
+      'Primeira mensagem',
+      'Mensagens mês a mês',
       'Tempo de resposta',
       'Horários',
-      'Primeiras vezes e fases',
       'A Pedra Filosofal',
       'Palavras só de vocês',
       'jujuba',

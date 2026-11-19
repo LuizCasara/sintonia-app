@@ -287,7 +287,7 @@
       "next": "Faltam {count} palavras para fechar {title}.",
       "nextStart": "{pct}% de {title}.",
       "intro": "As palavras de vocês dois, lidas como a série de Harry Potter ({total} palavras nas edições originais em inglês).",
-      "person": "{name}: {words} palavras, {share} da série",
+      "person": "{name}: {words} palavras, {share}",
       "times": "{n}× a série",
       "part": "{pct}% da série",
       "read": "lido",
@@ -486,11 +486,17 @@
       "streaks": "Sequências",
       "time": "Tempo de conversa",
       "apps": "WhatsApp e Telegram",
-      "journey": "Primeiras vezes e fases"
+      "journey": "Primeiras vezes e fases",
+      "highlights": "Em destaque",
+      "topMonths": "Os meses mais movimentados",
+      "timeline": "Linha do tempo",
+      "matrix": "Mensagens mês a mês"
     },
     "pace": {
       "median": "Mediana de resposta",
-      "vsUsual": "Contra o habitual"
+      "vsUsual": "Contra o habitual",
+      "title": "Ritmo de resposta por ano (mediana e comparação com o habitual do casal)",
+      "note": "Verde: mais rápido que o habitual. Magenta: mais lento. A barra mostra o tamanho da diferença. Não é uma nota, só mostra mudanças."
     },
     "firsts": {
       "firstMessage": "Primeira mensagem",
@@ -501,6 +507,25 @@
     "phase": {
       "peak": "Pico: {pct}% acima do normal dos meses ao redor",
       "valley": "Vale: {pct}% abaixo do normal dos meses ao redor"
+    },
+    "cover": {
+      "kicker": "Relatório da conversa"
+    },
+    "headline": "Vocês trocaram {count} mensagens em {time}, uma média de {perDay} por dia.",
+    "timelineHint": "Os marcos da jornada, na ordem em que aconteceram.",
+    "matrixHint": "Total de mensagens de cada mês. Quanto mais forte a cor, mais movimentado o mês.",
+    "month": "Mês",
+    "total": "Total",
+    "stat": {
+      "messages": "Mensagens",
+      "perDay": "{count} por dia, em média",
+      "together": "De conversa",
+      "since": "Desde {date}",
+      "activeRate": "Dias com mensagem",
+      "streak": "Maior sequência de dias",
+      "silence": "Maior pausa: {days}",
+      "record": "Mês mais movimentado",
+      "topEmoji": "Emoji mais usado"
     }
   }
 }

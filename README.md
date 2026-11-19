@@ -84,7 +84,7 @@ Todas as rotas existem em português (`/pt/...`) e inglês (`/en/...`). Quem que
 
 ### O que dá para levar
 
-- **PDF:** relatório completo e expandido, feito pela impressão do navegador (“Salvar como PDF”).
+- **PDF:** relatório completo e colorido, feito pela impressão do navegador (“Salvar como PDF”): capa com a marca, destaques, notas com barras, volume mês a mês, a linha do tempo inteira, horários em mapa de calor, livros e palavras. Dá para trocar o idioma antes de gerar.
 - **Cards para stories:** 6 imagens 1080×1920 desenhadas num `<canvas>`, só com números.
 - **Salvar no navegador:** guarda o relatório (números e datas, nunca as mensagens) no IndexedDB, com um cookie `sintonia_id` (uuid) de 400 dias. Na tela `/start` aparecem as “Sessões salvas”, que reabrem o relatório sem reenviar os arquivos.
 - **Prompt para IA:** um texto pronto, com nomes inventados no lugar dos reais, para colar na IA de sua preferência.

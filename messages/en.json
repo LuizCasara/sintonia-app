@@ -287,7 +287,7 @@
       "next": "{count} words to go to finish {title}.",
       "nextStart": "{pct}% of {title}.",
       "intro": "Both your words, read as the Harry Potter series ({total} words in the original English editions).",
-      "person": "{name}: {words} words, {share} of the series",
+      "person": "{name}: {words} words, {share}",
       "times": "{n}× the series",
       "part": "{pct}% of the series",
       "read": "read",
@@ -486,11 +486,17 @@
       "streaks": "Streaks",
       "time": "Time chatting",
       "apps": "WhatsApp and Telegram",
-      "journey": "Firsts and phases"
+      "journey": "Firsts and phases",
+      "highlights": "Highlights",
+      "topMonths": "The busiest months",
+      "timeline": "Timeline",
+      "matrix": "Messages month by month"
     },
     "pace": {
       "median": "Median response",
-      "vsUsual": "Versus usual"
+      "vsUsual": "Versus usual",
+      "title": "Response pace per year (median and comparison with the couple’s usual)",
+      "note": "Green: faster than usual. Magenta: slower. The bar shows how big the difference is. It is not a score, it only shows changes."
     },
     "firsts": {
       "firstMessage": "First message",
@@ -501,6 +507,25 @@
     "phase": {
       "peak": "Peak: {pct}% above the usual of the surrounding months",
       "valley": "Valley: {pct}% below the usual of the surrounding months"
+    },
+    "cover": {
+      "kicker": "Chat report"
+    },
+    "headline": "You two exchanged {count} messages in {time}, an average of {perDay} a day.",
+    "timelineHint": "The milestones of your journey, in the order they happened.",
+    "matrixHint": "Total messages in each month. The stronger the color, the busier the month.",
+    "month": "Month",
+    "total": "Total",
+    "stat": {
+      "messages": "Messages",
+      "perDay": "{count} a day on average",
+      "together": "Chatting for",
+      "since": "Since {date}",
+      "activeRate": "Days with a message",
+      "streak": "Longest streak of days",
+      "silence": "Longest pause: {days}",
+      "record": "Busiest month",
+      "topEmoji": "Most used emoji"
     }
   }
 }

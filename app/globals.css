@@ -192,7 +192,12 @@
 }
 @media print {
   @page {
-    margin: 14mm;
+    margin: 14mm 14mm 16mm;
+    @bottom-center {
+      content: counter(page) ' / ' counter(pages);
+      font-size: 9px;
+      color: #6b6b82;
+    }
   }
   html,
   body {
