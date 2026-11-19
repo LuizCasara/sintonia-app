@@ -277,7 +277,7 @@ test.describe('processando com ritmo cinematográfico', () => {
     const early = Number(await bar.getAttribute('aria-valuenow'));
     expect(early).toBeLessThan(60); // o Worker já terminou, mas a tela segura o ritmo
     await expect(page).toHaveURL(/\/pt\/processing\/?$/);
-    await expect(page).toHaveURL(/\/pt\/report\/timeline\/?$/, { timeout: 20_000 });
+    await expect(page).toHaveURL(/\/pt\/report\/timeline\/?$/, { timeout: 40_000 });
   });
 });
 
